@@ -774,8 +774,8 @@
       <span class="sync-dot" id="sync-dot"></span>
       <span id="sync-label">Not synced</span>
     </div>
-    <button class="sync-btn" onclick="handleSync()" style="color:#5DCAA5;border-color:rgba(29,158,117,0.3);">
-      ⟳ &nbsp;Sync Notion
+    <button class="sync-btn" onclick="handlePull()" style="color:#5DCAA5;border-color:rgba(29,158,117,0.3);">
+      ⟳ &nbsp;Pull Notion
     </button>
   </div>
 </nav>
@@ -790,7 +790,7 @@
     <a href="https://www.notion.so/a64a0fd07f5b4aa18b12639b8bf7a87d" target="_blank" class="live-link">QM Right Pricing DB</a>
     <a href="https://www.notion.so/337cb15b3901805283ccdf1d7a6bb34e" target="_blank" class="live-link">QM Scorecards</a>
   </div>
-  <div class="banner-right" id="banner-right">Hit <strong style="color:var(--white-70)">Sync Notion</strong> above to refresh</div>
+  <div class="banner-right" id="banner-right">Loading live data from Notion…</div>
 </div>
 
 <!-- MAIN -->
@@ -985,15 +985,12 @@
   <div class="notion-bar">
     <div class="notion-dot"></div>
     <div class="notion-text">
-      <strong>Notion sync ready</strong> — QM Right Pricing database live at
-      <a href="https://www.notion.so/a64a0fd07f5b4aa18b12639b8bf7a87d" target="_blank" class="notion-link"> notion.so/QM-Right-Pricing</a>
-      · MPQS scores sourced from
-      <a href="https://www.notion.so/337cb15b390180f992c1ca0f87a30dfd" target="_blank" class="notion-link">Joanie MPQS</a>
-      &amp;
-      <a href="https://www.notion.so/337cb15b3901805283ccdf1d7a6bb34e" target="_blank" class="notion-link">QM Scorecards</a>
+      <strong>Joanie · Live Notion integration</strong> — QM Right Pricing database at
+      <a href="https://www.notion.so/a64a0fd07f5b4aa18b12639b8bf7a87d" target="_blank" class="notion-link">notion.so/QM-Right-Pricing</a>
+      · Pulls publisher data on load and on demand · Pushes RP outputs back to Notion
     </div>
-    <button class="nbar-btn" onclick="handleSync()">Sync to Notion ↗</button>
-    <button class="nbar-btn" style="margin-left:6px;" onclick="handlePull()">Pull from Notion ↗</button>
+    <button class="nbar-btn" onclick="handlePull()">◈ Pull from Notion</button>
+    <button class="nbar-btn" style="margin-left:6px;" onclick="handleSync()">↑ Push to Notion</button>
   </div>
 
 </div>
@@ -1041,6 +1038,156 @@ const SUBIDS = [
   { id:'VISION',     angle:'Vision + dental combo',           cr:8.1, gpth:80, eff:70, rde:10, age75:15 },
   { id:'TRANSPORT',  angle:'Transportation benefit',          cr:6.4, gpth:63, eff:64, rde:15, age75:19 },
 ];
+
+/* ─── NOTION LIVE DATA ─── */
+const NOTION_DS = 'collection://6a85e45a-25c4-4403-a0bd-f54c201e1889';
+
+function notionRowToPub(r) {
+  const subIds = r['Sub IDs'] ? r['Sub IDs'].split(',').map(s => s.trim()).filter(Boolean) : [];
+  return {
+    name:      r['Publisher'] || '',
+    gpth:      r['GP/TH'] ?? null,
+    ltv:       r['Adjusted LTV'] ?? null,
+    actualCpa: r['Actual CPA'] ?? null,
+    sc60:      r['SC % 60+'] ?? 0,
+    sepBid:    r['Season'] === 'SEP' ? (r['Suggested Bid'] ?? null) : null,
+    oepBid:    r['OEP Bid'] ?? null,
+    aepBid:    r['AEP Bid'] ?? null,
+    eff:       r['Effectuation %'] ?? 70,
+    rde:       r['RDE %'] ?? 10,
+    age75:     r['Demo Age Over 75 %'] ?? 15,
+    subIds,
+    notionSeason: r['Season'],
+    mpqsGrade:    r['MPQS Score'] ?? null,
+    rpAction:     r['RP Action'] ?? null,
+    actionBand:   r['Action Band'] ?? null,
+    status:       r['Status'] ?? null,
+    partnerNotes: r['Partner Notes'] ?? null,
+  };
+}
+
+async function pullFromNotion() {
+  const dot   = document.getElementById('sync-dot');
+  const label = document.getElementById('sync-label');
+  const banner = document.getElementById('banner-right');
+
+  dot.style.background = '#85B7EB';
+  dot.classList.remove('live');
+  label.textContent = 'Pulling…';
+  banner.innerHTML = '<span style="color:var(--white-40)">Connecting to Notion…</span>';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: 'You are a data retrieval agent. Query the Notion QM Right Pricing database and return ALL rows as a JSON array. Return ONLY raw JSON — no markdown, no explanation, no backticks. Each object must use these exact keys: Publisher, Season, "MPQS Score", "GP/TH", "Adjusted LTV", "Target CPA", "Actual CPA", "CPA Delta", "Conversion Rate %", "CR to Hit Target", "Effectuation %", "RDE %", "Demo Age Over 75 %", "SC % 60+", "OEP Bid", "AEP Bid", "Suggested Bid", "Bid Change %", "RP Action", "Action Band", Status, "Sub IDs", "Partner Notes".',
+        messages: [{ role: 'user', content: 'Query the QM Right Pricing Notion database (collection://6a85e45a-25c4-4403-a0bd-f54c201e1889) and return all rows as a JSON array.' }],
+        mcp_servers: [{ type: 'url', url: 'https://mcp.notion.com/mcp', name: 'notion-mcp' }]
+      })
+    });
+
+    const data = await res.json();
+
+    /* extract JSON from response — could be in text block or tool_result */
+    let raw = '';
+    if (data.content) {
+      for (const block of data.content) {
+        if (block.type === 'text') raw += block.text;
+        if (block.type === 'tool_result' && block.content) {
+          for (const c of block.content) { if (c.type === 'text') raw += c.text; }
+        }
+      }
+    }
+
+    /* find the JSON array in the response */
+    const match = raw.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error('No JSON array found in response');
+
+    const rows = JSON.parse(match[0]);
+    if (!Array.isArray(rows) || rows.length === 0) throw new Error('Empty result set');
+
+    /* update PUBS in place */
+    PUBS.length = 0;
+    rows.forEach(r => PUBS.push(notionRowToPub(r)));
+
+    /* repopulate partner select */
+    const sel = document.getElementById('partner-select');
+    const curVal = sel.value;
+    sel.innerHTML = '<option value="">Select publisher to view scorecard...</option>';
+    PUBS.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d.name; o.textContent = d.name;
+      sel.appendChild(o);
+    });
+    if (curVal) sel.value = curVal;
+
+    dot.classList.add('live');
+    label.textContent = 'Live · Notion';
+    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Pulled ${rows.length} publishers from Notion · ${new Date().toLocaleTimeString()}</span>`;
+
+    refreshAll();
+
+  } catch (err) {
+    dot.style.background = '#E24B4A';
+    label.textContent = 'Pull failed';
+    banner.innerHTML = `<span style="color:#f09595">Pull error: ${err.message}</span>`;
+    console.error('Notion pull error:', err);
+  }
+}
+
+async function handleSync() {
+  const dot   = document.getElementById('sync-dot');
+  const label = document.getElementById('sync-label');
+  const banner = document.getElementById('banner-right');
+
+  dot.style.background = '#EF9F27';
+  dot.classList.remove('live');
+  label.textContent = 'Syncing…';
+  banner.innerHTML = '<span style="color:var(--white-40)">Pushing to Notion…</span>';
+
+  try {
+    const season = activeSeason;
+    const rows = PUBS.map(d => ({
+      Publisher:      d.name,
+      Season:         season,
+      'MPQS Score':   mpqs(d),
+      'GP/TH':        d.gpth,
+      'Adjusted LTV': d.ltv,
+      'Target CPA':   T().cpa,
+      'Actual CPA':   d.actualCpa,
+      'CPA Delta':    d.actualCpa ? d.actualCpa - T().cpa : null,
+      'RP Action':    rpAction(d)[0],
+      'Suggested Bid': bid(d),
+    }));
+
+    await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'You are a Notion sync agent. The user will provide updated publisher data. Update the existing entries in the QM Right Pricing Notion database (collection://6a85e45a-25c4-4403-a0bd-f54c201e1889) to match. Match records by Publisher name. Update MPQS Score, RP Action, CPA Delta, and Suggested Bid fields. Respond with a brief JSON summary of how many records were updated.',
+        messages: [{ role: 'user', content: `Update the QM Right Pricing Notion database with these ${season} season records:\n${JSON.stringify(rows)}` }],
+        mcp_servers: [{ type: 'url', url: 'https://mcp.notion.com/mcp', name: 'notion-mcp' }]
+      })
+    });
+
+    dot.classList.add('live');
+    label.textContent = 'Synced';
+    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Synced to Notion · ${new Date().toLocaleTimeString()}</span>`;
+
+  } catch (err) {
+    dot.style.background = '#E24B4A';
+    label.textContent = 'Sync failed';
+    banner.innerHTML = `<span style="color:#f09595">Sync error: ${err.message}</span>`;
+    console.error('Notion sync error:', err);
+  }
+}
+
+function handlePull() { pullFromNotion(); }
 
 /* ─── STATE ─── */
 let activeSeason = 'SEP';
@@ -1426,6 +1573,8 @@ function refreshAll() {
 
 populatePartnerSelect();
 refreshAll();
+/* auto-pull live Notion data on load */
+pullFromNotion();
 </script>
 </body>
 </html>
