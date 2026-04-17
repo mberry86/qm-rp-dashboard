@@ -1077,43 +1077,24 @@ async function pullFromNotion() {
   banner.innerHTML = '<span style="color:var(--white-40)">Connecting to Notion…</span>';
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/notion-pull', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: 'You are a data retrieval agent. Query the Notion QM Right Pricing database and return ALL rows as a JSON array. Return ONLY raw JSON — no markdown, no explanation, no backticks. Each object must use these exact keys: Publisher, Season, "MPQS Score", "GP/TH", "Adjusted LTV", "Target CPA", "Actual CPA", "CPA Delta", "Conversion Rate %", "CR to Hit Target", "Effectuation %", "RDE %", "Demo Age Over 75 %", "SC % 60+", "OEP Bid", "AEP Bid", "Suggested Bid", "Bid Change %", "RP Action", "Action Band", Status, "Sub IDs", "Partner Notes".',
-        messages: [{ role: 'user', content: 'Query the QM Right Pricing Notion database (collection://6a85e45a-25c4-4403-a0bd-f54c201e1889) and return all rows as a JSON array.' }],
-        mcp_servers: [{ type: 'url', url: 'https://mcp.notion.com/mcp', name: 'notion-mcp' }]
-      })
     });
 
-    const data = await res.json();
-
-    /* extract JSON from response — could be in text block or tool_result */
-    let raw = '';
-    if (data.content) {
-      for (const block of data.content) {
-        if (block.type === 'text') raw += block.text;
-        if (block.type === 'tool_result' && block.content) {
-          for (const c of block.content) { if (c.type === 'text') raw += c.text; }
-        }
-      }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP ${res.status}`);
     }
 
-    /* find the JSON array in the response */
-    const match = raw.match(/\[[\s\S]*\]/);
-    if (!match) throw new Error('No JSON array found in response');
+    const { rows, count, pulledAt } = await res.json();
+    if (!Array.isArray(rows) || rows.length === 0) throw new Error('No data returned from Notion');
 
-    const rows = JSON.parse(match[0]);
-    if (!Array.isArray(rows) || rows.length === 0) throw new Error('Empty result set');
-
-    /* update PUBS in place */
+    // Update PUBS in place from live Notion data
     PUBS.length = 0;
     rows.forEach(r => PUBS.push(notionRowToPub(r)));
 
-    /* repopulate partner select */
+    // Repopulate partner select
     const sel = document.getElementById('partner-select');
     const curVal = sel.value;
     sel.innerHTML = '<option value="">Select publisher to view scorecard...</option>';
@@ -1126,7 +1107,8 @@ async function pullFromNotion() {
 
     dot.classList.add('live');
     label.textContent = 'Live · Notion';
-    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Pulled ${rows.length} publishers from Notion · ${new Date().toLocaleTimeString()}</span>`;
+    const t = new Date(pulledAt).toLocaleTimeString();
+    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Pulled ${count} publishers from Notion · ${t}</span>`;
 
     refreshAll();
 
@@ -1149,41 +1131,18 @@ async function handleSync() {
   banner.innerHTML = '<span style="color:var(--white-40)">Pushing to Notion…</span>';
 
   try {
-    const season = activeSeason;
-    const rows = PUBS.map(d => ({
-      Publisher:      d.name,
-      Season:         season,
-      'MPQS Score':   mpqs(d),
-      'GP/TH':        d.gpth,
-      'Adjusted LTV': d.ltv,
-      'Target CPA':   T().cpa,
-      'Actual CPA':   d.actualCpa,
-      'CPA Delta':    d.actualCpa ? d.actualCpa - T().cpa : null,
-      'RP Action':    rpAction(d)[0],
-      'Suggested Bid': bid(d),
-    }));
-
-    await fetch('https://api.anthropic.com/v1/messages', {
+    await fetch('/api/notion-push', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: 'You are a Notion sync agent. The user will provide updated publisher data. Update the existing entries in the QM Right Pricing Notion database (collection://6a85e45a-25c4-4403-a0bd-f54c201e1889) to match. Match records by Publisher name. Update MPQS Score, RP Action, CPA Delta, and Suggested Bid fields. Respond with a brief JSON summary of how many records were updated.',
-        messages: [{ role: 'user', content: `Update the QM Right Pricing Notion database with these ${season} season records:\n${JSON.stringify(rows)}` }],
-        mcp_servers: [{ type: 'url', url: 'https://mcp.notion.com/mcp', name: 'notion-mcp' }]
-      })
+      body: JSON.stringify({ season: activeSeason, pubs: PUBS }),
     });
-
     dot.classList.add('live');
     label.textContent = 'Synced';
     banner.innerHTML = `<span style="color:var(--teal-light)">◈ Synced to Notion · ${new Date().toLocaleTimeString()}</span>`;
-
   } catch (err) {
     dot.style.background = '#E24B4A';
     label.textContent = 'Sync failed';
     banner.innerHTML = `<span style="color:#f09595">Sync error: ${err.message}</span>`;
-    console.error('Notion sync error:', err);
   }
 }
 
