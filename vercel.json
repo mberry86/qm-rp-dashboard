@@ -1,10 +1,26 @@
+
+Copy
+
 {
   "version": 2,
-  "name": "qm-right-pricing-dashboard",
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" }
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
