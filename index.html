@@ -1345,11 +1345,10 @@ function saveComment(pubName, safeId) {
 
 /* ─── RENDER PARTNER VIEW ─── */
 function populatePartnerSelect() {
-  const sel = document.getElementById('partner-select');
-  const cur = sel.value;
+  const sel   = document.getElementById('partner-select');
+  const cur   = sel.value;
   const names = [...new Set(PUBS.map(d => d.name))].sort();
 
-  // Rebuild options
   sel.innerHTML = '<option value="">Select publisher…</option>';
   names.forEach(n => {
     const o = document.createElement('option');
@@ -1359,17 +1358,10 @@ function populatePartnerSelect() {
   });
 
   // Restore previous selection if still valid
-  if (cur && names.includes(cur)) {
-    sel.value = cur;
-  }
+  if (cur && names.includes(cur)) sel.value = cur;
 
-  // Wire the change event fresh (remove old listener by replacing with clone)
-  const newSel = sel.cloneNode(true);
-  sel.parentNode.replaceChild(newSel, sel);
-  if (cur && names.includes(cur)) newSel.value = cur;
-  newSel.addEventListener('change', function() {
-    renderPartnerView(this.value);
-  });
+  // Attach change handler directly — remove old one first via onchange
+  sel.onchange = function() { renderPartnerView(this.value); };
 }
 
 function buildPartnerCard(d, forPortal=false) {
