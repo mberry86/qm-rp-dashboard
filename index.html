@@ -363,7 +363,7 @@ footer strong{color:var(--w60)}
 }
 .cms-title{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);font-family:var(--font-mono)}
 .cms-period{font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-left:auto}
-.call-kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0}
+.call-kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0}
 .ck-item{
   padding:10px 12px;border-right:1px solid var(--border);
   background:var(--surface);
@@ -1176,8 +1176,7 @@ function buildDispositionBreakdown(sc) {
 function buildCallMetrics(sc, pricePerCall) {
   if (!sc) return '';
 
-  // Billable Rate = Billable Calls ÷ Raw Calls (call volume ratio)
-  // Use confirmed billableCalls if present, else fall back to netSales as proxy
+  // Billable Rate = Billable Calls ÷ Raw Calls
   const billableForRate   = sc.billableCalls != null ? sc.billableCalls : sc.netSales;
   const hasBillableRate   = billableForRate != null && sc.rawCalls > 0;
   const billableRateVal   = hasBillableRate ? billableForRate / sc.rawCalls : null;
@@ -1185,26 +1184,16 @@ function buildCallMetrics(sc, pricePerCall) {
   const billableRateColor = hasBillableRate
     ? (billableRateVal >= 0.20 ? 'var(--teal)' : billableRateVal >= 0.10 ? 'var(--amber)' : 'var(--w60)')
     : 'var(--w35)';
-  const billableRateSub   = sc.billableCalls != null ? 'Billable ÷ Raw calls' : 'Policies ÷ Raw (est.)';
 
-  // Billable count display — confirmed or sold policies proxy
+  // Billable count — confirmed or proxy
   const billableCount = sc.billableCalls != null ? sc.billableCalls : sc.netSales;
-  const billableLabel = sc.billableCalls != null ? 'Confirmed billable' : 'Sold policies (proxy)';
   const billableColor = sc.billableCalls != null ? 'var(--amber)' : 'var(--w35)';
 
-  // Raw → Paid conversion %
-  const rawToPaid = sc.billableCalls && sc.rawCalls
-    ? (sc.billableCalls / sc.rawCalls * 100).toFixed(1) + '%'
-    : sc.netSales && sc.rawCalls
-      ? (sc.netSales / sc.rawCalls * 100).toFixed(1) + '% *'
-      : '—';
-
-  // RPC = Revenue ÷ Raw Calls
-  // Revenue = Billable Calls × Price Per Call (the bid — what we pay/partner earns per billable call)
-  const billCalls   = sc.billableCalls != null ? sc.billableCalls : sc.netSales;
-  const revenue     = (billCalls != null && pricePerCall != null) ? billCalls * pricePerCall : null;
-  const rpc         = (revenue != null && sc.rawCalls > 0) ? (revenue / sc.rawCalls).toFixed(2) : null;
-  const rpcColor    = rpc > 20 ? 'var(--teal)' : rpc > 10 ? 'var(--amber)' : 'var(--w60)';
+  // Revenue = Billable × Price Per Call; RPC = Revenue ÷ Raw Calls
+  const billCalls      = sc.billableCalls != null ? sc.billableCalls : sc.netSales;
+  const revenue        = (billCalls != null && pricePerCall != null) ? billCalls * pricePerCall : null;
+  const rpc            = (revenue != null && sc.rawCalls > 0) ? (revenue / sc.rawCalls).toFixed(2) : null;
+  const rpcColor       = rpc > 20 ? 'var(--teal)' : rpc > 10 ? 'var(--amber)' : 'var(--w60)';
   const revenueDisplay = revenue != null ? '$' + revenue.toLocaleString() : '—';
 
   return `
@@ -1222,17 +1211,12 @@ function buildCallMetrics(sc, pricePerCall) {
       <div class="ck-item">
         <div class="ck-label">Billable / Paid</div>
         <div class="ck-val" style="color:${billableColor}">${fmtNum(billableCount)}</div>
-        <div class="ck-sub">${billableLabel}</div>
+        <div class="ck-sub">Paid calls</div>
       </div>
       <div class="ck-item">
         <div class="ck-label">Billable Rate</div>
         <div class="ck-val" style="color:${billableRateColor}">${billableRate}</div>
-        <div class="ck-sub">${billableRateSub}</div>
-      </div>
-      <div class="ck-item">
-        <div class="ck-label">Raw → Paid %</div>
-        <div class="ck-val" style="color:var(--blue)">${rawToPaid}</div>
-        <div class="ck-sub">${sc.billableCalls ? 'Confirmed conv.' : 'Est. from policies'}</div>
+        <div class="ck-sub">Billable ÷ Raw calls</div>
       </div>
       <div class="ck-item">
         <div class="ck-label">Revenue</div>
@@ -1242,22 +1226,31 @@ function buildCallMetrics(sc, pricePerCall) {
       <div class="ck-item">
         <div class="ck-label">RPC</div>
         <div class="ck-val" style="color:${rpcColor}">${rpc ? '$'+rpc : '—'}</div>
-        <div class="ck-sub">Revenue ÷ raw calls</div>
+        <div class="ck-sub">&nbsp;</div>
       </div>
     </div>
-    ${!sc.billableCalls ? `<div style="font-size:8px;color:var(--w35);font-family:var(--font-mono);padding:5px 12px 8px;border-top:1px solid var(--border)">* Confirmed billable call count not in scorecard — Sold Policies used as proxy. Revenue and RPC are estimates until confirmed billable data is loaded.</div>` : ''}
+    ${!sc.billableCalls ? `<div style="font-size:8px;color:var(--w35);font-family:var(--font-mono);padding:5px 12px 8px;border-top:1px solid var(--border)">Confirmed billable call count not in scorecard — Sold Policies used as proxy. Revenue and RPC are estimates until confirmed billable data is loaded.</div>` : ''}
   </div>`;
 }
 
 function buildDispositionView(sc, pricePerCall) {
   if (!sc) return '';
-  const raw   = sc.rawCalls  || 0;
-  const bill  = sc.billableCalls || sc.netSales || 0;
-  const sales = sc.netSales  || 0;
-  const xferShow  = sc.transfers != null;
-  const convRaw   = raw > 0 ? (bill / raw * 100).toFixed(0) : null;
-  const revenue   = (bill != null && pricePerCall != null) ? bill * pricePerCall : null;
-  const rpc       = (revenue != null && raw > 0) ? (revenue / raw).toFixed(2) : null;
+  const raw    = sc.rawCalls  || 0;
+  const bill   = sc.billableCalls != null ? sc.billableCalls : null; // confirmed billable only
+  const sales  = sc.netSales  || 0;
+  const xferShow   = sc.transfers != null;
+  const revenue    = (bill != null && pricePerCall != null) ? bill * pricePerCall : null;
+  const rpc        = (revenue != null && raw > 0) ? (revenue / raw).toFixed(2) : null;
+
+  // Billable Rate: billable ÷ raw
+  const billRate = bill && raw > 0 ? (bill / raw * 100).toFixed(0) + '%' : '—';
+
+  // CR Billable to Sale: sales ÷ billable calls
+  const crBillToSale = bill && sales > 0 ? (sales / bill * 100).toFixed(1) + '%' : '—';
+  const crBTSColor   = bill && sales > 0
+    ? (sales/bill >= 0.40 ? 'var(--teal)' : sales/bill >= 0.20 ? 'var(--amber)' : '#ff8080')
+    : 'var(--w35)';
+
   return `
   <div class="disposition-section">
     <div class="ds-header"><span class="ds-title">KPI Overview</span></div>
@@ -1271,12 +1264,16 @@ function buildDispositionView(sc, pricePerCall) {
         <div class="df-rate">Rate: <strong>${sc.transferRate ? fmtPct(sc.transferRate) : '—'}</strong></div>
       </div>`:''}
       <div class="df-step">
-        <div class="df-box"><div class="df-num" style="color:var(--amber)">${fmtNum(bill)}</div><div class="df-label">Billable / Paid</div></div>
-        <div class="df-rate">${convRaw ? `<strong>${convRaw}%</strong> of raw` : 'of raw'}</div>
+        <div class="df-box"><div class="df-num" style="color:var(--amber)">${bill ? fmtNum(bill) : '—'}</div><div class="df-label">Billable / Paid</div></div>
+        <div class="df-rate">${bill ? `<strong>${billRate}</strong> of raw` : 'awaiting data'}</div>
       </div>
       <div class="df-step">
         <div class="df-box"><div class="df-num" style="color:var(--teal)">${fmtNum(sales)}</div><div class="df-label">Sold Policies</div></div>
         <div class="df-rate">CR: <strong>${fmtPct(sc.cr)}</strong></div>
+      </div>
+      <div class="df-step">
+        <div class="df-box"><div class="df-num" style="color:${crBTSColor}">${crBillToSale}</div><div class="df-label">CR · Billable to Sale</div></div>
+        <div class="df-rate">Sales ÷ Billable</div>
       </div>
       <div class="df-step">
         <div class="df-box"><div class="df-num" style="color:var(--purple)">${fmtPct(sc.eff)}</div><div class="df-label">Effectuation</div></div>
@@ -1285,8 +1282,8 @@ function buildDispositionView(sc, pricePerCall) {
     </div>
     <div style="display:flex;gap:24px;padding:8px 16px 10px;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:9px;color:var(--w35)">
       <span>Talk Hours: <strong style="color:var(--w60)">${sc.talkHours ? sc.talkHours.toLocaleString() : '—'}</strong></span>
-      <span>Revenue: <strong style="color:var(--w60)">${revenue ? '$'+revenue.toLocaleString() : '—'}</strong> (${fmtNum(bill)} billable × $${pricePerCall||'—'}/call)</span>
-      <span>RPC: <strong style="color:${rpc>10?'var(--teal)':rpc>5?'var(--amber)':'var(--w60)'}">${rpc ? '$'+rpc : '—'}</strong> (revenue ÷ ${fmtNum(raw)} raw calls)</span>
+      ${revenue ? `<span>Revenue: <strong style="color:var(--w60)">$${revenue.toLocaleString()}</strong></span>` : ''}
+      ${rpc ? `<span>RPC: <strong style="color:var(--w60)">$${rpc}</strong></span>` : ''}
     </div>
   </div>`;
 } // end buildDispositionView
