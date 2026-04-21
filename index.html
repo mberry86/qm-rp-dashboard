@@ -1080,6 +1080,7 @@ async function pullFromNotion() {
     const res = await fetch('/api/notion-pull', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ season: activeSeason }),
     });
 
     if (!res.ok) {
@@ -1090,11 +1091,9 @@ async function pullFromNotion() {
     const { rows, count, pulledAt } = await res.json();
     if (!Array.isArray(rows) || rows.length === 0) throw new Error('No data returned from Notion');
 
-    // Update PUBS in place from live Notion data
     PUBS.length = 0;
     rows.forEach(r => PUBS.push(notionRowToPub(r)));
 
-    // Repopulate partner select
     const sel = document.getElementById('partner-select');
     const curVal = sel.value;
     sel.innerHTML = '<option value="">Select publisher to view scorecard...</option>';
@@ -1108,7 +1107,7 @@ async function pullFromNotion() {
     dot.classList.add('live');
     label.textContent = 'Live · Notion';
     const t = new Date(pulledAt).toLocaleTimeString();
-    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Pulled ${count} publishers from Notion · ${t}</span>`;
+    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Pulled ${count} publishers · ${activeSeason} · ${t}</span>`;
 
     refreshAll();
 
@@ -1127,22 +1126,49 @@ async function handleSync() {
 
   dot.style.background = '#EF9F27';
   dot.classList.remove('live');
-  label.textContent = 'Syncing…';
-  banner.innerHTML = '<span style="color:var(--white-40)">Pushing to Notion…</span>';
+  label.textContent = 'Pushing…';
+  banner.innerHTML = '<span style="color:var(--white-40)">Pushing RP outputs to Notion…</span>';
 
   try {
-    await fetch('/api/notion-push', {
+    const t = T();
+    const pubsPayload = PUBS.map(d => ({
+      name:       d.name,
+      mpqsGrade:  mpqs(d),
+      rpAction:   rpAction(d)[0],
+      actionBand: actionBand(d)[0],
+      status:     !d.actualCpa ? 'No Spend' : d.actualCpa <= t.cpa ? 'On Target' : d.actualCpa <= t.cpa * 1.15 ? 'Watch' : 'At Risk',
+      actualCpa:  d.actualCpa,
+      cpaDelta:   d.actualCpa ? Math.round(d.actualCpa - t.cpa) : null,
+      suggBid:    bid(d),
+      eff:        d.eff,
+      rde:        d.rde,
+      age75:      d.age75,
+      gpth:       d.gpth,
+      cr:         d.sc60,
+    }));
+
+    const res = await fetch('/api/notion-push', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ season: activeSeason, pubs: PUBS }),
+      body: JSON.stringify({ season: activeSeason, pubs: pubsPayload }),
     });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP ${res.status}`);
+    }
+
+    const { updated, failed, pushedAt } = await res.json();
     dot.classList.add('live');
     label.textContent = 'Synced';
-    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Synced to Notion · ${new Date().toLocaleTimeString()}</span>`;
+    const t2 = new Date(pushedAt).toLocaleTimeString();
+    banner.innerHTML = `<span style="color:var(--teal-light)">◈ Pushed ${updated} publishers to Notion · ${activeSeason} · ${t2}${failed > 0 ? ` · ${failed} failed` : ''}</span>`;
+
   } catch (err) {
     dot.style.background = '#E24B4A';
-    label.textContent = 'Sync failed';
-    banner.innerHTML = `<span style="color:#f09595">Sync error: ${err.message}</span>`;
+    label.textContent = 'Push failed';
+    banner.innerHTML = `<span style="color:#f09595">Push error: ${err.message}</span>`;
+    console.error('Notion push error:', err);
   }
 }
 
@@ -1484,7 +1510,7 @@ function setSeason(s, btn) {
   activeSeason = s;
   document.querySelectorAll('.stoggle').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  refreshAll();
+  pullFromNotion();
 }
 
 function showTab(id, btn) {
