@@ -1,25 +1,15 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "api/*.js",   "use": "@vercel/node"   }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+    { "src": "/api/notion-pull", "dest": "/api/notion-pull.js" },
+    { "src": "/api/notion-push", "dest": "/api/notion-push.js" },
+    { "src": "/(.*)",            "dest": "/index.html"         }
+  ],
+  "env": {
+    "NOTION_TOKEN": "@notion_token"
+  }
 }
-
-
