@@ -1598,29 +1598,190 @@ function buildTicker() {
   document.getElementById('banner-ts').textContent = new Date().toLocaleTimeString();
 }
 
-/* ─── SYNC HANDLERS ─── */
-function handlePull() {
-  const dot = document.getElementById('sync-dot');
+/* ─── SYNC HANDLERS — REAL API ─── */
+async function handlePull() {
+  const dot   = document.getElementById('sync-dot');
   const label = document.getElementById('sync-label');
-  dot.className='sync-dot';
-  dot.style.background='var(--blue)';
-  label.textContent='Pulling…';
-  setTimeout(()=>{
-    dot.className='sync-dot live';
-    label.textContent='Live · Notion';
+  dot.className = 'sync-dot';
+  dot.style.background = 'var(--blue)';
+  label.textContent = 'Pulling…';
+
+  try {
+    const res  = await fetch(`/api/notion-pull?season=${activeSeason}`);
+    const data = await res.json();
+
+    if (!data.ok) throw new Error(data.error || 'Pull failed');
+
+    // Merge live publisher data into PUBS
+    if (data.publishers && data.publishers.length > 0) {
+      // Replace NOTION_DATA-derived PUBS with live data
+      const livePubs = data.publishers.map(p => ({
+        notionPageId: p.notionPageId,
+        name:         p.name,
+        gpth:         p.gpth,
+        ltv:          p.ltv,
+        actualCpa:    p.actualCpa,
+        targetCpa:    p.targetCpa,
+        baseBid:      p.baseBid,
+        eff:          p.eff,
+        rde:          p.rde,
+        age75:        p.age75,
+        cr:           p.cr,
+        sc60:         p.sc60,
+        subIds:       p.subIds || [],
+        mpqsGrade:    p.mpqsGrade,
+        rpAction:     p.rpAction,
+        actionBand:   p.actionBand,
+        status:       p.status,
+        cpaDelta:     p.cpaDelta,
+        notes:        p.notes,
+      }));
+      // Update global PUBS
+      PUBS.length = 0;
+      livePubs.forEach(p => PUBS.push(p));
+    }
+
+    // Merge live scorecard data
+    if (data.scorecards && data.scorecards.length > 0) {
+      SCORECARD_DATA.length = 0;
+      data.scorecards.forEach(sc => {
+        // Normalize field names to match existing SCORECARD_DATA shape
+        SCORECARD_DATA.push({
+          pub:           sc.pub,
+          season:        sc.season,
+          rawCalls:      sc.rawCalls,
+          billableCalls: sc.billableCalls,
+          billableRate:  sc.billableRate,
+          cr:            sc.cr,
+          transfers:     sc.transfers,
+          transferRate:  sc.transferRate,
+          dupRate:       sc.dupRate,
+          netSales:      sc.netSales,
+          cpa:           sc.cpa,
+          eff:           sc.eff,
+          age75:         sc.age75,
+          talkHours:     sc.talkHours,
+          actionBand:    sc.actionBand,
+          status:        sc.status,
+          biggestRisk:   sc.biggestRisk,
+          topOpp:        sc.topOpp,
+          date:          sc.date,
+        });
+      });
+    }
+
+    // Merge live sub ID data
+    if (data.subIds && data.subIds.length > 0) {
+      SUBID_DATA.length = 0;
+      data.subIds.forEach(s => SUBID_DATA.push(s));
+      // Rebuild SUBID_MAP
+      SUBID_DATA.forEach(s => { SUBID_MAP[s.id] = s; });
+    }
+
+    dot.className    = 'sync-dot live';
+    label.textContent = `Live · ${data.pulledAt ? new Date(data.pulledAt).toLocaleTimeString() : 'Notion'}`;
     refreshAll();
-  },1200);
+
+  } catch(err) {
+    console.error('Pull error:', err);
+    dot.className     = 'sync-dot err';
+    label.textContent = 'Pull failed';
+    // Fall back to embedded data silently
+    loadData();
+    refreshAll();
+    // Show a brief error message
+    const nb = document.getElementById('partner-detail');
+    if (nb) {
+      const msg = document.createElement('div');
+      msg.style.cssText = 'color:var(--amber);font-family:var(--font-mono);font-size:9px;padding:6px 0;';
+      msg.textContent   = `⚠ Notion pull failed (${err.message}) — showing cached data. Check NOTION_TOKEN env var in Vercel.`;
+      nb.prepend(msg);
+      setTimeout(() => msg.remove(), 6000);
+    }
+  }
 }
 
-function handlePush() {
-  const dot = document.getElementById('sync-dot');
+async function handlePush() {
+  const dot   = document.getElementById('sync-dot');
   const label = document.getElementById('sync-label');
-  dot.style.background='var(--amber)';
-  label.textContent='Pushing…';
-  setTimeout(()=>{
-    dot.className='sync-dot live';
-    label.textContent='Pushed';
-  },1400);
+  dot.style.background = 'var(--amber)';
+  label.textContent    = 'Pushing…';
+
+  // Build subIdMap for the API
+  const subIdMap = {};
+  SUBID_DATA.forEach(s => { subIdMap[s.id] = s; });
+
+  // Only push publishers that have a notionPageId (i.e. came from a live pull)
+  const publishersToPush = PUBS.filter(p => p.notionPageId);
+
+  if (publishersToPush.length === 0) {
+    dot.className     = 'sync-dot live';
+    label.textContent = 'Pull first';
+    alert('Pull from Notion first to get page IDs before pushing RP outputs.');
+    return;
+  }
+
+  try {
+    const res  = await fetch('/api/notion-push', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        publishers: publishersToPush,
+        subIdMap,
+        season: activeSeason,
+      }),
+    });
+    const data = await res.json();
+
+    if (!data.ok) throw new Error(data.error || 'Push failed');
+
+    dot.className     = 'sync-dot live';
+    label.textContent = `Pushed ${data.updated} rows`;
+
+    // Flash success on sync button
+    setTimeout(() => { label.textContent = 'Live · Notion'; }, 4000);
+
+    if (data.errors && data.errors.length > 0) {
+      console.warn('Push partial errors:', data.errors);
+    }
+
+  } catch(err) {
+    console.error('Push error:', err);
+    dot.className     = 'sync-dot err';
+    label.textContent = 'Push failed';
+    setTimeout(() => { label.textContent = 'Live · Notion'; }, 4000);
+  }
+}
+
+/* ─── URL-BASED PARTNER ROUTING ─── */
+// Supports: ?partner=EngageCX  or  ?partner=EngageCX&season=OEP
+// Opens the partner portal directly scoped to that publisher
+function checkUrlPartnerRoute() {
+  const params  = new URLSearchParams(window.location.search);
+  const partner = params.get('partner');
+  const season  = params.get('season');
+
+  if (season && ['SEP','OEP','AEP'].includes(season.toUpperCase())) {
+    activeSeason = season.toUpperCase();
+    document.querySelectorAll('.stab').forEach(b => {
+      b.classList.toggle('on', b.textContent.trim() === activeSeason);
+    });
+    loadData();
+  }
+
+  if (partner) {
+    // Decode and find the publisher (fuzzy match)
+    const name = decodeURIComponent(partner);
+    const d    = PUBS.find(p => p.name === name)
+              || PUBS.find(p => p.name.toLowerCase() === name.toLowerCase())
+              || PUBS.find(p => p.name.toLowerCase().includes(name.toLowerCase()));
+
+    if (d) {
+      // Hide the main nav/command center UI and go straight to partner portal
+      openPortal();
+      renderPortalScorecard(d.name);
+    }
+  }
 }
 
 function exportRP() {
@@ -1672,9 +1833,8 @@ function refreshAll() {
   renderRP();
   renderMPQS();
   renderSubIDs();
-  populatePartnerSelect(); // rebuilds + rewires select event listener
+  populatePartnerSelect();
   buildTicker();
-  // Re-render partner card if one was selected (read value after populatePartnerSelect replaces element)
   const pv = (document.getElementById('partner-select') || {}).value;
   if (pv) renderPartnerView(pv);
   renderCharts();
@@ -1685,11 +1845,12 @@ loadData();
 refreshAll();
 document.getElementById('sync-dot').className='sync-dot live';
 document.getElementById('sync-label').textContent='Live · Notion';
+// Check for URL-based partner routing after data is loaded
+checkUrlPartnerRoute();
 setTimeout(()=>{
   document.getElementById('loader').style.opacity='0';
   document.getElementById('loader').style.transition='opacity .4s';
   setTimeout(()=>document.getElementById('loader').style.display='none',400);
 },1600);
-</script>
 </body>
 </html>
