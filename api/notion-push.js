@@ -1,100 +1,108 @@
+// api/notion-push.js
+// Vercel serverless function — push RP formula outputs back to Notion
+// Writes Enhanced Bid, MPQS Multiplier, Sub ID QI to each publisher row
+
+const NOTION_API     = 'https://api.notion.com/v1';
+const NOTION_VERSION = '2022-06-28';
+
+// MPQS multipliers
+const MPQS_MULT = { A: 1.15, B: 1.00, C: 0.85, D: 0.70 };
+
+// Default season config (fallback if not passed)
+const SEASON_CONFIG = {
+  SEP: { cr: 9.0,  cpa: 325, eff: 73, ltv: 730, ltvPct: 0.45 },
+  OEP: { cr: 10.0, cpa: 325, eff: 72, ltv: 730, ltvPct: 0.45 },
+  AEP: { cr: 16.0, cpa: 275, eff: 74, ltv: 730, ltvPct: 0.45 },
+};
+
+function calcBaseBid(pub, seasonCfg) {
+  const ltv = pub.ltv  || seasonCfg.ltv;
+  const cr  = pub.cr   || seasonCfg.cr;
+  const eff = pub.eff  || seasonCfg.eff;
+  return ltv * (eff / 100) * seasonCfg.ltvPct * (cr / 100);
+}
+
+function calcSubIdQI(subIds, subIdMap) {
+  if (!subIds || subIds.length === 0) return 1.0;
+  const qis = subIds.map(id => subIdMap[id]?.qi ?? 1.0);
+  return qis.reduce((a, b) => a + b, 0) / qis.length;
+}
+
+async function updateNotionPage(pageId, properties) {
+  const token = process.env.NOTION_TOKEN;
+  const res = await fetch(`${NOTION_API}/pages/${pageId}`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Notion-Version': NOTION_VERSION,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ properties }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Notion PATCH error ${res.status} for page ${pageId}: ${err}`);
+  }
+  return res.json();
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-
-  const notionToken = process.env.NOTION_TOKEN;
-  if (!notionToken) return res.status(500).json({ error: 'NOTION_TOKEN not configured' });
-
-  const { season, pubs } = req.body || {};
-  if (!season || !Array.isArray(pubs)) return res.status(400).json({ error: 'Missing season or pubs in request body' });
-
-  const DATABASE_ID = 'a64a0fd07f5b4aa18b12639b8bf7a87d';
+  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'POST only' });
 
   try {
-    // First: query Notion to find all pages for this season, keyed by Publisher name
-    const queryRes = await fetch(`https://api.notion.com/v1/databases/${DATABASE_ID}/query`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${notionToken}`,
-        'Notion-Version': '2022-06-28',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        page_size: 100,
-        filter: {
-          property: 'Season',
-          select: { equals: season },
-        },
-      }),
-    });
+    const { publishers, subIdMap, season } = req.body;
 
-    if (!queryRes.ok) {
-      const err = await queryRes.json().catch(() => ({}));
-      return res.status(queryRes.status).json({ error: `Notion query error: ${queryRes.status}`, detail: err?.message });
+    if (!publishers || !Array.isArray(publishers)) {
+      return res.status(400).json({ ok: false, error: 'publishers array required' });
     }
 
-    const queryData = await queryRes.json();
+    const seasonCfg = SEASON_CONFIG[season] || SEASON_CONFIG.SEP;
+    const results   = [];
+    const errors    = [];
 
-    // Build a map of publisher name -> page ID
-    const pageMap = {};
-    for (const page of queryData.results) {
-      const name = page.properties?.Publisher?.title?.[0]?.plain_text;
-      if (name) pageMap[name] = page.id;
+    for (const pub of publishers) {
+      if (!pub.notionPageId) continue;
+
+      try {
+        const grade      = pub.mpqsGrade || 'B';
+        const mpqsMult   = MPQS_MULT[grade] || 1.0;
+        const qi         = calcSubIdQI(pub.subIds, subIdMap || {});
+        const baseBid    = calcBaseBid(pub, seasonCfg);
+        const enhBid     = +(baseBid * mpqsMult * qi).toFixed(2);
+
+        await updateNotionPage(pub.notionPageId, {
+          'Enhanced Bid':    { number: enhBid },
+          'MPQS Multiplier': { number: mpqsMult },
+          'Sub ID QI':       { number: +qi.toFixed(4) },
+        });
+
+        results.push({
+          publisher:  pub.name,
+          enhBid,
+          mpqsMult,
+          qi: +qi.toFixed(4),
+        });
+
+      } catch (err) {
+        errors.push({ publisher: pub.name, error: err.message });
+      }
     }
-
-    // Update each publisher's page with fresh RP outputs
-    const updates = [];
-    for (const pub of pubs) {
-      const pageId = pageMap[pub.name];
-      if (!pageId) continue;
-
-      const props = {
-        'MPQS Score': pub.mpqsGrade ? { select: { name: pub.mpqsGrade } } : null,
-        'RP Action':  pub.rpAction  ? { select: { name: pub.rpAction  } } : null,
-        'Action Band': pub.actionBand ? { select: { name: pub.actionBand } } : null,
-        'Status':     pub.status    ? { select: { name: pub.status    } } : null,
-        'Actual CPA': pub.actualCpa != null ? { number: pub.actualCpa } : null,
-        'CPA Delta':  pub.cpaDelta  != null ? { number: pub.cpaDelta  } : null,
-        'Suggested Bid': pub.suggBid != null ? { number: pub.suggBid  } : null,
-        'Effectuation %': pub.eff != null ? { number: pub.eff } : null,
-        'RDE %':      pub.rde != null ? { number: pub.rde } : null,
-        'Demo Age Over 75 %': pub.age75 != null ? { number: pub.age75 } : null,
-        'GP/TH':      pub.gpth != null ? { number: pub.gpth } : null,
-        'Conversion Rate %': pub.cr != null ? { number: pub.cr } : null,
-      };
-
-      // Remove null entries
-      const cleanProps = Object.fromEntries(Object.entries(props).filter(([, v]) => v !== null));
-
-      const updateRes = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${notionToken}`,
-          'Notion-Version': '2022-06-28',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ properties: cleanProps }),
-      });
-
-      updates.push({ name: pub.name, status: updateRes.ok ? 'updated' : 'failed', code: updateRes.status });
-    }
-
-    const succeeded = updates.filter(u => u.status === 'updated').length;
-    const failed = updates.filter(u => u.status === 'failed').length;
 
     return res.status(200).json({
-      season,
-      updated: succeeded,
-      failed,
-      skipped: pubs.length - updates.length,
+      ok: true,
       pushedAt: new Date().toISOString(),
-      details: updates,
+      season,
+      updated: results.length,
+      results,
+      errors,
     });
 
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    console.error('notion-push error:', err);
+    return res.status(500).json({ ok: false, error: err.message });
   }
 }
