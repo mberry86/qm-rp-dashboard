@@ -1,12 +1,25 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const notionToken = process.env.NOTION_TOKEN;
-  if (!notionToken) return res.status(500).json({ error: 'NOTION_TOKEN not configured in Vercel environment variables' });
+  const hasToken = !!notionToken;
+  const tokenPreview = notionToken ? notionToken.substring(0, 8) + '...' : 'not found';
+  const allEnvKeys = Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('KEY') && !k.includes('TOKEN') && !k.includes('PASS') && !k.includes('PWD'));
+
+  if (!hasToken) {
+    return res.status(500).json({
+      error: 'NOTION_TOKEN not configured',
+      debug: {
+        hasToken,
+        tokenPreview,
+        envKeysPresent: allEnvKeys,
+        notionRelatedKeys: Object.keys(process.env).filter(k => k.toLowerCase().includes('notion'))
+      }
+    });
+  }
 
   const DATABASE_ID = 'a64a0fd07f5b4aa18b12639b8bf7a87d';
 
