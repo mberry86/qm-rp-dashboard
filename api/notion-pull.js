@@ -12,9 +12,11 @@ export default async function handler(req, res) {
   const DATABASE_ID = 'a64a0fd07f5b4aa18b12639b8bf7a87d';
 
   try {
-    const body = { page_size: 100, sorts: [{ property: 'Publisher', direction: 'ascending' }] };
+    const body = {
+      page_size: 100,
+      sorts: [{ property: 'Publisher', direction: 'ascending' }]
+    };
 
-    // Filter by season if provided
     if (season && ['SEP','OEP','AEP'].includes(season)) {
       body.filter = { property: 'Season', select: { equals: season } };
     }
@@ -29,11 +31,15 @@ export default async function handler(req, res) {
       body: JSON.stringify(body),
     });
 
+    // Return full Notion error so we can diagnose
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
       return res.status(response.status).json({
         error: `Notion API error: ${response.status}`,
-        detail: err?.message || JSON.stringify(err),
+        notion_code: err?.code,
+        notion_message: err?.message,
+        token_prefix: notionToken.substring(0, 10) + '...',
+        database_id: DATABASE_ID,
       });
     }
 
@@ -51,7 +57,6 @@ export default async function handler(req, res) {
           default:       return null;
         }
       };
-
       return {
         'Publisher':          get('Publisher', 'title'),
         'Season':             get('Season', 'select'),
