@@ -1,29 +1,24 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const notionToken = process.env.NOTION_TOKEN;
-  const hasToken = !!notionToken;
-  const tokenPreview = notionToken ? notionToken.substring(0, 8) + '...' : 'not found';
-  const allEnvKeys = Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('KEY') && !k.includes('TOKEN') && !k.includes('PASS') && !k.includes('PWD'));
+  if (!notionToken) return res.status(500).json({ error: 'NOTION_TOKEN not configured' });
 
-  if (!hasToken) {
-    return res.status(500).json({
-      error: 'NOTION_TOKEN not configured',
-      debug: {
-        hasToken,
-        tokenPreview,
-        envKeysPresent: allEnvKeys,
-        notionRelatedKeys: Object.keys(process.env).filter(k => k.toLowerCase().includes('notion'))
-      }
-    });
-  }
-
+  const { season } = req.body || {};
   const DATABASE_ID = 'a64a0fd07f5b4aa18b12639b8bf7a87d';
 
   try {
+    const body = { page_size: 100, sorts: [{ property: 'Publisher', direction: 'ascending' }] };
+
+    // Filter by season if provided
+    if (season && ['SEP','OEP','AEP'].includes(season)) {
+      body.filter = { property: 'Season', select: { equals: season } };
+    }
+
     const response = await fetch(`https://api.notion.com/v1/databases/${DATABASE_ID}/query`, {
       method: 'POST',
       headers: {
@@ -31,10 +26,7 @@ export default async function handler(req, res) {
         'Notion-Version': '2022-06-28',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        page_size: 100,
-        sorts: [{ property: 'Publisher', direction: 'ascending' }],
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -90,6 +82,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       rows,
       count: rows.length,
+      season: season || 'all',
       pulledAt: new Date().toISOString(),
     });
 
