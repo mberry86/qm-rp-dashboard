@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QM Right Pricing · Centerfield Health & Medicare</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {
@@ -38,6 +38,7 @@
   --font: 'DM Sans', sans-serif;
   --font-head: 'Syne', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-num: 'Barlow', sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{font-size:13px;scroll-behavior:smooth}
@@ -155,7 +156,7 @@ body::before{
 .kc.blue::after{background:var(--blue)}
 .kc.purple::after{background:var(--purple)}
 .kc-label{font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--w35);margin-bottom:6px;font-family:var(--font-mono)}
-.kc-val{font-size:22px;font-weight:800;line-height:1;font-family:var(--font-head);color:var(--white);margin-bottom:3px}
+.kc-val{font-size:22px;font-weight:300;line-height:1;font-family:var(--font-num);color:var(--white);margin-bottom:3px;letter-spacing:0.01em}
 .kc-val.g{color:var(--teal)}
 .kc-val.a{color:var(--amber)}
 .kc-val.r{color:#ff8080}
@@ -268,12 +269,12 @@ table.dt tbody tr:hover td{background:var(--w04)}
 .pc-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .pk{background:var(--w04);border:1px solid var(--border);border-radius:7px;padding:10px 12px}
 .pk-label{font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:var(--w35);margin-bottom:5px;font-family:var(--font-mono)}
-.pk-val{font-size:20px;font-weight:800;line-height:1;margin-bottom:2px;font-family:var(--font-head)}
+.pk-val{font-size:20px;font-weight:300;line-height:1;margin-bottom:2px;font-family:var(--font-num);letter-spacing:0.01em}
 .pk-target{font-size:8px;color:var(--w35);font-family:var(--font-mono)}
 .pc-footer{display:flex;gap:14px;padding-top:14px;border-top:1px solid var(--border)}
 .pf{flex:1}
 .pf-l{font-size:9px;color:var(--w35);text-transform:uppercase;letter-spacing:.06em;font-family:var(--font-mono);margin-bottom:4px}
-.pf-v{font-size:16px;font-weight:800;color:var(--white);font-family:var(--font-head)}
+.pf-v{font-size:16px;font-weight:300;color:var(--white);font-family:var(--font-num);letter-spacing:0.01em}
 .pc-rp-formula{
   background:rgba(0,200,150,0.04);border:1px solid rgba(0,200,150,0.15);
   border-radius:6px;padding:10px 14px;margin-top:14px;
@@ -344,7 +345,7 @@ footer strong{color:var(--w60)}
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
   backdrop-filter:blur(4px);
 }
-.lo-mark{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--teal);letter-spacing:.1em}
+.lo-mark{font-family:var(--font-num);font-size:28px;font-weight:300;color:var(--teal);letter-spacing:.1em}
 .lo-text{font-size:10px;font-family:var(--font-mono);color:var(--w35);letter-spacing:.08em}
 .lo-bar{width:200px;height:2px;background:var(--border2);border-radius:2px;overflow:hidden;position:relative}
 .lo-bar::after{content:'';position:absolute;left:0;top:0;height:100%;background:var(--teal);animation:lobar 1.8s ease-in-out infinite}
@@ -370,7 +371,7 @@ footer strong{color:var(--w60)}
 }
 .ck-item:last-child{border-right:none}
 .ck-label{font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:var(--w35);font-family:var(--font-mono);margin-bottom:5px}
-.ck-val{font-size:16px;font-weight:800;font-family:var(--font-head);color:var(--w80);line-height:1;margin-bottom:2px}
+.ck-val{font-size:16px;font-weight:300;font-family:var(--font-num);color:var(--w80);line-height:1;margin-bottom:2px;letter-spacing:0.01em}
 .ck-sub{font-size:8px;color:var(--w35);font-family:var(--font-mono)}
 
 /* ── DISPOSITION VIEW ── */
@@ -397,7 +398,7 @@ footer strong{color:var(--w60)}
   background:var(--surface2);border:1px solid var(--border2);border-radius:6px;
   padding:10px 8px;width:100%;margin-bottom:6px;
 }
-.df-num{font-size:18px;font-weight:800;font-family:var(--font-head);line-height:1;margin-bottom:2px}
+.df-num{font-size:18px;font-weight:300;font-family:var(--font-num);line-height:1;margin-bottom:2px;letter-spacing:0.01em}
 .df-label{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:var(--w35);font-family:var(--font-mono)}
 .df-rate{font-size:9px;font-family:var(--font-mono);color:var(--w35)}
 .df-rate strong{color:var(--amber)}
@@ -446,7 +447,7 @@ footer strong{color:var(--w60)}
 .sid-name{font-size:11px;font-weight:800;font-family:var(--font-head);color:var(--white);margin-bottom:2px}
 .sid-angle{font-size:8px;color:var(--w35);font-family:var(--font-mono);margin-bottom:8px}
 .sid-qi{font-size:10px;font-family:var(--font-mono);margin-bottom:6px}
-.sid-qi strong{font-size:14px;font-weight:800;font-family:var(--font-head)}
+.sid-qi strong{font-size:14px;font-weight:400;font-family:var(--font-num)}
 .sid-metrics{display:flex;flex-direction:column;gap:3px}
 .sid-row{display:flex;justify-content:space-between;font-size:9px;font-family:var(--font-mono);color:var(--w35)}
 .sid-row span:last-child{color:var(--w60);font-weight:600}
