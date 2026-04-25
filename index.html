@@ -1442,9 +1442,19 @@ function buildIntelBoxes(sc) {
 }
 
 function buildCommentsBox(pubName, forPortal) {
-  if (forPortal) return '';
   const saved = PUB_COMMENTS[pubName]||'';
   const safeId = pubName.replace(/[^a-z0-9]/gi,'_');
+
+  // Portal view — show saved note read-only if one exists
+  if (forPortal) {
+    if (!saved.trim()) return '';
+    return `<div style="margin-top:14px;background:rgba(0,200,150,0.05);border:1px solid rgba(0,200,150,0.2);border-radius:8px;padding:14px 18px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-family:var(--font-mono);margin-bottom:8px;">◈ Notes from Centerfield</div>
+      <div style="font-size:11px;color:var(--w60);line-height:1.75;font-family:var(--font-mono);white-space:pre-wrap;">${saved}</div>
+    </div>`;
+  }
+
+  // Internal view — full editable notes box
   return `<div class="comments-section">
     <div class="cs-header">
       <span class="cs-title">Internal Notes — ${pubName}</span>
