@@ -513,6 +513,127 @@ textarea.pub-comment::placeholder{color:var(--w35)}
   background:none;border:none;transition:color .15s;
 }
 .portal-close:hover{color:var(--white)}
+
+/* ── JOANIE PREDICTS ── */
+.jp-wrap{
+  margin-top:14px;
+  border:1px solid rgba(157,126,255,0.25);
+  border-radius:8px;overflow:hidden;
+  background:rgba(157,126,255,0.03);
+}
+.jp-header{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;
+  background:linear-gradient(90deg,rgba(157,126,255,0.1),transparent);
+  border-bottom:1px solid rgba(157,126,255,0.15);
+}
+.jp-orb{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:conic-gradient(from 0deg,#9d7eff,#00c896,#9d7eff);
+  display:flex;align-items:center;justify-content:center;
+  animation:jpSpin 8s linear infinite;
+  box-shadow:0 0 10px rgba(157,126,255,0.3);
+}
+.jp-orb-i{width:18px;height:18px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px}
+@keyframes jpSpin{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
+.jp-hdr-text{}
+.jp-hdr-eye{font-size:8px;font-family:var(--font-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--purple);opacity:.8}
+.jp-hdr-title{font-family:var(--font-head);font-size:13px;font-weight:700;letter-spacing:-.2px;color:var(--white)}
+.jp-hdr-sub{font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-top:1px}
+.jp-hdr-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.jp-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:3px;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:var(--font-mono);border:1px solid}
+.jp-badge.purple{color:var(--purple);border-color:rgba(157,126,255,0.3);background:rgba(157,126,255,0.1)}
+.jp-badge.live{color:var(--teal);border-color:rgba(0,200,150,0.3);background:rgba(0,200,150,0.1)}
+.jp-badge.live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);animation:jpblink 2s infinite}
+@keyframes jpblink{0%,100%{opacity:1}50%{opacity:.3}}
+.jp-body{padding:16px}
+/* mode tabs */
+.jp-modes{display:flex;gap:0;background:rgba(255,255,255,0.05);border-radius:5px;padding:2px;width:fit-content;margin-bottom:14px}
+.jp-mtab{padding:5px 14px;font-size:9px;font-weight:600;font-family:var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--w35);background:transparent;border:none;border-radius:3px;cursor:pointer;transition:all .15s}
+.jp-mtab:hover:not(.on){color:var(--w60);background:rgba(255,255,255,0.06)}
+.jp-mtab.on{background:rgba(157,126,255,0.2);color:var(--purple);border:1px solid rgba(157,126,255,0.3)}
+.jp-mpanel{display:none}
+.jp-mpanel.on{display:block}
+/* solver grid */
+.jp-grid{display:grid;grid-template-columns:320px 1fr;gap:12px;align-items:start}
+/* inputs */
+.jp-inp-panel{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:14px}
+.jp-iph{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.jp-iph-title{font-size:11px;font-weight:600;color:var(--w80);font-family:var(--font-head)}
+.jp-iph-tag{font-size:8px;font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--purple)}
+.jp-ig{margin-bottom:10px}
+.jp-iglbl{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.jp-igname{font-size:8px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--w35);font-family:var(--font-mono)}
+.jp-igbase{font-size:8px;color:var(--w35);font-family:var(--font-mono)}
+.jp-igbase span{color:var(--teal)}
+.jp-slider{-webkit-appearance:none;appearance:none;width:100%;height:2px;border-radius:2px;background:rgba(255,255,255,0.1);outline:none;cursor:pointer}
+.jp-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--purple);cursor:pointer;box-shadow:0 0 6px rgba(157,126,255,0.5)}
+.jp-inrow{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.jp-in{background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:6px 9px;font-family:var(--font-num);font-size:13px;font-weight:300;color:var(--white);width:100%;outline:none;transition:border-color .15s}
+.jp-in:focus{border-color:rgba(157,126,255,0.5)}
+.jp-in.tgt{border-color:rgba(157,126,255,0.4);background:rgba(157,126,255,0.06)}
+.jp-unit{font-size:8px;font-family:var(--font-mono);color:var(--w35);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:6px 7px;white-space:nowrap;flex-shrink:0}
+.jp-presets{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.jp-ps{padding:2px 7px;border-radius:3px;border:1px solid var(--border2);background:transparent;font-family:var(--font-mono);font-size:8px;color:var(--w35);cursor:pointer;transition:all .12s}
+.jp-ps:hover{border-color:rgba(157,126,255,0.4);color:var(--purple);background:rgba(157,126,255,0.08)}
+.jp-div{height:1px;background:var(--border);margin:10px 0}
+.jp-solve-btn{width:100%;padding:10px;background:linear-gradient(135deg,rgba(157,126,255,0.25),rgba(157,126,255,0.1));border:1px solid rgba(157,126,255,0.4);border-radius:6px;font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--purple);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.jp-solve-btn:hover{background:linear-gradient(135deg,rgba(157,126,255,0.35),rgba(157,126,255,0.18));transform:translateY(-1px)}
+.jp-reset{display:block;text-align:center;margin-top:6px;font-family:var(--font-mono);font-size:8px;color:var(--w35);cursor:pointer;letter-spacing:.06em;text-transform:uppercase}
+.jp-reset:hover{color:var(--w60)}
+/* outputs */
+.jp-hero{background:rgba(157,126,255,0.06);border:1px solid rgba(157,126,255,0.2);border-radius:7px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.jp-hero-eye{font-size:8px;font-family:var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-bottom:3px}
+.jp-hero-val{font-family:var(--font-num);font-size:38px;font-weight:300;line-height:1;letter-spacing:-.02em}
+.jp-hero-val.g{color:var(--teal)}.jp-hero-val.a{color:var(--amber)}.jp-hero-val.r{color:#ff8080}
+.jp-hero-sub{font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-top:2px}
+.jp-gap-lbl{font-size:8px;font-family:var(--font-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--w35);margin-bottom:2px}
+.jp-gap-val{font-family:var(--font-num);font-size:18px;font-weight:300}
+.jp-verdict{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:3px;font-family:var(--font-mono);font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid;margin-top:4px}
+/* back solver */
+.jp-bs{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:14px;margin-bottom:10px}
+.jp-bs-title{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--w35);font-family:var(--font-mono);margin-bottom:10px}
+.jp-bs-row{display:grid;grid-template-columns:120px 1fr 85px 65px;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.jp-bs-row:last-child{border-bottom:none}
+.jp-bs-kpi{font-family:var(--font-mono);font-size:9px;color:var(--w60)}
+.jp-bs-now{text-align:right;font-family:var(--font-mono);font-size:8px;color:var(--w35)}
+.jp-bs-tgt{text-align:right;font-family:var(--font-num);font-size:12px;font-weight:300}
+/* scenarios */
+.jp-sc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.jp-sc-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;transition:border-color .15s}
+.jp-sc-card:hover{border-color:var(--border2)}
+.jp-sc-card.mid{border-color:rgba(157,126,255,0.25);background:rgba(157,126,255,0.05)}
+.jp-sc-lbl{font-family:var(--font-mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px}
+.jp-sc-lbl.low{color:var(--amber)}.jp-sc-lbl.mid{color:var(--purple)}.jp-sc-lbl.high{color:var(--teal)}
+.jp-sc-kpi{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.jp-sc-kn{font-family:var(--font-mono);font-size:8px;color:var(--w35)}
+.jp-sc-kv{font-family:var(--font-num);font-size:12px;font-weight:300;color:var(--w80)}
+.jp-sc-kv.g{color:var(--teal)}.jp-sc-kv.a{color:var(--amber)}.jp-sc-kv.r{color:#ff8080}
+/* joanie says */
+.jp-joanie{background:rgba(0,200,150,0.04);border:1px solid rgba(0,200,150,0.15);border-radius:6px;padding:11px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+.jp-jorb{width:22px;height:22px;border-radius:50%;background:conic-gradient(from 0deg,var(--purple),var(--teal),var(--purple));display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:jpSpin 6s linear infinite;box-shadow:0 0 8px rgba(157,126,255,0.25)}
+.jp-jorb-i{width:15px;height:15px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:9px}
+.jp-j-hdr{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-family:var(--font-mono);margin-bottom:4px}
+.jp-j-txt{font-size:10px;color:var(--w60);line-height:1.65;font-family:var(--font-mono)}
+.jp-j-txt strong{color:var(--w80)}
+/* waterfall */
+.jp-wf-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.jp-wf-lbl{font-family:var(--font-mono);font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:var(--w35);width:80px;flex-shrink:0}
+.jp-wf-wrap{flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
+.jp-wf-bar{height:100%;display:flex;align-items:center;padding-left:7px;font-family:var(--font-mono);font-size:8px;font-weight:600;border-radius:3px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.jp-wf-num{font-family:var(--font-num);font-size:11px;font-weight:300;width:55px;text-align:right;flex-shrink:0}
+/* vol cards */
+.jp-vol-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.jp-vrc{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center}
+.jp-vrc.hl{border-color:rgba(0,200,150,0.25);background:rgba(0,200,150,0.04)}
+.jp-vrc-lbl{font-family:var(--font-mono);font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:var(--w35);margin-bottom:5px}
+.jp-vrc-val{font-family:var(--font-num);font-size:24px;font-weight:300;color:var(--w80);line-height:1}
+.jp-vrc-val.g{color:var(--teal)}
+.jp-vrc-sub{font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-top:2px}
+/* insight */
+.jp-insight{background:rgba(0,200,150,0.04);border:1px solid rgba(0,200,150,0.12);border-radius:5px;padding:9px 12px;margin-bottom:10px;font-size:10px;color:var(--w60);line-height:1.6;font-family:var(--font-mono)}
+.jp-insight strong{color:var(--teal)}
+@media(max-width:900px){.jp-grid{grid-template-columns:1fr}.jp-sc-grid{grid-template-columns:1fr}.jp-vol-row{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -1435,6 +1556,7 @@ function buildPartnerCard(d, forPortal=false) {
     ${buildSubIdDetail(d)}
     ${buildIntelBoxes(sc)}
     ${whatItMeans}
+    ${buildJoaniePredictsPanel(d, forPortal)}
     ${buildCommentsBox(d.name, forPortal)}
   </div>`;
 }
@@ -1845,6 +1967,347 @@ setTimeout(()=>{
   document.getElementById('loader').style.transition='opacity .4s';
   setTimeout(()=>document.getElementById('loader').style.display='none',400);
 },1600);
+
+/* ═══════════════════════════════════════════════════════════
+   JOANIE PREDICTS — Partner View Goal Solver
+   Renders inside partner scorecard card, seeded from live d object
+═══════════════════════════════════════════════════════════ */
+
+// Number formatters
+const jpI   = n => Math.round(n).toLocaleString('en-US');
+const jp$   = n => '$' + Math.abs(Math.round(n)).toLocaleString('en-US');
+const jp$K  = n => '$' + Math.round(n/1000).toLocaleString('en-US') + 'K';
+const jpSgn = n => (n>=0?'+$':'-$') + Math.abs(Math.round(n)).toLocaleString('en-US');
+
+// Core GPpTH formula
+// GPpTH = (Revenue - MediaCost) / TalkHours
+// Revenue = NetSales * RPS * (Eff/100)
+// MediaCost = NetSales * CPA
+// NetSales = RawCalls * (CR/100)
+// TalkHours = NetSales * (ATT/60)
+function jpCalc(cr, cpa, eff, att, rps, rawCalls) {
+  const ns  = rawCalls * (cr/100);
+  const rev = ns * rps * (eff/100);
+  const mc  = ns * cpa;
+  const gp  = rev - mc;
+  const th  = ns * (att/60);
+  return {ns, rev, mc, gp, th, gpptH: th>0 ? gp/th : 0};
+}
+
+// Band color using QM RP palette
+function jpBandColor(band) {
+  const m = {'Scale Eligible':'#00c896','Maintain':'#4d9eff','Monitor':'#ffb84d','Throttle':'#ff8c00','Pullback':'#ff4d4d'};
+  return m[band] || '#9d7eff';
+}
+
+// Build the entire Joanie Predicts panel as an HTML string
+// d = partner data object from PUBS array
+function buildJoaniePredictsPanel(d, forPortal=false) {
+  if (!d) return '';
+  // Never expose GPpTH / revenue model data to partners
+  if (forPortal) return '';
+
+  // Seed inputs from live partner data
+  const seedCR    = d.cr   ? parseFloat(d.cr)   : T().cr;
+  const seedCPA   = d.actualCpa ? d.actualCpa   : T().cpa;
+  const seedEff   = d.eff  ? parseFloat(d.eff)  : T().eff;
+  const seedRPS   = d.ltv  ? Math.round(d.ltv * 0.30) : 290; // approx rev per sale from LTV
+  const seedATT   = 22; // default avg talk time min
+  const seedVol   = 1147; // default raw calls
+  const seedGPpTH = d.gpth ? d.gpth : 50;
+  const bandColor = jpBandColor(d.actionBand);
+  const uid       = d.name.replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,8); // unique prefix per partner
+
+  return `
+  <div class="jp-wrap" id="jp-${uid}">
+    <!-- Header -->
+    <div class="jp-header">
+      <div class="jp-orb"><div class="jp-orb-i">🔮</div></div>
+      <div class="jp-hdr-text">
+        <div class="jp-hdr-eye">Partner Intelligence · Goal Solver</div>
+        <div class="jp-hdr-title">Joanie Predicts</div>
+        <div class="jp-hdr-sub">Adjust any lever — back-solves what needs to move to hit GPpTH target</div>
+      </div>
+      <div class="jp-hdr-right">
+        <span class="jp-badge purple">🤖 Joanie</span>
+        <span class="jp-badge live">Live</span>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="jp-body">
+
+      <!-- Mode tabs -->
+      <div class="jp-modes">
+        <button class="jp-mtab on"  onclick="jpMode('${uid}','gppthmodo',this)">🎯 GPpTH Solver</button>
+        <button class="jp-mtab"     onclick="jpMode('${uid}','crmode',this)">📈 CR Solver</button>
+        <button class="jp-mtab"     onclick="jpMode('${uid}','volmode',this)">📞 Volume Solver</button>
+      </div>
+
+      <!-- ── GPpTH SOLVER ── -->
+      <div class="jp-mpanel on" id="jp-${uid}-gppthmodo">
+        <div class="jp-grid">
+          <!-- INPUTS -->
+          <div class="jp-inp-panel">
+            <div class="jp-iph"><div class="jp-iph-title">Inputs — GPpTH Solver</div><div class="jp-iph-tag">Back-Solve</div></div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">GPpTH Target ($)</div><div class="jp-igbase">Benchmark: <span>$75</span></div></div>
+              <div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-in tgt" id="jp-${uid}-tgt" type="number" value="75" min="10" max="300" oninput="jpRecalc('${uid}',${seedVol})"></div>
+              <div class="jp-presets">
+                <button class="jp-ps" onclick="jpV('jp-${uid}-tgt',50);jpRecalc('${uid}',${seedVol})">$50</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-tgt',75);jpRecalc('${uid}',${seedVol})">$75 Bench</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-tgt',90);jpRecalc('${uid}',${seedVol})">$90 QM</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-tgt',100);jpRecalc('${uid}',${seedVol})">$100</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-tgt',125);jpRecalc('${uid}',${seedVol})">$125</button>
+              </div>
+            </div>
+            <div class="jp-div"></div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">Conv Rate (CR%)</div><div class="jp-igbase">Current: <span>${seedCR.toFixed(1)}%</span></div></div>
+              <div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-cr" type="range" min="3" max="30" step=".1" value="${seedCR}" oninput="jpSy('${uid}','cr');jpRecalc('${uid}',${seedVol})"><input class="jp-in" id="jp-${uid}-in-cr" type="number" step=".1" value="${seedCR.toFixed(1)}" oninput="jpSySl('${uid}','cr');jpRecalc('${uid}',${seedVol})" style="width:72px;flex-shrink:0"><div class="jp-unit">%</div></div>
+            </div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">CPA ($/Sale)</div><div class="jp-igbase">Current: <span>$${seedCPA}</span></div></div>
+              <div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-slider" id="jp-${uid}-sl-cpa" type="range" min="50" max="1200" step="5" value="${seedCPA}" oninput="jpSy('${uid}','cpa');jpRecalc('${uid}',${seedVol})"><input class="jp-in" id="jp-${uid}-in-cpa" type="number" step="5" value="${seedCPA}" oninput="jpSySl('${uid}','cpa');jpRecalc('${uid}',${seedVol})" style="width:72px;flex-shrink:0"></div>
+            </div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">Effectuation %</div><div class="jp-igbase">Benchmark: <span>${T().eff}%</span></div></div>
+              <div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-eff" type="range" min="30" max="100" step=".5" value="${seedEff}" oninput="jpSy('${uid}','eff');jpRecalc('${uid}',${seedVol})"><input class="jp-in" id="jp-${uid}-in-eff" type="number" step=".5" value="${seedEff.toFixed(1)}" oninput="jpSySl('${uid}','eff');jpRecalc('${uid}',${seedVol})" style="width:72px;flex-shrink:0"><div class="jp-unit">%</div></div>
+            </div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">Avg Talk Time (min)</div></div>
+              <div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-att" type="range" min="5" max="60" step="1" value="${seedATT}" oninput="jpSy('${uid}','att');jpRecalc('${uid}',${seedVol})"><input class="jp-in" id="jp-${uid}-in-att" type="number" step="1" value="${seedATT}" oninput="jpSySl('${uid}','att');jpRecalc('${uid}',${seedVol})" style="width:72px;flex-shrink:0"><div class="jp-unit">min</div></div>
+            </div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">Revenue Per Sale ($)</div></div>
+              <div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-slider" id="jp-${uid}-sl-rps" type="range" min="50" max="800" step="5" value="${seedRPS}" oninput="jpSy('${uid}','rps');jpRecalc('${uid}',${seedVol})"><input class="jp-in" id="jp-${uid}-in-rps" type="number" step="5" value="${seedRPS}" oninput="jpSySl('${uid}','rps');jpRecalc('${uid}',${seedVol})" style="width:72px;flex-shrink:0"></div>
+            </div>
+            <div class="jp-div"></div>
+            <button class="jp-solve-btn" onclick="jpRecalc('${uid}',${seedVol})">🔮 Recalculate · Joanie Predicts</button>
+            <div class="jp-reset" onclick="jpReset('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})">↺ Reset to Partner Baseline</div>
+          </div>
+          <!-- OUTPUTS -->
+          <div>
+            <div class="jp-hero">
+              <div><div class="jp-hero-eye">Projected GPpTH</div><div class="jp-hero-val" id="jp-${uid}-gpptH">$${seedGPpTH}</div><div class="jp-hero-sub">per talk hour · at current inputs</div></div>
+              <div><div class="jp-gap-lbl">Gap to Target</div><div class="jp-gap-val" id="jp-${uid}-gap" style="font-family:var(--font-num)">—</div><div id="jp-${uid}-verdict"></div></div>
+              <div><div class="jp-gap-lbl">Projected Band</div><div id="jp-${uid}-band" style="margin-top:3px"></div></div>
+            </div>
+            <div class="jp-joanie"><div class="jp-jorb"><div class="jp-jorb-i">🔮</div></div><div><div class="jp-j-hdr">Joanie Says</div><div class="jp-j-txt" id="jp-${uid}-joanie">Click Recalculate to generate Joanie's prediction for ${d.name}.</div></div></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);font-family:var(--font-mono);margin-bottom:8px;margin-top:4px">Back-Solver · What Needs to Move</div>
+            <div class="jp-bs"><div class="jp-bs-title">Required lever movement to hit GPpTH target</div><div id="jp-${uid}-bs"></div></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-family:var(--font-mono);margin-bottom:8px">Scenario Range · Low / Mid / High</div>
+            <div class="jp-sc-grid" id="jp-${uid}-scens"></div>
+            <div class="jp-insight" id="jp-${uid}-insight">Adjust inputs above to see the GPpTH formula breakdown.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CR SOLVER ── -->
+      <div class="jp-mpanel" id="jp-${uid}-crmode">
+        <div class="jp-grid">
+          <div class="jp-inp-panel">
+            <div class="jp-iph"><div class="jp-iph-title">Inputs — CR Solver</div><div class="jp-iph-tag">Impact Mode</div></div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">Target CR (%)</div><div class="jp-igbase">Benchmark: <span>${T().cr}%</span></div></div>
+              <div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-cr2" type="range" min="3" max="30" step=".1" value="${seedCR}" oninput="jpSy('${uid}','cr2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})"><input class="jp-in tgt" id="jp-${uid}-in-cr2" type="number" step=".1" value="${seedCR.toFixed(1)}" oninput="jpSySl('${uid}','cr2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})" style="width:72px;flex-shrink:0"><div class="jp-unit">%</div></div>
+              <div class="jp-presets">
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-cr2',${T().cr});jpSySl('${uid}','cr2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})">${T().cr}% Bench</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-cr2',12);jpSySl('${uid}','cr2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})">12%</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-cr2',15);jpSySl('${uid}','cr2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})">15%</button>
+              </div>
+            </div>
+            <div class="jp-div"></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">Raw Call Volume</div></div><div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-vol2" type="range" min="100" max="5000" step="50" value="${seedVol}" oninput="jpSy('${uid}','vol2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS})"><input class="jp-in" id="jp-${uid}-in-vol2" type="number" step="50" value="${seedVol}" oninput="jpSySl('${uid}','vol2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT},${seedRPS})" style="width:72px;flex-shrink:0"><div class="jp-unit">calls</div></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">Revenue Per Sale ($)</div></div><div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-slider" id="jp-${uid}-sl-rps2" type="range" min="50" max="800" step="5" value="${seedRPS}" oninput="jpSy('${uid}','rps2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT})"><input class="jp-in" id="jp-${uid}-in-rps2" type="number" step="5" value="${seedRPS}" oninput="jpSySl('${uid}','rps2');jpRecalcCR('${uid}',${seedCPA},${seedEff},${seedATT})" style="width:72px;flex-shrink:0"></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">CPA ($/Sale)</div></div><div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-slider" id="jp-${uid}-sl-cpa2" type="range" min="50" max="1200" step="5" value="${seedCPA}" oninput="jpSy('${uid}','cpa2');jpRecalcCR('${uid}')"><input class="jp-in" id="jp-${uid}-in-cpa2" type="number" step="5" value="${seedCPA}" oninput="jpSySl('${uid}','cpa2');jpRecalcCR('${uid}')" style="width:72px;flex-shrink:0"></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">Effectuation %</div></div><div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-eff2" type="range" min="30" max="100" step=".5" value="${seedEff}" oninput="jpSy('${uid}','eff2');jpRecalcCR('${uid}')"><input class="jp-in" id="jp-${uid}-in-eff2" type="number" step=".5" value="${seedEff.toFixed(1)}" oninput="jpSySl('${uid}','eff2');jpRecalcCR('${uid}')" style="width:72px;flex-shrink:0"><div class="jp-unit">%</div></div></div>
+            <div class="jp-div"></div>
+            <button class="jp-solve-btn" onclick="jpRecalcCR('${uid}')">🔮 Project CR Impact</button>
+            <div class="jp-reset" onclick="jpReset('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})">↺ Reset to Partner Baseline</div>
+          </div>
+          <div>
+            <div class="jp-hero">
+              <div><div class="jp-hero-eye">Projected GPpTH at Target CR</div><div class="jp-hero-val" id="jp-${uid}-cr-gpptH">—</div><div class="jp-hero-sub">gross profit per talk hour</div></div>
+              <div><div class="jp-gap-lbl">Net Sales</div><div class="jp-gap-val" id="jp-${uid}-cr-sales" style="font-family:var(--font-num);color:var(--teal)">—</div></div>
+              <div><div class="jp-gap-lbl">Total GP</div><div class="jp-gap-val" id="jp-${uid}-cr-gp" style="font-family:var(--font-num);color:#4d9eff">—</div></div>
+            </div>
+            <div class="jp-joanie"><div class="jp-jorb"><div class="jp-jorb-i">🔮</div></div><div><div class="jp-j-hdr">Joanie Says</div><div class="jp-j-txt" id="jp-${uid}-cr-joanie">Adjust CR to see cascade into GPpTH.</div></div></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-family:var(--font-mono);margin-bottom:8px">CR Impact Waterfall</div>
+            <div class="jp-bs"><div id="jp-${uid}-cr-wf"></div></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);font-family:var(--font-mono);margin-bottom:8px;margin-top:10px">Scenario Range</div>
+            <div class="jp-sc-grid" id="jp-${uid}-cr-scens"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VOLUME SOLVER ── -->
+      <div class="jp-mpanel" id="jp-${uid}-volmode">
+        <div class="jp-grid">
+          <div class="jp-inp-panel">
+            <div class="jp-iph"><div class="jp-iph-title">Inputs — Volume Solver</div><div class="jp-iph-tag">Scale Mode</div></div>
+            <div class="jp-ig">
+              <div class="jp-iglbl"><div class="jp-igname">Target Call Volume</div></div>
+              <div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-vol3" type="range" min="100" max="8000" step="100" value="${seedVol}" oninput="jpSy('${uid}','vol3');jpRecalcVol('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS})"><input class="jp-in tgt" id="jp-${uid}-in-vol3" type="number" step="100" value="${seedVol}" oninput="jpSySl('${uid}','vol3');jpRecalcVol('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS})" style="width:72px;flex-shrink:0"><div class="jp-unit">calls</div></div>
+              <div class="jp-presets">
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-vol3',500);jpSySl('${uid}','vol3');jpRecalcVol('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS})">500</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-vol3',1000);jpSySl('${uid}','vol3');jpRecalcVol('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS})">1K</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-vol3',2000);jpSySl('${uid}','vol3');jpRecalcVol('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS})">2K</button>
+                <button class="jp-ps" onclick="jpV('jp-${uid}-in-vol3',5000);jpSySl('${uid}','vol3');jpRecalcVol('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS})">5K</button>
+              </div>
+            </div>
+            <div class="jp-div"></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">CR (%)</div></div><div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-cr3" type="range" min="3" max="30" step=".1" value="${seedCR}" oninput="jpSy('${uid}','cr3');jpRecalcVol('${uid}')"><input class="jp-in" id="jp-${uid}-in-cr3" type="number" step=".1" value="${seedCR.toFixed(1)}" oninput="jpSySl('${uid}','cr3');jpRecalcVol('${uid}')" style="width:72px;flex-shrink:0"><div class="jp-unit">%</div></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">CPA ($/Sale)</div></div><div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-slider" id="jp-${uid}-sl-cpa3" type="range" min="50" max="1200" step="5" value="${seedCPA}" oninput="jpSy('${uid}','cpa3');jpRecalcVol('${uid}')"><input class="jp-in" id="jp-${uid}-in-cpa3" type="number" step="5" value="${seedCPA}" oninput="jpSySl('${uid}','cpa3');jpRecalcVol('${uid}')" style="width:72px;flex-shrink:0"></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">Revenue Per Sale ($)</div></div><div class="jp-inrow"><div class="jp-unit">$</div><input class="jp-slider" id="jp-${uid}-sl-rps3" type="range" min="50" max="800" step="5" value="${seedRPS}" oninput="jpSy('${uid}','rps3');jpRecalcVol('${uid}')"><input class="jp-in" id="jp-${uid}-in-rps3" type="number" step="5" value="${seedRPS}" oninput="jpSySl('${uid}','rps3');jpRecalcVol('${uid}')" style="width:72px;flex-shrink:0"></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">Effectuation %</div></div><div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-eff3" type="range" min="30" max="100" step=".5" value="${seedEff}" oninput="jpSy('${uid}','eff3');jpRecalcVol('${uid}')"><input class="jp-in" id="jp-${uid}-in-eff3" type="number" step=".5" value="${seedEff.toFixed(1)}" oninput="jpSySl('${uid}','eff3');jpRecalcVol('${uid}')" style="width:72px;flex-shrink:0"><div class="jp-unit">%</div></div></div>
+            <div class="jp-ig"><div class="jp-iglbl"><div class="jp-igname">Avg Talk Time (min)</div></div><div class="jp-inrow"><input class="jp-slider" id="jp-${uid}-sl-att3" type="range" min="5" max="60" step="1" value="${seedATT}" oninput="jpSy('${uid}','att3');jpRecalcVol('${uid}')"><input class="jp-in" id="jp-${uid}-in-att3" type="number" step="1" value="${seedATT}" oninput="jpSySl('${uid}','att3');jpRecalcVol('${uid}')" style="width:72px;flex-shrink:0"><div class="jp-unit">min</div></div></div>
+            <div class="jp-div"></div>
+            <button class="jp-solve-btn" onclick="jpRecalcVol('${uid}')">🔮 Project Volume Impact</button>
+            <div class="jp-reset" onclick="jpReset('${uid}',${seedCR},${seedCPA},${seedEff},${seedATT},${seedRPS},${seedVol})">↺ Reset to Partner Baseline</div>
+          </div>
+          <div>
+            <div class="jp-hero">
+              <div><div class="jp-hero-eye">Projected GPpTH at Target Volume</div><div class="jp-hero-val" id="jp-${uid}-vol-gpptH">—</div><div class="jp-hero-sub">gross profit per talk hour</div></div>
+              <div><div class="jp-gap-lbl">Net Sales</div><div class="jp-gap-val" id="jp-${uid}-vol-sales" style="font-family:var(--font-num);color:var(--teal)">—</div></div>
+              <div><div class="jp-gap-lbl">Total GP</div><div class="jp-gap-val" id="jp-${uid}-vol-gp" style="font-family:var(--font-num);color:#4d9eff">—</div></div>
+            </div>
+            <div class="jp-joanie"><div class="jp-jorb"><div class="jp-jorb-i">🔮</div></div><div><div class="jp-j-hdr">Joanie Says</div><div class="jp-j-txt" id="jp-${uid}-vol-joanie">Adjust volume to see scale impact on GPpTH and total GP.</div></div></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);font-family:var(--font-mono);margin-bottom:8px">Volume Results</div>
+            <div class="jp-vol-row" id="jp-${uid}-vol-row"></div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);font-family:var(--font-mono);margin-bottom:8px;margin-top:4px">Scenario Range</div>
+            <div class="jp-sc-grid" id="jp-${uid}-vol-scens"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /jp-body -->
+  </div><!-- /jp-wrap -->
+  <script>
+  // Auto-run initial calculation after render
+  (function(){
+    setTimeout(function(){
+      jpRecalc('${uid}', ${seedVol});
+      jpRecalcCR('${uid}');
+      jpRecalcVol('${uid}');
+    }, 100);
+  })();
+  <\/script>
+  `;
+}
+
+/* ── GPpTH Solver ── */
+function jpRecalc(uid, defVol) {
+  const cr  = parseFloat(document.getElementById('jp-'+uid+'-in-cr')?.value)  || T().cr;
+  const cpa = parseFloat(document.getElementById('jp-'+uid+'-in-cpa')?.value) || T().cpa;
+  const eff = parseFloat(document.getElementById('jp-'+uid+'-in-eff')?.value) || T().eff;
+  const att = parseFloat(document.getElementById('jp-'+uid+'-in-att')?.value) || 22;
+  const rps = parseFloat(document.getElementById('jp-'+uid+'-in-rps')?.value) || 290;
+  const tgt = parseFloat(document.getElementById('jp-'+uid+'-tgt')?.value)    || 75;
+  const vol = defVol || 1147;
+  const res = jpCalc(cr, cpa, eff, att, rps, vol);
+  const g = res.gpptH, gap = g - tgt;
+
+  // Hero
+  const hv = document.getElementById('jp-'+uid+'-gpptH');
+  if(hv){hv.textContent=jp$(g);hv.className='jp-hero-val '+(g>=tgt?'g':g>=tgt*0.6?'a':'r');}
+
+  // Gap
+  const gv=document.getElementById('jp-'+uid+'-gap');
+  if(gv){gv.textContent=jpSgn(gap);gv.style.color=gap>=0?'var(--teal)':gap>-25?'var(--amber)':'#ff8080';}
+
+  // Verdict
+  const vd=document.getElementById('jp-'+uid+'-verdict');
+  if(vd){const vc=gap>=0?{l:'Target Met ✓',c:'var(--teal)',b:'rgba(0,200,150,0.1)',bc:'rgba(0,200,150,0.3)'}:gap>-25?{l:'Close — Adjust',c:'var(--amber)',b:'rgba(255,184,77,0.1)',bc:'rgba(255,184,77,0.3)'}:{l:'Gap — Action Needed',c:'#ff8080',b:'rgba(255,77,77,0.1)',bc:'rgba(255,77,77,0.3)'};vd.innerHTML=`<div class="jp-verdict" style="color:${vc.c};background:${vc.b};border-color:${vc.bc}">${vc.l}</div>`;}
+
+  // Band
+  const bnd=g>=125?'Scale Eligible':g>=75?'Maintain':g>=50?'Monitor':g>=20?'Throttle':'Pullback';
+  const bc=jpBandColor(bnd);
+  const bv=document.getElementById('jp-'+uid+'-band');
+  if(bv)bv.innerHTML=`<div class="jp-verdict" style="color:${bc};background:${bc}22;border-color:${bc}55;font-size:8px">${bnd}</div>`;
+
+  // Back-solver
+  const reqM=tgt*(att/60),reqCPA=rps*(eff/100)-reqM,reqRPS=(reqM+cpa)/(eff/100),reqEff=(cpa+reqM)/rps*100,reqATT=(rps*(eff/100)-cpa)/tgt*60;
+  const brows=[
+    {lbl:'CPA ($/Sale)',   curr:cpa,            tgt:Math.round(reqCPA), unit:'$', good:reqCPA<cpa,   pct:Math.max(0,reqCPA)/1200, color:'var(--teal)'},
+    {lbl:'Rev Per Sale',   curr:rps,            tgt:Math.round(reqRPS), unit:'$', good:reqRPS>rps,   pct:Math.min(1,reqRPS/800),  color:'var(--teal)'},
+    {lbl:'Effectuation %', curr:eff,            tgt:Math.min(100,Math.round(reqEff)), unit:'%', good:reqEff<=(eff+0.5), pct:Math.min(1,reqEff/100), color:'var(--purple)'},
+    {lbl:'Avg Talk Time',  curr:att,            tgt:Math.max(5,Math.round(reqATT)), unit:'min', good:reqATT<att, pct:Math.max(0,reqATT)/60, color:'var(--amber)'},
+  ];
+  const bsEl=document.getElementById('jp-'+uid+'-bs');
+  if(bsEl)bsEl.innerHTML=brows.map(r=>{const arr=(r.unit==='$'&&r.lbl==='CPA ($/Sale)')?(r.tgt<r.curr?'▼':'▲'):(r.tgt>r.curr?'▲':'▼');const gc=r.good?'var(--teal)':'var(--amber)';
+    return `<div class="jp-bs-row"><div class="jp-bs-kpi">${r.lbl}</div><div style="height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden"><div style="height:100%;border-radius:2px;background:${r.color};width:${Math.round(r.pct*100)}%;transition:width .8s;opacity:.7"></div></div><div class="jp-bs-now">Now: ${r.unit==='$'?'$':''}${jpI(r.curr)}${r.unit==='%'?'%':r.unit==='min'?' min':''}</div><div class="jp-bs-tgt" style="color:${gc}"><span style="font-size:7px;margin-right:2px">${arr}</span>${r.unit==='$'?'$':''}${jpI(r.tgt)}${r.unit==='%'?'%':r.unit==='min'?' min':''}</div></div>`;
+  }).join('');
+
+  // Scenarios
+  const scns=[{l:'LOW',c:'low',crM:1,cpaM:.95,effM:1,rpsM:1.02},{l:'MID',c:'mid',crM:1.05,cpaM:.90,effM:1.03,rpsM:1.05},{l:'HIGH',c:'high',crM:1.12,cpaM:.82,effM:1.06,rpsM:1.10}];
+  const scEl=document.getElementById('jp-'+uid+'-scens');
+  if(scEl)scEl.innerHTML=scns.map((s,i)=>{const sr=jpCalc(cr*s.crM,cpa*s.cpaM,Math.min(100,eff*s.effM),att,rps*s.rpsM,vol);const gc=sr.gpptH>=tgt?'g':sr.gpptH>=tgt*.7?'a':'r';
+    return `<div class="jp-sc-card ${i===1?'mid':''}"><div class="jp-sc-lbl ${s.c}">${s.l}</div><div class="jp-sc-kpi"><span class="jp-sc-kn">GPpTH</span><span class="jp-sc-kv ${gc}">${jp$(sr.gpptH)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">CR%</span><span class="jp-sc-kv">${(cr*s.crM).toFixed(1)}%</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">CPA</span><span class="jp-sc-kv">${jp$(cpa*s.cpaM)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Net Sales</span><span class="jp-sc-kv">${jpI(sr.ns)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Total GP</span><span class="jp-sc-kv ${gc}">${jp$K(sr.gp)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Gap to ${jp$(tgt)}</span><span class="jp-sc-kv ${gc}">${jpSgn(sr.gpptH-tgt)}</span></div></div>`;
+  }).join('');
+
+  // Joanie text
+  const pub=document.querySelector('#jp-'+uid+' .jp-hdr-title')?.parentElement?.parentElement?.previousElementSibling?.textContent||'This partner';
+  let jt='';
+  if(gap>=0)jt=`Projecting <strong>${jp$(g)} GPpTH</strong> — target met with a surplus of <strong>${jpSgn(gap)}</strong>. ${jpI(res.ns)} net sales · ${jp$K(res.gp)} total GP. ${g>=125?'Scale Eligible territory — increase volume allocation.':'Continue current mix.'}`;
+  else if(gap>-30){const fix=Math.round(cpa+gap*(att/60));jt=`<strong>${jp$(Math.abs(gap))} away</strong> from the ${jp$(tgt)} target. Fastest lever: reduce CPA to <strong>~${jp$(fix)}</strong> or increase RPS by ~${jp$(Math.abs(gap)*(att/60))}. Eff ${eff.toFixed(0)}% ${eff>=T().eff?'(above benchmark)':'(below benchmark — improving helps)'}. Monitor-level gap — achievable.`;}
+  else jt=`<strong>${jpSgn(gap)} GPpTH gap.</strong> Per-sale margin: <strong>${jp$(rps*(eff/100)-cpa)}</strong> vs. required ${jp$(tgt*(att/60))} to hit target. ${cpa>rps*(eff/100)?'⚠️ <strong>Media cost exceeds revenue</strong> — CPA reduction is critical.':'Primary lever: CPA reduction. Secondary: QM pricing renegotiation.'}`;
+  const jEl=document.getElementById('jp-'+uid+'-joanie');if(jEl)jEl.innerHTML=jt;
+  const ins=document.getElementById('jp-'+uid+'-insight');if(ins)ins.innerHTML=`<strong>Formula:</strong> GPpTH = (Revenue − Media Cost) ÷ Talk Hours &nbsp;|&nbsp; <strong>Net Sales</strong> = ${jpI(res.ns)} &nbsp;·&nbsp; <strong>Talk Hrs</strong> = ${res.th.toFixed(1)} &nbsp;·&nbsp; <strong>GP</strong> = ${jp$K(res.gp)}`;
+}
+
+/* ── CR Solver ── */
+function jpRecalcCR(uid) {
+  const cr =parseFloat(document.getElementById('jp-'+uid+'-in-cr2')?.value)||T().cr;
+  const vol=parseFloat(document.getElementById('jp-'+uid+'-in-vol2')?.value)||1147;
+  const rps=parseFloat(document.getElementById('jp-'+uid+'-in-rps2')?.value)||290;
+  const cpa=parseFloat(document.getElementById('jp-'+uid+'-in-cpa2')?.value)||T().cpa;
+  const eff=parseFloat(document.getElementById('jp-'+uid+'-in-eff2')?.value)||T().eff;
+  const att=22;
+  const res=jpCalc(cr,cpa,eff,att,rps,vol);const g=res.gpptH;
+  const hv=document.getElementById('jp-'+uid+'-cr-gpptH');if(hv){hv.textContent=jp$(g);hv.className='jp-hero-val '+(g>=75?'g':g>=40?'a':'r');}
+  const sv=document.getElementById('jp-'+uid+'-cr-sales');if(sv)sv.textContent=jpI(res.ns);
+  const gv=document.getElementById('jp-'+uid+'-cr-gp');if(gv)gv.textContent=jp$K(res.gp);
+  const wf=document.getElementById('jp-'+uid+'-cr-wf');if(wf)wf.innerHTML=[{lbl:'Raw Calls',val:vol,c:'rgba(77,158,255,0.5)'},{lbl:'Converted',val:Math.round(res.ns),c:'rgba(157,126,255,0.7)'},{lbl:'Effectuated',val:Math.round(res.ns*(eff/100)),c:'rgba(0,200,150,0.7)'}].map(r=>`<div class="jp-wf-row"><div class="jp-wf-lbl">${r.lbl}</div><div class="jp-wf-wrap"><div class="jp-wf-bar" style="width:${Math.round(r.val/vol*100)}%;background:${r.c};color:rgba(255,255,255,.85)">${jpI(r.val)}</div></div><div class="jp-wf-num" style="color:${r.c.replace('0.','1.')}">${jpI(r.val)}</div></div>`).join('');
+  const sc=document.getElementById('jp-'+uid+'-cr-scens');if(sc)sc.innerHTML=[{l:'LOW',c:'low',v:cr},{l:'MID',c:'mid',v:Math.max(cr,T().cr)},{l:'HIGH',c:'high',v:Math.max(cr,15)}].map((s,i)=>{const sr=jpCalc(s.v,cpa,eff,att,rps,vol);const gc=sr.gpptH>=75?'g':sr.gpptH>=40?'a':'r';return `<div class="jp-sc-card ${i===1?'mid':''}"><div class="jp-sc-lbl ${s.c}">${s.l} · ${s.v.toFixed(1)}% CR</div><div class="jp-sc-kpi"><span class="jp-sc-kn">GPpTH</span><span class="jp-sc-kv ${gc}">${jp$(sr.gpptH)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Net Sales</span><span class="jp-sc-kv">${jpI(sr.ns)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Total GP</span><span class="jp-sc-kv ${gc}">${jp$K(sr.gp)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Talk Hrs</span><span class="jp-sc-kv">${jpI(sr.th)}</span></div></div>`;}).join('');
+  const jEl=document.getElementById('jp-'+uid+'-cr-joanie');if(jEl)jEl.innerHTML=`At <strong>CR ${cr.toFixed(1)}%</strong>, projecting <strong>${jp$(g)} GPpTH</strong> with <strong>${jpI(res.ns)} net sales</strong> and <strong>${jp$K(res.gp)} total GP</strong>. ${g>=75?'✅ Above $75 benchmark.':cr>T().cr?`Every +1pp CR adds ~${jp$(jpCalc(cr+1,cpa,eff,att,rps,vol).gpptH-g)} to GPpTH.`:'CR below benchmark — conversion improvement is the primary lever.'}`;
+}
+
+/* ── Volume Solver ── */
+function jpRecalcVol(uid) {
+  const vol=parseFloat(document.getElementById('jp-'+uid+'-in-vol3')?.value)||1147;
+  const cr =parseFloat(document.getElementById('jp-'+uid+'-in-cr3')?.value) ||T().cr;
+  const cpa=parseFloat(document.getElementById('jp-'+uid+'-in-cpa3')?.value)||T().cpa;
+  const rps=parseFloat(document.getElementById('jp-'+uid+'-in-rps3')?.value)||290;
+  const eff=parseFloat(document.getElementById('jp-'+uid+'-in-eff3')?.value)||T().eff;
+  const att=parseFloat(document.getElementById('jp-'+uid+'-in-att3')?.value)||22;
+  const res=jpCalc(cr,cpa,eff,att,rps,vol);const g=res.gpptH;
+  const hv=document.getElementById('jp-'+uid+'-vol-gpptH');if(hv){hv.textContent=jp$(g);hv.className='jp-hero-val '+(g>=75?'g':g>=40?'a':'r');}
+  const sv=document.getElementById('jp-'+uid+'-vol-sales');if(sv)sv.textContent=jpI(res.ns);
+  const gv=document.getElementById('jp-'+uid+'-vol-gp');if(gv)gv.textContent=jp$K(res.gp);
+  const vr=document.getElementById('jp-'+uid+'-vol-row');if(vr)vr.innerHTML=`<div class="jp-vrc"><div class="jp-vrc-lbl">Net Sales</div><div class="jp-vrc-val g">${jpI(res.ns)}</div><div class="jp-vrc-sub">from ${jpI(vol)} raw calls</div></div><div class="jp-vrc"><div class="jp-vrc-lbl">Talk Hours</div><div class="jp-vrc-val">${jpI(res.th)}</div><div class="jp-vrc-sub">agent capacity needed</div></div><div class="jp-vrc hl"><div class="jp-vrc-lbl">Total GP</div><div class="jp-vrc-val g">${jp$K(res.gp)}</div><div class="jp-vrc-sub">after media cost</div></div>`;
+  const sc=document.getElementById('jp-'+uid+'-vol-scens');if(sc)sc.innerHTML=[{l:'LOW',c:'low',m:.7},{l:'MID',c:'mid',m:1},{l:'HIGH',c:'high',m:1.5}].map((s,i)=>{const sv2=Math.round(vol*s.m);const sr=jpCalc(cr,cpa,eff,att,rps,sv2);const gc=sr.gpptH>=75?'g':sr.gpptH>=40?'a':'r';return `<div class="jp-sc-card ${i===1?'mid':''}"><div class="jp-sc-lbl ${s.c}">${s.l} · ${jpI(sv2)}</div><div class="jp-sc-kpi"><span class="jp-sc-kn">GPpTH</span><span class="jp-sc-kv ${gc}">${jp$(sr.gpptH)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Net Sales</span><span class="jp-sc-kv">${jpI(sr.ns)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Total GP</span><span class="jp-sc-kv ${gc}">${jp$K(sr.gp)}</span></div><div class="jp-sc-kpi"><span class="jp-sc-kn">Media Cost</span><span class="jp-sc-kv r">${jp$K(sr.mc)}</span></div></div>`;}).join('');
+  const jEl=document.getElementById('jp-'+uid+'-vol-joanie');if(jEl)jEl.innerHTML=`At <strong>${jpI(vol)} raw calls</strong>: <strong>${jpI(res.ns)} net sales</strong>, <strong>${jp$(g)} GPpTH</strong>, ${jp$K(res.gp)} total GP on ${jp$K(res.mc)} media cost. ${g<0?'⚠️ Negative GPpTH — volume increases amplify losses. Fix economics first.':g<75?'Volume alone won\'t fix GPpTH — per-sale margin must improve.':'✅ Strong economics — volume scaling compounds GP positively.'}`;
+}
+
+/* ── UI helpers ── */
+function jpMode(uid,id,btn){
+  document.querySelectorAll('#jp-'+uid+' .jp-mpanel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#jp-'+uid+' .jp-mtab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('jp-'+uid+'-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+function jpSy(uid,id){const sl=document.getElementById('jp-'+uid+'-sl-'+id),inp=document.getElementById('jp-'+uid+'-in-'+id);if(sl&&inp)inp.value=sl.value;}
+function jpSySl(uid,id){const sl=document.getElementById('jp-'+uid+'-sl-'+id),inp=document.getElementById('jp-'+uid+'-in-'+id);if(sl&&inp)sl.value=inp.value;}
+function jpV(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+function jpReset(uid,cr,cpa,eff,att,rps,vol){
+  ['cr','cpa','eff','att','rps'].forEach(k=>{const sl=document.getElementById('jp-'+uid+'-sl-'+k),inp=document.getElementById('jp-'+uid+'-in-'+k);const v={cr,cpa,eff,att,rps}[k];if(sl)sl.value=v;if(inp)inp.value=v;});
+  ['cr2','cpa2','eff2','rps2'].forEach(k=>{const sl=document.getElementById('jp-'+uid+'-sl-'+k),inp=document.getElementById('jp-'+uid+'-in-'+k);const v={cr2:cr,cpa2:cpa,eff2:eff,rps2:rps}[k];if(sl)sl.value=v;if(inp)inp.value=v;});
+  ['cr3','cpa3','eff3','att3','rps3'].forEach(k=>{const sl=document.getElementById('jp-'+uid+'-sl-'+k),inp=document.getElementById('jp-'+uid+'-in-'+k);const v={cr3:cr,cpa3:cpa,eff3:eff,att3:att,rps3:rps}[k];if(sl)sl.value=v;if(inp)inp.value=v;});
+  ['vol2','vol3'].forEach(k=>{const sl=document.getElementById('jp-'+uid+'-sl-'+k),inp=document.getElementById('jp-'+uid+'-in-'+k);if(sl)sl.value=vol;if(inp)inp.value=vol;});
+  jpRecalc(uid,vol);jpRecalcCR(uid);jpRecalcVol(uid);
+}
+
 </script>
 </body>
 </html>
