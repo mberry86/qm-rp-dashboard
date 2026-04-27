@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QM Partner Scorecard · Centerfield Health & Medicare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A1628;
+  --navy-mid: #0D1E38;
+  --navy-card: #0f1f3a;
+  --navy-border: rgba(255,255,255,0.07);
+  --navy-border-med: rgba(255,255,255,0.12);
+  --teal: #1D9E75;
+  --teal-light: #5DCAA5;
+  --teal-dim: rgba(29,158,117,0.15);
+  --gold: #BA7517;
+  --gold-light: #EF9F27;
+  --gold-dim: rgba(186,117,23,0.15);
+  --white: #ffffff;
+  --white-70: rgba(255,255,255,0.7);
+  --white-50: rgba(255,255,255,0.5);
+  --white-40: rgba(255,255,255,0.4);
+  --white-15: rgba(255,255,255,0.15);
+  --white-08: rgba(255,255,255,0.08);
+  --red: #E24B4A;
+  --red-dim: rgba(226,75,74,0.15);
+  --blue: #378ADD;
+  --blue-dim: rgba(55,138,221,0.15);
+  --green: #1D9E75;
+  --green-dim: rgba(29,158,117,0.12);
+  --amber: #EF9F27;
+  --amber-dim: rgba(239,159,39,0.12);
+  --font: 'DM Sans', -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', 'DM Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: var(--font);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 56px;
+  background: var(--navy-mid);
+  border-bottom: 1px solid var(--navy-border-med);
+  flex-shrink: 0;
+}
+.tb-left { display: flex; align-items: center; gap: 14px; }
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--teal-light);
+  letter-spacing: 0.01em;
+  padding: 5px 10px;
+  border: 1px solid rgba(93,202,165,0.25);
+  border-radius: 5px;
+  background: rgba(29,158,117,0.08);
+}
+.tb-sep { width: 1px; height: 20px; background: var(--navy-border-med); }
+.tb-title { font-size: 13px; font-weight: 500; color: var(--white-70); }
+.tb-right { display: flex; align-items: center; gap: 10px; }
+.tb-season {
+  font-size: 10px; font-weight: 700; font-family: var(--font-display);
+  letter-spacing: 0.08em; padding: 4px 10px;
+  background: var(--teal-dim); border: 1px solid rgba(29,158,117,0.3);
+  color: var(--teal-light); border-radius: 4px;
+}
+.tb-date { font-size: 11px; color: var(--white-40); }
+
+/* ── MAIN WRAPPER ── */
+.page-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 24px 60px;
+}
+
+/* ── LOCKED STATE ── */
+.locked-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+  text-align: center;
+  padding: 60px 20px;
+}
+.locked-icon { font-size: 40px; opacity: 0.3; }
+.locked-title { font-size: 18px; font-weight: 600; color: var(--white-70); }
+.locked-sub { font-size: 13px; color: var(--white-40); max-width: 340px; line-height: 1.6; }
+
+/* ── SCORECARD ── */
+.scorecard {
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* HEADER */
+.sc-header {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-border-med);
+  border-radius: 12px 12px 0 0;
+  padding: 24px 28px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.sc-partner-name {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.sc-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sc-tag {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+  padding: 3px 9px; border-radius: 3px; text-transform: uppercase;
+  background: var(--white-08); color: var(--white-50);
+}
+.sc-tag.teal { background: var(--teal-dim); color: var(--teal-light); border: 1px solid rgba(29,158,117,0.2); }
+.sc-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.grade-badge {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 700;
+  width: 64px; height: 64px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.grade-a { background: rgba(29,158,117,0.18); color: #5DCAA5; border: 1.5px solid rgba(29,158,117,0.35); }
+.grade-b { background: rgba(55,138,221,0.18); color: #85B7EB; border: 1.5px solid rgba(55,138,221,0.35); }
+.grade-c { background: rgba(239,159,39,0.18); color: #EF9F27; border: 1.5px solid rgba(239,159,39,0.35); }
+.grade-d { background: rgba(226,75,74,0.18); color: #f09595; border: 1.5px solid rgba(226,75,74,0.35); }
+.action-badge {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 5px 14px; border-radius: 5px;
+}
+.ab-green  { background: var(--green-dim); color: #5DCAA5; border: 1px solid rgba(29,158,117,0.3); }
+.ab-blue   { background: var(--blue-dim);  color: #85B7EB; border: 1px solid rgba(55,138,221,0.3); }
+.ab-amber  { background: var(--amber-dim); color: #EF9F27; border: 1px solid rgba(239,159,39,0.3); }
+.ab-red    { background: var(--red-dim);   color: #f09595; border: 1px solid rgba(226,75,74,0.3); }
+.ab-gray   { background: var(--white-08);  color: var(--white-50); border: 1px solid var(--navy-border); }
+
+/* KPI GRID */
+.sc-kpi-section {
+  background: var(--navy-card);
+  border-left: 1px solid var(--navy-border-med);
+  border-right: 1px solid var(--navy-border-med);
+  padding: 22px 28px;
+  border-top: 1px solid var(--navy-border);
+}
+.sc-section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--white-40);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sc-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--navy-border);
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.kpi-card {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-border);
+  border-radius: 8px;
+  padding: 14px 14px 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.kpi-card-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--white-40);
+}
+.kpi-card-val {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 700;
+  line-height: 1.1;
+}
+.kpi-card-target {
+  font-size: 10px; color: var(--white-40); margin-top: 2px;
+}
+.kc-green { color: #5DCAA5; }
+.kc-amber { color: #EF9F27; }
+.kc-red   { color: #f09595; }
+.kc-white { color: var(--white); }
+
+/* KPI STATUS BAR */
+.kpi-bar-wrap { margin-top: 10px; }
+.kpi-bar-track {
+  height: 4px; background: var(--white-08);
+  border-radius: 2px; overflow: hidden; margin-top: 5px;
+}
+.kpi-bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
+
+/* RP SECTION */
+.sc-rp-section {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-border-med);
+  border-top: none;
+  padding: 20px 28px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.rp-item {}
+.rp-item-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--white-40); margin-bottom: 5px;
+}
+.rp-item-val {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 700; color: var(--white);
+}
+.rp-item-val.teal { color: var(--teal-light); }
+.rp-item-sub { font-size: 10px; color: var(--white-40); margin-top: 2px; }
+
+/* FORMULA ROW */
+.sc-formula {
+  background: rgba(29,158,117,0.04);
+  border: 1px solid rgba(29,158,117,0.12);
+  border-top: none;
+  border-radius: 0 0 0 0;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.formula-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal-light);
+  flex-shrink: 0;
+}
+.formula-expr {
+  font-size: 11px; font-family: 'DM Sans', monospace;
+  color: var(--white-70);
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.fe-base { color: var(--white-70); }
+.fe-mult { color: var(--white-40); }
+.fe-val  { color: var(--teal-light); font-weight: 600; }
+.fe-arrow { color: var(--white-40); }
+.fe-result { color: var(--teal-light); font-weight: 700; font-size: 13px; }
+
+/* SUB ID SECTION */
+.sc-subid-section {
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border-med);
+  border-top: none;
+  padding: 20px 28px;
+}
+.subid-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.subid-chip {
+  padding: 6px 14px; border-radius: 5px;
+  border: 1px solid var(--navy-border-med);
+  background: var(--navy-mid);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.chip-dot { width: 6px; height: 6px; border-radius: 50%; }
+.chip-angle { font-size: 10px; font-weight: 400; color: var(--white-40); }
+
+/* GUIDANCE SECTION */
+.sc-guidance {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-border-med);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 20px 28px;
+}
+.guidance-items {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 10px;
+}
+.guidance-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 12px; line-height: 1.5; color: var(--white-70);
+}
+.gi-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 6px;
+}
+
+/* ACTION ROW */
+.sc-action-row {
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border-med);
+  border-top: none;
+  padding: 16px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.action-context {
+  font-size: 12px; color: var(--white-50); line-height: 1.5;
+}
+.action-context strong { color: var(--white-70); }
+
+/* PDF BUTTON */
+.pdf-btn {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 9px 20px; border-radius: 6px; cursor: pointer; border: none;
+  background: var(--teal); color: #fff;
+  transition: background .15s; flex-shrink: 0;
+  font-family: var(--font);
+}
+.pdf-btn:hover { background: #1b8f69; }
+.pdf-btn svg { flex-shrink: 0; }
+
+/* FOOTER */
+.portal-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 10px; color: var(--white-40);
+  line-height: 1.8;
+}
+.portal-footer strong { color: var(--white-50); }
+
+/* ── PRINT / PDF STYLES ── */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 14mm 16mm;
+  }
+  body { background: #fff !important; color: #111 !important; }
+  .topbar { display: none !important; }
+  .pdf-btn { display: none !important; }
+  .sc-action-row { display: none !important; }
+  .portal-footer { display: none !important; }
+  .page-wrap { padding: 0 !important; background: #fff; }
+  .scorecard { max-width: 100% !important; }
+
+  .sc-header { background: #f4f7fb !important; border-color: #cdd6e4 !important; border-radius: 8px 8px 0 0 !important; }
+  .sc-partner-name { color: #111 !important; }
+  .sc-tag { background: #e8f0f8 !important; color: #555 !important; }
+  .sc-tag.teal { background: #d4f0e8 !important; color: #1a7a5a !important; }
+
+  .kpi-card { background: #f9fbfe !important; border-color: #cdd6e4 !important; }
+  .kpi-card-label { color: #777 !important; }
+  .kpi-card-target { color: #888 !important; }
+  .kc-green { color: #1a7a5a !important; }
+  .kc-amber { color: #b07a12 !important; }
+  .kc-red   { color: #b03030 !important; }
+
+  .sc-kpi-section { background: #fff !important; border-color: #cdd6e4 !important; }
+  .sc-section-label { color: #888 !important; }
+  .sc-section-label::after { background: #cdd6e4 !important; }
+
+  .sc-rp-section { background: #f4f7fb !important; border-color: #cdd6e4 !important; }
+  .rp-item-label { color: #777 !important; }
+  .rp-item-val { color: #111 !important; }
+  .rp-item-val.teal { color: #1a7a5a !important; }
+  .rp-item-sub { color: #888 !important; }
+
+  .sc-formula { background: #eef8f4 !important; border-color: #aadeca !important; }
+  .formula-label { color: #1a7a5a !important; }
+  .formula-expr { color: #444 !important; }
+  .fe-val, .fe-result { color: #1a7a5a !important; }
+  .fe-mult, .fe-arrow { color: #999 !important; }
+
+  .sc-subid-section { background: #fff !important; border-color: #cdd6e4 !important; }
+  .subid-chip { background: #f4f7fb !important; border-color: #cdd6e4 !important; color: #111 !important; }
+  .chip-angle { color: #777 !important; }
+
+  .sc-guidance { background: #f4f7fb !important; border-color: #cdd6e4 !important; }
+  .guidance-item { color: #444 !important; }
+
+  .grade-a { background: #d4f0e8 !important; color: #1a7a5a !important; border-color: #aadeca !important; }
+  .grade-b { background: #d6e8f8 !important; color: #2266aa !important; border-color: #aac8e8 !important; }
+  .grade-c { background: #fdf0d4 !important; color: #b07a12 !important; border-color: #e8c878 !important; }
+  .grade-d { background: #fde8e8 !important; color: #b03030 !important; border-color: #e8aaaa !important; }
+
+  .ab-green  { background: #d4f0e8 !important; color: #1a7a5a !important; }
+  .ab-blue   { background: #d6e8f8 !important; color: #2266aa !important; }
+  .ab-amber  { background: #fdf0d4 !important; color: #b07a12 !important; }
+  .ab-red    { background: #fde8e8 !important; color: #b03030 !important; }
+  .ab-gray   { background: #eee     !important; color: #777     !important; }
+
+  .print-footer {
+    display: block !important;
+    text-align: center;
+    font-size: 9px; color: #999;
+    margin-top: 16px;
+    border-top: 1px solid #cdd6e4;
+    padding-top: 8px;
+  }
+}
+
+/* hidden on screen */
+.print-footer { display: none; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-left">
+    <div class="logo">QM//RP</div>
+    <div class="tb-sep"></div>
+    <div class="tb-title">Partner Scorecard · Centerfield Health &amp; Medicare</div>
+  </div>
+  <div class="tb-right">
+    <span class="tb-season" id="tb-season">SEP</span>
+    <span class="tb-date" id="tb-date"></span>
+  </div>
+</div>
+
+<!-- PAGE WRAP -->
+<div class="page-wrap" id="page-wrap">
+
+  <!-- LOCKED STATE (shown when no valid partner param) -->
+  <div class="locked-wrap" id="locked-view">
+    <div class="locked-icon">🔒</div>
+    <div class="locked-title">Scorecard access required</div>
+    <div class="locked-sub">This portal requires a valid partner link. Please use the URL provided by your Centerfield account manager.</div>
+  </div>
+
+  <!-- SCORECARD (hidden until valid partner loaded) -->
+  <div class="scorecard" id="scorecard" style="display:none;">
+
+    <!-- HEADER -->
+    <div class="sc-header">
+      <div>
+        <div class="sc-partner-name" id="sc-name">—</div>
+        <div class="sc-meta">
+          <span class="sc-tag teal" id="sc-season-tag">SEP</span>
+          <span class="sc-tag">QM Partner Scorecard</span>
+          <span class="sc-tag">Enhanced RP Engine</span>
+        </div>
+      </div>
+      <div class="sc-header-right">
+        <div class="grade-badge" id="sc-grade">—</div>
+        <div class="action-badge" id="sc-action">—</div>
+      </div>
+    </div>
+
+    <!-- KPI GRID -->
+    <div class="sc-kpi-section">
+      <div class="sc-section-label">Performance KPIs vs Targets</div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+    </div>
+
+    <!-- RP ROW -->
+    <div class="sc-rp-section" id="rp-row"></div>
+
+    <!-- FORMULA -->
+    <div class="sc-formula" id="sc-formula"></div>
+
+    <!-- SUB ID -->
+    <div class="sc-subid-section">
+      <div class="sc-section-label">Sub ID Marketing Angles Tracked</div>
+      <div class="subid-chips" id="subid-chips"></div>
+    </div>
+
+    <!-- GUIDANCE -->
+    <div class="sc-guidance">
+      <div class="sc-section-label">Recommended Focus Areas</div>
+      <div class="guidance-items" id="guidance-items"></div>
+    </div>
+
+    <!-- ACTION ROW WITH PDF BUTTON -->
+    <div class="sc-action-row">
+      <div class="action-context">
+        Scorecard generated <strong id="sc-gen-date">—</strong> ·
+        Season targets apply · Right Pricing formula: LTV × Eff% × LTV% × CR% × MPQS × SubID_QI ·
+        Questions? Contact your Centerfield account manager.
+      </div>
+      <button class="pdf-btn" onclick="downloadPDF()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download PDF
+      </button>
+    </div>
+
+    <!-- PRINT FOOTER (only visible in PDF) -->
+    <div class="print-footer" id="print-footer">
+      QM Right Pricing · Centerfield Health &amp; Medicare · Confidential · Generated <span id="pf-date"></span>
+    </div>
+
+  </div><!-- /scorecard -->
+
+  <!-- PORTAL FOOTER -->
+  <div class="portal-footer" id="portal-footer" style="display:none;">
+    <strong>Centerfield Health &amp; Medicare</strong> · QM Right Pricing Engine · Powered by Joanie<br>
+    Scorecard data is confidential and intended for the named partner only.<br>
+    Season: <span id="footer-season">SEP — Special Enrollment</span>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+/* ─── DATA (mirrors index.html) ─── */
+const SEASONS = {
+  SEP: { cr:9.0,  cpa:325, eff:73, rde:10, age75:15, ltv:730, ltvPct:0.45, gpth:90, label:'SEP — Special Enrollment', short:'SEP' },
+  OEP: { cr:10.0, cpa:325, eff:72, rde:15, age75:15, ltv:730, ltvPct:0.45, gpth:90, label:'OEP — Open Enrollment',    short:'OEP' },
+  AEP: { cr:16.0, cpa:275, eff:74, rde:15, age75:15, ltv:730, ltvPct:0.45, gpth:90, label:'AEP — Annual Enrollment',  short:'AEP' },
+};
+
+const PUBS = [
+  { name:'Adolent Marketing',   gpth:81,  ltv:689, actualCpa:328, sepBid:18, oepBid:18, aepBid:26,  eff:71, rde:9,  age75:17, subIds:['FLEX-CARD','GROCERY'] },
+  { name:'Barrington Media',    gpth:9,   ltv:862, actualCpa:765, sepBid:null,oepBid:94,aepBid:90,  eff:68, rde:14, age75:21, subIds:['FLEX-CARD'] },
+  { name:'DigiPeak LLC',        gpth:null,ltv:720, actualCpa:387, sepBid:25, oepBid:28, aepBid:38,  eff:73, rde:8,  age75:14, subIds:['GROCERY','DENTAL'] },
+  { name:'EngageCX',            gpth:null,ltv:690, actualCpa:442, sepBid:38, oepBid:40, aepBid:46,  eff:70, rde:11, age75:18, subIds:['FLEX-CARD','OTC'] },
+  { name:'Insurco',             gpth:null,ltv:799, actualCpa:425, sepBid:40, oepBid:45, aepBid:47,  eff:75, rde:7,  age75:12, subIds:['GROCERY'] },
+  { name:'Healthcare.com',      gpth:null,ltv:null,actualCpa:348, sepBid:40, oepBid:45, aepBid:55,  eff:74, rde:9,  age75:15, subIds:['FLEX-CARD','GROCERY','DENTAL'] },
+  { name:'HLG Solutions',       gpth:null,ltv:685, actualCpa:274, sepBid:22, oepBid:25, aepBid:30,  eff:69, rde:12, age75:20, subIds:['OTC'] },
+  { name:'Milestone Marketing', gpth:null,ltv:745, actualCpa:480, sepBid:45, oepBid:50, aepBid:55,  eff:72, rde:9,  age75:16, subIds:['FLEX-CARD','GROCERY'] },
+  { name:'MyHealthAngel',       gpth:null,ltv:616, actualCpa:421, sepBid:null,oepBid:25,aepBid:35,  eff:66, rde:15, age75:23, subIds:['GROCERY'] },
+  { name:'Paragon',             gpth:null,ltv:766, actualCpa:null,sepBid:30, oepBid:30, aepBid:null,eff:73, rde:8,  age75:13, subIds:['FLEX-CARD'] },
+  { name:'Quote Velocity',      gpth:null,ltv:687, actualCpa:264, sepBid:35, oepBid:35, aepBid:40,  eff:72, rde:10, age75:15, subIds:['DENTAL','OTC'] },
+  { name:'RateQuote',           gpth:null,ltv:709, actualCpa:367, sepBid:18, oepBid:22, aepBid:29,  eff:70, rde:8,  age75:12, subIds:['GROCERY'] },
+  { name:'RevRise Media',       gpth:null,ltv:800, actualCpa:null,sepBid:35, oepBid:35, aepBid:30,  eff:74, rde:11, age75:18, subIds:['FLEX-CARD','GROCERY'] },
+  { name:'Scalability.io',      gpth:null,ltv:696, actualCpa:289, sepBid:27, oepBid:30, aepBid:43,  eff:71, rde:9,  age75:16, subIds:['DENTAL'] },
+  { name:'Wisdom Companies',    gpth:null,ltv:672, actualCpa:346, sepBid:20, oepBid:25, aepBid:35,  eff:68, rde:10, age75:19, subIds:['GROCERY','OTC'] },
+  { name:'UAB Inulti',          gpth:null,ltv:663, actualCpa:304, sepBid:18, oepBid:18, aepBid:26,  eff:70, rde:8,  age75:14, subIds:['FLEX-CARD'] },
+];
+
+const SUBID_META = {
+  'FLEX-CARD': { angle:'Flex card / allowance benefit', color:'#5DCAA5' },
+  'GROCERY':   { angle:'Grocery / food allowance',      color:'#85B7EB' },
+  'DENTAL':    { angle:'Dental coverage emphasis',      color:'#EF9F27' },
+  'OTC':       { angle:'OTC / pharmacy benefit',        color:'#b47eff' },
+  'VISION':    { angle:'Vision + dental combo',         color:'#f5a623' },
+  'TRANSPORT': { angle:'Transportation benefit',        color:'#f09595' },
+};
+
+/* ─── HELPERS ─── */
+let activeSeason = 'SEP';
+
+function T() { return SEASONS[activeSeason]; }
+
+function bid(d) {
+  if (activeSeason === 'SEP') return d.sepBid;
+  if (activeSeason === 'OEP') return d.oepBid;
+  return d.aepBid;
+}
+
+function mpqsGrade(d) {
+  const t = T();
+  let pts = 0;
+  if (d.gpth >= 90) pts += 2; else if (d.gpth >= 70) pts += 1;
+  if (d.ltv >= 730) pts += 2; else if (d.ltv >= 650) pts += 1;
+  if (d.eff >= t.eff) pts += 2; else if (d.eff >= t.eff - 8) pts += 1;
+  if (d.rde <= t.rde) pts += 2; else if (d.rde <= t.rde + 3) pts += 1;
+  if (d.age75 <= t.age75) pts += 2; else if (d.age75 <= t.age75 + 5) pts += 1;
+  return pts >= 9 ? 'A' : pts >= 7 ? 'B' : pts >= 4 ? 'C' : 'D';
+}
+
+function mpqsMult(g) {
+  return { A:1.15, B:1.00, C:0.85, D:0.70 }[g] || 1.00;
+}
+
+function subIdQI(d) {
+  // Quality index 0.75–1.10 based on sub id mix
+  const premiums = ['FLEX-CARD','GROCERY'];
+  const discounts = ['TRANSPORT'];
+  if (!d.subIds || d.subIds.length === 0) return 1.00;
+  let qi = 1.00;
+  if (d.subIds.some(s => premiums.includes(s))) qi += 0.05;
+  if (d.subIds.every(s => premiums.includes(s))) qi += 0.05;
+  if (d.subIds.some(s => discounts.includes(s))) qi -= 0.10;
+  if (d.subIds.includes('DENTAL') && !d.subIds.some(s => premiums.includes(s))) qi -= 0.05;
+  return Math.min(1.10, Math.max(0.75, qi));
+}
+
+function calcEnhancedBid(d) {
+  const t = T();
+  const b = bid(d);
+  if (!b) return null;
+  const g = mpqsGrade(d);
+  const qi = subIdQI(d);
+  return Math.round(b * mpqsMult(g) * qi);
+}
+
+function rpAction(d) {
+  const t = T();
+  if (!d.actualCpa) return ['No Spend', 'ab-gray'];
+  const delta = d.actualCpa - t.cpa;
+  if (delta > 100) return ['Cut Bid',   'ab-red'];
+  if (delta > 20)  return ['Reduce Bid','ab-amber'];
+  if (delta < -50) return ['Scale Up',  'ab-green'];
+  if (delta < -10) return ['Slight ↑',  'ab-blue'];
+  return ['On Target','ab-green'];
+}
+
+function gradeClass(g) {
+  return { A:'grade-a', B:'grade-b', C:'grade-c', D:'grade-d' }[g] || 'grade-d';
+}
+
+function kpiColor(val, target, dir) {
+  // dir: 'gte' = higher is better, 'lte' = lower is better
+  if (val === null || val === undefined) return 'kc-white';
+  if (dir === 'gte') return val >= target ? 'kc-green' : val >= target * 0.92 ? 'kc-amber' : 'kc-red';
+  if (dir === 'lte') return val <= target ? 'kc-green' : val <= target * 1.20 ? 'kc-amber' : 'kc-red';
+  return 'kc-white';
+}
+
+function barPct(val, target, dir) {
+  if (!val) return 0;
+  if (dir === 'gte') return Math.min(100, Math.round((val / target) * 100));
+  if (dir === 'lte') return Math.min(100, Math.round((target / val) * 100));
+  return 50;
+}
+
+function barColor(col) {
+  if (col === 'kc-green') return '#5DCAA5';
+  if (col === 'kc-amber') return '#EF9F27';
+  if (col === 'kc-red')   return '#f09595';
+  return 'rgba(255,255,255,0.2)';
+}
+
+/* ─── GUIDANCE GENERATOR ─── */
+function generateGuidance(d, g, t) {
+  const tips = [];
+  if (d.eff < t.eff) {
+    tips.push({ color:'#EF9F27', text:`Effectuation is ${d.eff}% vs ${t.eff}% target — focus on reducing drop-off between enrollment and payment. Consider confirmation call cadence improvements.` });
+  }
+  if (d.rde > t.rde) {
+    tips.push({ color:'#f09595', text:`RDE rate of ${d.rde}% exceeds the ${t.rde}% max — rapid disenrollment is compressing LTV. Review which Sub IDs or creatives correlate with early cancels.` });
+  }
+  if (d.age75 > t.age75) {
+    tips.push({ color:'#EF9F27', text:`Age 75+ mix of ${d.age75}% is above the ${t.age75}% target — this demographic skews claim cost higher. Consider tightening creative targeting.` });
+  }
+  if (d.actualCpa && d.actualCpa > t.cpa) {
+    tips.push({ color:'#f09595', text:`Actual CPA of $${d.actualCpa} is above the $${t.cpa} target. The suggested RP bid reflects a downward adjustment to bring cost in line.` });
+  }
+  if (g === 'A' || g === 'B') {
+    tips.push({ color:'#5DCAA5', text:`MPQS grade ${g} — strong overall quality profile. ${g === 'A' ? 'Eligible for scale consideration at current or increased bid levels.' : 'Maintain current performance to sustain bid levels.'}` });
+  }
+  if (tips.length === 0) {
+    tips.push({ color:'#5DCAA5', text:'All KPIs are tracking at or near target. Maintain current traffic strategy and creative mix.' });
+  }
+  return tips;
+}
+
+/* ─── RENDER ─── */
+function renderScorecard(d) {
+  const t = T();
+  const g = mpqsGrade(d);
+  const [action, actionClass] = rpAction(d);
+  const enhBid = calcEnhancedBid(d);
+  const baseBid = bid(d);
+  const adjLtv = d.ltv ? Math.round(d.ltv * (d.eff / 100)) : null;
+  const qi = subIdQI(d);
+  const mult = mpqsMult(g);
+
+  // Header
+  document.getElementById('sc-name').textContent = d.name;
+  document.getElementById('sc-season-tag').textContent = SEASONS[activeSeason].short;
+  document.getElementById('sc-grade').className = 'grade-badge ' + gradeClass(g);
+  document.getElementById('sc-grade').textContent = g;
+  const actionEl = document.getElementById('sc-action');
+  actionEl.textContent = action;
+  actionEl.className = 'action-badge ' + actionClass;
+
+  // KPI grid
+  const kpis = [
+    { label:'MPQS Grade',    val:g,                             raw:null,        target:'Target: B+',         col: (g==='A'||g==='B') ? 'kc-green' : g==='C' ? 'kc-amber' : 'kc-red', barPct:g==='A'?100:g==='B'?80:g==='C'?55:30 },
+    { label:'Effectuation',  val:`${d.eff}%`,                   raw:d.eff,       target:`Target: ${t.eff}%`,  col:kpiColor(d.eff, t.eff, 'gte'),   barPct:barPct(d.eff, t.eff, 'gte') },
+    { label:'RDE Rate',      val:`${d.rde}%`,                   raw:d.rde,       target:`Max: ${t.rde}%`,     col:kpiColor(d.rde, t.rde, 'lte'),   barPct:barPct(d.rde, t.rde, 'lte') },
+    { label:'Age 75+ Mix',   val:`${d.age75}%`,                 raw:d.age75,     target:`Max: ${t.age75}%`,   col:kpiColor(d.age75, t.age75,'lte'),barPct:barPct(d.age75, t.age75,'lte') },
+    { label:'Actual CPA',    val:d.actualCpa ? `$${d.actualCpa}` : '—', raw:d.actualCpa, target:`Target: $${t.cpa}`, col:kpiColor(d.actualCpa, t.cpa, 'lte'), barPct:barPct(d.actualCpa, t.cpa, 'lte') },
+  ];
+
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k => `
+    <div class="kpi-card">
+      <div class="kpi-card-label">${k.label}</div>
+      <div class="kpi-card-val ${k.col}">${k.val}</div>
+      <div class="kpi-bar-wrap">
+        <div class="kpi-bar-track">
+          <div class="kpi-bar-fill" style="width:${k.barPct}%;background:${barColor(k.col)};"></div>
+        </div>
+      </div>
+      <div class="kpi-card-target">${k.target}</div>
+    </div>
+  `).join('');
+
+  // RP Row
+  document.getElementById('rp-row').innerHTML = `
+    <div class="rp-item">
+      <div class="rp-item-label">Enhanced RP Bid</div>
+      <div class="rp-item-val teal">${enhBid ? '$'+enhBid : '—'}</div>
+      <div class="rp-item-sub">MPQS + Sub ID adjusted</div>
+    </div>
+    <div class="rp-item">
+      <div class="rp-item-label">Base Bid</div>
+      <div class="rp-item-val">${baseBid ? '$'+baseBid : '—'}</div>
+      <div class="rp-item-sub">Pre-adjustment</div>
+    </div>
+    <div class="rp-item">
+      <div class="rp-item-label">Target CPA</div>
+      <div class="rp-item-val">$${t.cpa}</div>
+      <div class="rp-item-sub">${activeSeason} season</div>
+    </div>
+    <div class="rp-item">
+      <div class="rp-item-label">Adj LTV</div>
+      <div class="rp-item-val">${adjLtv ? '$'+adjLtv : '—'}</div>
+      <div class="rp-item-sub">LTV × Eff%</div>
+    </div>
+  `;
+
+  // Formula row
+  const baseDisplay = baseBid ? '$'+baseBid : '—';
+  document.getElementById('sc-formula').innerHTML = `
+    <div class="formula-label">RP Calculation</div>
+    <div class="formula-expr">
+      <span class="fe-base">Base: <strong>${baseDisplay}</strong></span>
+      <span class="fe-mult">×</span>
+      <span class="fe-val">MPQS ${g}: ×${mult.toFixed(2)}</span>
+      <span class="fe-mult">×</span>
+      <span class="fe-val">Sub ID QI: ×${qi.toFixed(2)}</span>
+      <span class="fe-arrow">→</span>
+      <span class="fe-result">Enhanced Bid: ${enhBid ? '$'+enhBid : '—'}</span>
+    </div>
+    <div style="margin-left:auto;font-size:9px;color:var(--white-40);font-style:italic;">LTV × Eff% × LTV% × CR% × MPQS × SubID_QI</div>
+  `;
+
+  // Sub IDs
+  document.getElementById('subid-chips').innerHTML = d.subIds.map(sid => {
+    const meta = SUBID_META[sid] || { angle: sid, color:'#fff' };
+    return `<div class="subid-chip">
+      <span class="chip-dot" style="background:${meta.color};"></span>
+      <strong>${sid}</strong>
+      <span class="chip-angle">${meta.angle}</span>
+    </div>`;
+  }).join('');
+
+  // Guidance
+  const tips = generateGuidance(d, g, t);
+  document.getElementById('guidance-items').innerHTML = tips.map(tip => `
+    <div class="guidance-item">
+      <span class="gi-dot" style="background:${tip.color};"></span>
+      <span>${tip.text}</span>
+    </div>
+  `).join('');
+
+  // Dates
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('sc-gen-date').textContent = dateStr;
+  document.getElementById('pf-date').textContent = dateStr;
+
+  // Footer season
+  document.getElementById('footer-season').textContent = SEASONS[activeSeason].label;
+
+  // Show scorecard
+  document.getElementById('locked-view').style.display = 'none';
+  document.getElementById('scorecard').style.display = 'flex';
+  document.getElementById('portal-footer').style.display = 'block';
+}
+
+/* ─── PDF DOWNLOAD ─── */
+function downloadPDF() {
+  window.print();
+}
+
+/* ─── INIT ─── */
+(function(){
+  // Set date in topbar
+  document.getElementById('tb-date').textContent = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+
+  // Read URL params
+  const params = new URLSearchParams(window.location.search);
+  const partnerParam = params.get('partner');
+  const seasonParam  = params.get('season');
+
+  // Set season
+  if (seasonParam && SEASONS[seasonParam.toUpperCase()]) {
+    activeSeason = seasonParam.toUpperCase();
+  }
+  document.getElementById('tb-season').textContent = activeSeason;
+
+  if (!partnerParam) return; // stays locked
+
+  // Find partner (exact, then case-insensitive)
+  const d = PUBS.find(p => p.name === partnerParam)
+           || PUBS.find(p => p.name.toLowerCase() === partnerParam.toLowerCase());
+
+  if (!d) {
+    document.querySelector('.locked-sub').textContent = `No scorecard found for "${partnerParam}". Please contact your Centerfield account manager.`;
+    return;
+  }
+
+  renderScorecard(d);
+})();
+</script>
+</body>
+</html>
