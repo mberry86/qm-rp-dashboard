@@ -1147,10 +1147,9 @@ function loadData() {
       notes:       r['Partner Notes'],
     };
   });
-}
   // ── Merge CSV actuals into PUBS (Apr 2026 from Looker) ──
   const CSV_ACTUALS = {
-    'Paragon Media':       { ib:7210, d1:5161, spend:135758, sales:374, cpd1:26.30  },
+    'Paragon':       { ib:7210, d1:5161, spend:135758, sales:374, cpd1:26.30  },
     'EngageCX':            { ib:6791, d1:5387, spend:203262, sales:437, cpd1:37.73  },
     'Adolent Marketing':   { ib:5751, d1:4058, spend:70380,  sales:220, cpd1:17.34  },
     'UAB Inulti':          { ib:5526, d1:3862, spend:66816,  sales:167, cpd1:17.30  },
@@ -1158,11 +1157,11 @@ function loadData() {
     'SkyLab Digital':      { ib:4432, d1:3545, spend:109669, sales:297, cpd1:30.94  },
     'RateQuote':           { ib:4067, d1:1064, spend:32967,  sales:58,  cpd1:30.98  },
     'Scalability.io':      { ib:4007, d1:1393, spend:48114,  sales:104, cpd1:34.54  },
-    'DigiPeak, LLC':       { ib:3720, d1:2515, spend:60200,  sales:126, cpd1:23.94  },
-    'Milestone Marketing': { ib:3329, d1:2445, spend:105715, sales:196, cpd1:43.24  },
-    'The Wisdom Companies':{ ib:2705, d1:1875, spend:45900,  sales:101, cpd1:24.48  },
+    'DigiPeak LLC':       { ib:3720, d1:2515, spend:60200,  sales:126, cpd1:23.94  },
+    'Milestone Marketing Solutions': { ib:3329, d1:2445, spend:105715, sales:196, cpd1:43.24  },
+    'The Wisdom Companies LLC':{ ib:2705, d1:1875, spend:45900,  sales:101, cpd1:24.48  },
     'Cobra Solutions':     { ib:2446, d1:1969, spend:61775,  sales:158, cpd1:31.37  },
-    'InsurCo (Fluent)':    { ib:2601, d1:1587, spend:62955,  sales:91,  cpd1:39.67  },
+    'Insurco':    { ib:2601, d1:1587, spend:62955,  sales:91,  cpd1:39.67  },
     'HLG Solutions':       { ib:1171, d1:435,  spend:15092,  sales:29,  cpd1:34.69  },
     'Palo Media Group':    { ib:1081, d1:815,  spend:26565,  sales:49,  cpd1:32.60  },
     'Ring2Media':          { ib:354,  d1:123,  spend:11052,  sales:5,   cpd1:89.85  },
@@ -1171,7 +1170,7 @@ function loadData() {
     'GoldMineLeads':       { ib:113,  d1:93,   spend:3045,   sales:6,   cpd1:32.74  },
     'Health Is Wealth':    { ib:48,   d1:36,   spend:1225,   sales:5,   cpd1:34.03  },
     'Healthcare.com':      { ib:18,   d1:8,    spend:360,    sales:1,   cpd1:45.00  },
-    'Barrington Media':    { ib:11,   d1:6,    spend:911,    sales:1,   cpd1:151.83 },
+    'Barrington Media Group':    { ib:11,   d1:6,    spend:911,    sales:1,   cpd1:151.83 },
   };
   const AGG_CPD1 = 29.67;
   const TGT_CPD1 = 30;
@@ -1179,6 +1178,8 @@ function loadData() {
     const csv = CSV_ACTUALS[d.name];
     if (csv) { d.ib = csv.ib; d.d1 = csv.d1; d.spend = csv.spend; d.sales = csv.sales; d.cpd1 = csv.cpd1; }
   });;
+}
+
 
 
 /* ─── RP FORMULA ENGINE ─── */
@@ -1747,32 +1748,25 @@ function buildPartnerCard(d, forPortal=false) {
   const qi = calcSubIdQI(d);
   const mpqsMult = MPQS_MULT[g]||1.0;
   const baseBid = calcBaseBid(d);
-  // Build sc from PUBS data (d) — always current from CSV, never stale
+  // sc built entirely from PUBS (CSV data) — no SCORECARD_DATA for call metrics
+  const _scd = getScorecardForPub(d.name) || {};
   const sc = {
-    ib:          d.ib    || 0,
-    d1:          d.d1    || 0,
-    spend:       d.spend || null,
-    sales:       d.sales || null,
-    netSales:    d.sales || null,
-    rawCalls:    d.ib    || 0,
-    contacts:    d.d1    || 0,
+    ib:          d.ib        || 0,
+    d1:          d.d1        || 0,
+    spend:       d.spend     || null,
+    netSales:    d.sales     || null,
+    rawCalls:    d.ib        || 0,
+    contacts:    d.d1        || 0,
     cpa:         d.actualCpa || null,
-    talkHours:   null,
-    cr:          d.cr    ? d.cr/100 : null,
-    eff:         d.eff   ? d.eff/100 : null,
-    age75:       d.age75 ? d.age75/100 : null,
-    cpd1:        d.cpd1  || null,
+    cpd1:        d.cpd1      || null,
+    cr:          d.cr        ? d.cr/100    : null,
+    eff:         d.eff       ? d.eff/100   : null,
+    age75:       d.age75     ? d.age75/100 : null,
+    talkHours:   _scd.talkHours || null,
+    actionBand:  _scd.actionBand || null,
+    status:      _scd.status     || null,
     season:      activeSeason,
     date:        'Apr 2026',
-    // Keep SCORECARD_DATA fields for action band / status only
-    ...(getScorecardForPub(d.name) || {}),
-    // Always override with fresh PUBS data — never let stale SCORECARD_DATA win
-    ib:          d.ib    || 0,
-    d1:          d.d1    || 0,
-    spend:       d.spend || null,
-    netSales:    d.sales || null,
-    rawCalls:    d.ib    || 0,
-    contacts:    d.d1    || 0,
   };
 
   const _v  = (v, unit) => v != null ? v+unit : '\u2014';
@@ -2592,5 +2586,3 @@ document.addEventListener('click', function(e) {
 </script>
 </body>
 </html>
-
-
