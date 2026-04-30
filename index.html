@@ -1774,7 +1774,6 @@ function buildPartnerCard(d, forPortal=false) {
   const _cr = (v, tgt) => v == null ? 'var(--w35)' : v<=tgt ? 'var(--teal)' : '#ff8080';
   const kpis = [
     { label:'MPQS Grade',   val:g||'\u2014',      color:g==='A'||g==='B'?'var(--teal)':g==='C'?'var(--amber)':g==='D'?'#ff8080':'var(--w35)', target:'Target: B+' },
-    { label:'GP/TH',        val:d.gpth!=null?'$'+Math.round(d.gpth):'\u2014', color:d.gpth!=null?(d.gpth>=(t.gpth||10)?'var(--teal)':'var(--amber)'):'var(--w35)', target:'Target: $'+(t.gpth||10) },
     { label:'Effectuation', val:_v(d.eff,'%'),    color:_c(d.eff,t.eff,true),   target:'Target: '+t.eff+'%' },
     { label:'RDE Rate',     val:_v(d.rde,'%'),    color:_cr(d.rde,t.rde),       target:'Max: '+t.rde+'%' },
     { label:'Age 75+ Mix',  val:_v(d.age75,'%'),  color:_cr(d.age75,t.age75),   target:'Max: '+t.age75+'%' },
@@ -1814,14 +1813,16 @@ function buildPartnerCard(d, forPortal=false) {
         <div class="pk-target">${k.target}</div>
       </div>`).join('')}
     </div>
-    <div class="pc-footer">
+    ${forPortal ? '' : `<div class="pc-footer">
       <div class="pf"><div class="pf-l">Enhanced RP Bid</div><div class="pf-v" style="color:var(--teal)">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</div></div>
       <div class="pf"><div class="pf-l">Base Bid</div><div class="pf-v" style="color:var(--w60)">$${baseBid.toFixed(0)}</div></div>
       <div class="pf"><div class="pf-l">Target CPA</div><div class="pf-v">$${t.cpa}</div></div>
-  <div class="pf"><div class="pf-l">Current Price/Billable Call</div><div class="pf-v" style="color:var(--teal)">${d.baseBid?'$'+d.baseBid.toFixed(0):'—'}</div></div>div></div>
+      <div class="pf"><div class="pf-l">Current Price/Billable Call</div><div class="pf-v" style="color:var(--teal)">${d.baseBid?'$'+d.baseBid.toFixed(0):'—'}</div></div>
+    </div>`}
+    <div class="pc-footer" style="border-top:none;padding-top:0">
       <div class="pf" style="flex:2"><div class="pf-l">Sub IDs Tracked</div><div style="font-size:12px;font-weight:700;color:var(--w60);margin-top:3px;font-family:var(--font-mono)">${d.subIds.join(' · ')||'—'}</div></div>
     </div>
-    <div class="pc-rp-formula">
+    ${forPortal ? '' : `<div class="pc-rp-formula">
       <div class="pc-formula-title">Enhanced RP Calculation</div>
       <div class="pc-formula-row">
         <span class="pfc">Base: <strong>$${baseBid.toFixed(2)}</strong></span>
@@ -1830,7 +1831,7 @@ function buildPartnerCard(d, forPortal=false) {
         <span class="pfc">→ Enhanced Bid: <strong>$${enhBid.toFixed(0)}</strong></span>
         <span class="pfc" style="margin-left:auto;color:var(--w35)">LTV × Eff% × LTV% × CR% × MPQS × SubID_QI</span>
       </div>
-    </div>
+    </div>`}
     ${d.notes?`<div class="pnotes">${d.notes}</div>`:''}
     ${buildCallMetrics(sc, d.baseBid)}
     ${buildDispositionView(sc, d.baseBid)}
