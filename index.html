@@ -112,7 +112,7 @@ body::before{
 }
 .ticker-scroll{
   display:flex;gap:24px;align-items:center;
-  animation:ticker 40s linear infinite;
+  animation:ticker 70s linear infinite;
   white-space:nowrap;
 }
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -219,6 +219,7 @@ table.dt tbody tr:hover td{background:var(--w04)}
 .bd-g{background:rgba(0,200,150,.15);color:var(--teal);border:1px solid rgba(0,200,150,.25)}
 .bd-a{background:rgba(255,184,77,.13);color:var(--amber);border:1px solid rgba(255,184,77,.22)}
 .bd-r{background:rgba(255,77,77,.13);color:#ff8080;border:1px solid rgba(255,77,77,.22)}
+.bd-am{background:rgba(255,140,0,.15);color:#ffb347;border:1px solid rgba(255,140,0,.25)}
 .bd-b{background:rgba(77,158,255,.13);color:#7ab8ff;border:1px solid rgba(77,158,255,.22)}
 .bd-p{background:rgba(157,126,255,.13);color:#b9a4ff;border:1px solid rgba(157,126,255,.22)}
 .bd-x{background:var(--w04);color:var(--w35);border:1px solid var(--border2)}
@@ -233,6 +234,7 @@ table.dt tbody tr:hover td{background:var(--w04)}
 .sp-b{background:rgba(77,158,255,.2);color:#7ab8ff;border:1px solid rgba(77,158,255,.28)}
 .sp-c{background:rgba(255,184,77,.18);color:#ffd080;border:1px solid rgba(255,184,77,.28)}
 .sp-d{background:rgba(255,77,77,.18);color:#ff9090;border:1px solid rgba(255,77,77,.28)}
+.sp-am{background:rgba(255,140,0,.18);color:#ffb347;border:1px solid rgba(255,140,0,.28)}
 
 /* ── COLORS ── */
 .cg{color:var(--teal)}.ca{color:var(--amber)}.cr{color:#ff8080}.cm{color:var(--w35)}.cb{color:#7ab8ff}
@@ -624,7 +626,7 @@ textarea.pub-comment::placeholder{color:var(--w35)}
 
   <!-- RP FORMULA EXPLAINER -->
   <div class="formula-box">
-    <div class="fb-title">Enhanced RP Formula — MPQS + Sub ID Weighted Bid Calculation</div>
+    <div class="fb-title">MPQS v3.2 Right Pricing Formula — Indexed Score + Sub ID Weighted Bid</div>
     <div class="fb-grid">
       <div class="fblock teal">
         <div class="fblock-label">Base Bid</div>
@@ -633,8 +635,8 @@ textarea.pub-comment::placeholder{color:var(--w35)}
       </div>
       <div class="fblock gold">
         <div class="fblock-label">MPQS Multiplier</div>
-        <div class="fblock-eq">A=×1.15 · B=×1.00 · C=×0.85 · D=×0.70</div>
-        <div class="fblock-note">Rewards durable, high-quality traffic. D-grade = 26% discount vs A</div>
+        <div class="fblock-eq">Score ≥91=×1.10 · 84–90=×1.00 · 74–83=×0.90 · 64–73=×0.80 · &lt;64=×0.70</div>
+        <div class="fblock-note">GPpTH 45% · CR 15% · Effectuation 25% · RDE 10% · Demo 5% · indexed vs season targets</div>
       </div>
       <div class="fblock blue">
         <div class="fblock-label">Sub ID Quality Index</div>
@@ -707,15 +709,19 @@ textarea.pub-comment::placeholder{color:var(--w35)}
       <table class="dt">
         <thead><tr>
           <th style="width:150px;text-align:left">Publisher</th>
-          <th style="width:100px;text-align:left">Score</th>
-          <th style="width:60px">CR%</th>
-          <th style="width:62px">GP/TH</th>
-          <th style="width:80px">Effectuation</th>
-          <th style="width:58px">RDE</th>
-          <th style="width:68px">Age 75+</th>
-          <th style="width:68px">Adj LTV</th>
+          <th style="width:90px;text-align:left">MPQS Score</th>
+          <th style="width:55px">CR%</th>
+          <th style="width:55px">GP/TH</th>
+          <th style="width:68px">Effectuation</th>
+          <th style="width:50px">RDE</th>
+          <th style="width:58px">Age 75+</th>
+          <th style="width:48px" title="GPpTH score (45%)">GPpTH §</th>
+          <th style="width:40px" title="CR score (15%)">CR §</th>
+          <th style="width:40px" title="Effectuation score (25%)">Eff §</th>
+          <th style="width:40px" title="RDE score (10%)">RDE §</th>
+          <th style="width:48px" title="Demo score (5%)">Demo §</th>
           <th style="width:80px">Sub IDs</th>
-          <th style="width:100px">Action Band</th>
+          <th style="width:110px">Action Band</th>
         </tr></thead>
         <tbody id="mpqs-tbody"></tbody>
       </table>
@@ -1043,8 +1049,8 @@ textarea.pub-comment::placeholder{color:var(--w35)}
 /* ─── SEASON CONFIG ─── */
 const SEASONS = {
   SEP:{ cr:7.0,  cpa:400, eff:72, rde:15, age75:15, gpth:10, ltv:710, ltvPct:0.60, tgtCpd1:30, label:'SEP — Special Enrollment', note:'Apr 2026 targets: CPA $400 · CR 7% · Eff 72% · RDE ≥15% · GP/TH $10.' },
-  OEP:{ cr:10.0, cpa:325, eff:72, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'OEP — Open Enrollment',    note:'Higher CR target (10%). RDE tolerance widens to 15%.' },
-  AEP:{ cr:16.0, cpa:275, eff:74, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'AEP — Annual Enrollment',  note:'CR doubles to 16%. CPA drops to $275 — tightest economics.' },
+  OEP:{ cr:9.0,  gpth:75,  cpa:325, eff:70, rde:15, age75:15, ltv:720, ltvPct:0.60, tgtCpd1:30, label:'OEP — Open Enrollment',    note:'OEP targets: CPA $325 · CR 9% · Eff 70% · RDE ≤15% · GP/TH $75.' },
+  AEP:{ cr:16.0, gpth:175, cpa:275, eff:74, rde:15, age75:15, ltv:800, ltvPct:0.60, tgtCpd1:30, label:'AEP — Annual Enrollment',  note:'AEP targets: CPA $275 · CR 16% · Eff 74% · RDE ≤15% · GP/TH $175.' },
 };
 
 /* ─── SUB ID CONFIG ─── */
@@ -1060,7 +1066,57 @@ const SUBID_DATA = [
 const SUBID_MAP = Object.fromEntries(SUBID_DATA.map(s => [s.id, s]));
 
 /* ─── MPQS MULTIPLIERS ─── */
-const MPQS_MULT = { A:1.15, B:1.00, C:0.85, D:0.70 };
+/* ─── MPQS v3.2 ENGINE ─── */
+const MPQS_WEIGHTS = { gpth:0.45, cr:0.15, eff:0.25, rde:0.10, demo:0.05 };
+const MPQS_BANDS = [
+  { min:91, label:'Scale Eligible', css:'bd-g',  color:'var(--teal)'  },
+  { min:84, label:'Maintain',       css:'bd-b',  color:'var(--blue)'  },
+  { min:74, label:'Monitor',        css:'bd-a',  color:'var(--amber)' },
+  { min:64, label:'Throttle',       css:'bd-am', color:'#ffb347'      },
+  { min:0,  label:'Pullback',       css:'bd-r',  color:'#ff8080'      },
+];
+
+function getBench() {
+  const t = SEASONS[activeSeason] || SEASONS['SEP'];
+  return { gpth:t.gpth, cr:t.cr, eff:t.eff, rde:t.rde, demo:t.age75 };
+}
+
+function scoreComponent(partnerVal, benchVal, inverted, cap) {
+  if (partnerVal == null || benchVal == null || benchVal === 0) return null;
+  const raw = inverted
+    ? (benchVal / Math.max(partnerVal, 0.1)) * 100
+    : (partnerVal / benchVal) * 100;
+  return Math.min(Math.max(raw, cap[0]), cap[1]);
+}
+
+function calcMPQSScore(d) {
+  const b = getBench();
+  const parts = [
+    { s:scoreComponent(d.gpth,  b.gpth, false, [50,120]), w:MPQS_WEIGHTS.gpth },
+    { s:scoreComponent(d.cr,    b.cr,   false, [70,115]), w:MPQS_WEIGHTS.cr   },
+    { s:scoreComponent(d.eff,   b.eff,  false, [60,115]), w:MPQS_WEIGHTS.eff  },
+    { s:scoreComponent(d.rde,   b.rde,  true,  [50,115]), w:MPQS_WEIGHTS.rde  },
+    { s:scoreComponent(d.age75, b.demo, true,  [60,115]), w:MPQS_WEIGHTS.demo },
+  ];
+  let totalWeight = 0, totalScore = 0;
+  parts.forEach(p => { if (p.s != null) { totalScore += p.s * p.w; totalWeight += p.w; } });
+  if (totalWeight === 0) return null;
+  return +(totalScore / totalWeight).toFixed(1);
+}
+
+function getMPQSBand(score) {
+  if (score == null) return MPQS_BANDS[4];
+  return MPQS_BANDS.find(b => score >= b.min) || MPQS_BANDS[4];
+}
+
+function mpqsMultiplier(score) {
+  if (score == null) return 0.85;
+  if (score >= 91) return 1.10;
+  if (score >= 84) return 1.00 + (score - 84) / 70;
+  if (score >= 74) return 0.90 + (score - 74) / 100;
+  if (score >= 64) return 0.80 + (score - 64) / 100;
+  return Math.max(0.70, 0.70 + (score - 50) / 140);
+}
 
 /* ─── STATE ─── */
 let activeSeason = 'SEP';
@@ -1200,11 +1256,11 @@ function calcSubIdQI(d) {
 }
 
 function calcEnhancedBid(d) {
-  const grade = d.mpqsGrade || 'B';
-  const mpqsMult = MPQS_MULT[grade] || 1.0;
-  const qi = calcSubIdQI(d);
-  const base = calcBaseBid(d);
-  return +(base * mpqsMult * qi).toFixed(2);
+  const score = calcMPQSScore(d);
+  const mult  = mpqsMultiplier(score);
+  const qi    = calcSubIdQI(d);
+  const base  = calcBaseBid(d);
+  return +(base * mult * qi).toFixed(2);
 }
 
 function aggTargetPrice() {
@@ -1223,16 +1279,17 @@ function rpAction(d) {
   return ['On Target','bd-g'];
 }
 
-function actionBandLabel(g) {
-  if (g==='A') return ['Scale Eligible','bd-g'];
-  if (g==='B') return ['Maintain','bd-b'];
-  if (g==='C') return ['Monitor','bd-a'];
-  return ['Pullback','bd-r'];
+function actionBandLabel(score) {
+  const band = getMPQSBand(score);
+  return [band.label, band.css];
 }
 
-function spill(g) {
-  const m={A:'sp-a',B:'sp-b',C:'sp-c',D:'sp-d'};
-  return `<span class="spill ${m[g]||'sp-c'}">${g}</span>`;
+function spill(score) {
+  const label = score != null ? Math.round(score) : '—';
+  const cls = score == null ? 'sp-c'
+    : score >= 91 ? 'sp-a' : score >= 84 ? 'sp-b'
+    : score >= 74 ? 'sp-c' : score >= 64 ? 'sp-am' : 'sp-d';
+  return `<span class="spill ${cls}">${label}</span>`;
 }
 
 function deltaBadge(d) {
@@ -1292,7 +1349,7 @@ function renderKPIs() {
       <div class="kc-val">$${t.tgtCpd1||30}</div>
       <div class="kc-sub">Per paid contact · ${activeSeason}</div>
     </div>`;
-  document.getElementById('nav-sub').textContent = `${t.label} · Enhanced RP Engine`;
+  document.getElementById('nav-sub').textContent = `${t.label} · MPQS v3.2 RP Engine`;
 
   document.getElementById('season-strip').innerHTML =
     `<span class="ss-label">${activeSeason}</span>` +
@@ -1300,6 +1357,7 @@ function renderKPIs() {
     `<span class="ss-chip"><strong>$${t.ltv}</strong> Blended LTV</span>` +
     `<span class="ss-chip"><strong>${t.ltvPct*100}%</strong> LTV% to CPA</span>` +
     `<span class="ss-chip"><strong>$${t.gpth||10}</strong> GP/TH target</span>` +
+    `<span class="ss-chip" style="background:rgba(0,200,150,0.08);border-color:rgba(0,200,150,0.2);color:var(--teal)">MPQS v3.2 · Scale≥91 · Maint 84–90 · Mon 74–83 · Throttle 64–73 · Pullback&lt;64</span>` +
     `<span class="ss-note">${t.note}</span>`;
 }
 
@@ -1313,23 +1371,22 @@ function renderRP() {
   if (F.filter==='risk')    data=data.filter(d=>d.status==='At Risk');
   const rpSeverity = {['Cut Bid']:0,['Reduce Bid']:1,['Monitor']:2,['On Target']:3,['Slight ↑']:4,['Scale Up']:5,['No Spend']:6};
   if (F.sort==='delta') data.sort((a,b)=>Math.abs((b.actualCpa||0)-t.cpa)-Math.abs((a.actualCpa||0)-t.cpa));
-  else if (F.sort==='mpqs') data.sort((a,b)=>a.mpqsGrade.localeCompare(b.mpqsGrade));
-  else if (F.sort==='bid') data.sort((a,b)=>calcEnhancedBid(b)-calcEnhancedBid(a));
+  else if (F.sort==='mpqs') data.sort((a,c)=>(calcMPQSScore(c)||0)-(calcMPQSScore(a)||0));
+  else if (F.sort==='bid') data.sort((a,c)=>calcEnhancedBid(c)-calcEnhancedBid(a));
   else if (F.sort==='rp') data.sort((a,b)=>(rpSeverity[a.rpAction]||9)-(rpSeverity[b.rpAction]||9));
   else data.sort((a,b)=>a.name.localeCompare(b.name));
 
   document.getElementById('rp-tbody').innerHTML = data.map(d => {
-    const g = d.mpqsGrade;
+    const score = calcMPQSScore(d); const mult = mpqsMultiplier(score); const b = getBench();
     const [act, actc] = rpAction(d);
     const enhBid = calcEnhancedBid(d);
     const qi = calcSubIdQI(d);
-    const mpqsMult = MPQS_MULT[g]||1.0;
     const adjLtv = d.ltv ? Math.round(d.ltv*(d.eff/100)) : null;
     const sidBadges = d.subIds.slice(0,2).map(id=>`<span class="bd bd-p" style="font-size:8px">${id.slice(0,4)}</span>`).join(' ');
     return `<tr>
       <td title="${d.name}">${d.name.length>20?d.name.slice(0,20)+'…':d.name}</td>
-      <td>${spill(g)}</td>
-      <td class="${ck(d.gpth,90,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
+      <td>${spill(score)}</td>
+      <td class="${ck(d.gpth,b.gpth,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
       <td class="cm">${adjLtv?'$'+adjLtv:'—'}</td>
       <td class="cm">$${t.cpa}</td>
       <td class="${d.actualCpa?(d.actualCpa>t.cpa?'cr':'cg'):'cm'}">${d.actualCpa?'$'+d.actualCpa:'—'}</td>
@@ -1338,7 +1395,7 @@ function renderRP() {
       <td class="${ck(d.rde,t.rde,'lte')}">${d.rde}%</td>
       <td class="${ck(d.age75,t.age75,'lte')}">${d.age75}%</td>
       <td>${sidBadges||'—'}</td>
-      <td class="${enhBid>0?'cg':'cm'}" title="Base×${mpqsMult}×${qi.toFixed(2)}">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</td>
+      <td class="${enhBid>0?'cg':'cm'}" title="×${mult.toFixed(2)}×${qi.toFixed(2)}">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</td>
       <td><span class="bd ${actc}">${act}</span></td>
     </tr>`;
   }).join('');
@@ -1347,33 +1404,46 @@ function renderRP() {
 /* ─── RENDER MPQS ─── */
 function renderMPQS() {
   const t = T();
-  const bandMap = {A:['Scale Eligible','bd-g'],B:['Maintain','bd-b'],C:['Monitor','bd-a'],D:['Pullback','bd-r']};
+  const b = getBench();
   document.getElementById('mpqs-tbody').innerHTML = PUBS.map(d => {
-    const g = d.mpqsGrade;
-    const [bl, bc] = bandMap[g]||['—','bd-x'];
+    const score = calcMPQSScore(d); const band = getMPQSBand(score);
+    const gpthS = d.gpth  != null ? scoreComponent(d.gpth,  b.gpth, false, [50,120]) : null;
+    const crS   = d.cr    != null ? scoreComponent(d.cr,    b.cr,   false, [70,115]) : null;
+    const effS  = d.eff   != null ? scoreComponent(d.eff,   b.eff,  false, [60,115]) : null;
+    const rdeS  = d.rde   != null ? scoreComponent(d.rde,   b.rde,  true,  [50,115]) : null;
+    const demoS = d.age75 != null ? scoreComponent(d.age75, b.demo, true,  [60,115]) : null;
+    function cs(s){return s==null?'cm':s>=100?'cg':s>=85?'ca':'cr';}
     const sidStr = d.subIds.map(id=>`<span class="bd bd-p" style="font-size:8px">${id}</span>`).join(' ');
     return `<tr>
       <td title="${d.name}">${d.name.length>20?d.name.slice(0,20)+'…':d.name}</td>
-      <td>${spill(g)} <span class="bd ${bc}" style="margin-left:4px">${g}</span></td>
+      <td>${spill(score)} <span class="bd ${band.css}" style="margin-left:4px">${score!=null?score.toFixed(0):'—'}</span></td>
       <td class="${ck(d.cr,t.cr,'gte')}">${d.cr!==null&&d.cr!==undefined?d.cr.toFixed(1)+'%':'—'}</td>
-      <td class="${ck(d.gpth,90,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
+      <td class="${ck(d.gpth,b.gpth,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
       <td class="${ck(d.eff,t.eff,'gte')}">${d.eff}%</td>
       <td class="${ck(d.rde,t.rde,'lte')}">${d.rde}%</td>
       <td class="${ck(d.age75,t.age75,'lte')}">${d.age75}%</td>
-      <td class="cm">${d.ltv?'$'+d.ltv:'—'}</td>
+      <td class="${cs(gpthS)}">${gpthS!=null?gpthS.toFixed(0):'—'}</td>
+      <td class="${cs(crS)}">${crS!=null?crS.toFixed(0):'—'}</td>
+      <td class="${cs(effS)}">${effS!=null?effS.toFixed(0):'—'}</td>
+      <td class="${cs(rdeS)}">${rdeS!=null?rdeS.toFixed(0):'—'}</td>
+      <td class="${cs(demoS)}">${demoS!=null?demoS.toFixed(0):'—'}</td>
       <td>${sidStr||'—'}</td>
-      <td><span class="bd ${bc}">${bl}</span></td>
+      <td><span class="bd ${band.css}">${band.label}</span></td>
     </tr>`;
   }).join('');
-  const t2 = T();
+  const t2 = T(); const b2 = getBench();
   document.getElementById('targets-ref').innerHTML =
-    `<span class="tref-lbl">${activeSeason}</span>` +
+    `<span class="tref-lbl">${activeSeason} — MPQS v3.2</span>` +
+    `<span class="ti">GPpTH <strong>$${b2.gpth}</strong></span>` +
     `<span class="ti">CR <strong>${t2.cr}%</strong></span>` +
-    `<span class="ti">Effectuation <strong>${t2.eff}%</strong></span>` +
-    `<span class="ti">RDE ≤ <strong>${t2.rde}%</strong></span>` +
-    `<span class="ti">Age 75+ ≤ <strong>${t2.age75}%</strong></span>` +
-    `<span class="ti">GP/TH <strong>$90</strong></span>` +
-    `<span class="ti">Target CPA <strong>$${t2.cpa}</strong></span>`;
+    `<span class="ti">Effectuation <strong>${b2.eff}%</strong></span>` +
+    `<span class="ti">RDE ≤ <strong>${b2.rde}%</strong></span>` +
+    `<span class="ti">Age 75+ ≤ <strong>${b2.demo}%</strong></span>` +
+    `<span class="ti">Scale <strong>≥91</strong></span>` +
+    `<span class="ti">Maintain <strong>84–90</strong></span>` +
+    `<span class="ti">Monitor <strong>74–83</strong></span>` +
+    `<span class="ti">Throttle <strong>64–73</strong></span>` +
+    `<span class="ti">Pullback <strong>&lt;64</strong></span>`;
 }
 
 /* ─── RENDER SUB IDs ─── */
@@ -1381,27 +1451,21 @@ function renderSubIDs() {
   const t = T();
   function sg(v,tgt,dir){return dir==='gte'?(v>=tgt?'skr-g':v>=tgt*.9?'skr-a':'skr-r'):(v<=tgt?'skr-g':v<=tgt*1.1?'skr-a':'skr-r')}
   document.getElementById('subid-grid').innerHTML = SUBID_DATA.map(si => {
-    let p=0;
-    if(si.cr>=t.cr)p+=2;else if(si.cr>=t.cr-2)p+=1;
-    if(si.gpth>=90)p+=2;else if(si.gpth>=70)p+=1;
-    if(si.eff>=t.eff)p+=2;else if(si.eff>=t.eff-8)p+=1;
-    if(si.rde<=t.rde)p+=2;else if(si.rde<=t.rde+3)p+=1;
-    if(si.age75<=t.age75)p+=2;else if(si.age75<=t.age75+5)p+=1;
-    const g=p>=9?'A':p>=7?'B':p>=4?'C':'D';
+    const siScore = calcMPQSScore({ gpth:si.gpth, cr:si.cr, eff:si.eff, rde:si.rde, age75:si.age75 });
+    const siBand  = getMPQSBand(siScore);
     const qiColor = si.qi>=1.05?'var(--teal)':si.qi>=0.95?'var(--amber)':'#ff8080';
     return `<div class="sic">
-      <div class="sic-head"><div class="sic-id">${si.id}</div>${spill(g)}</div>
+      <div class="sic-head"><div class="sic-id">${si.id}</div>${spill(siScore)}</div>
       <div class="sic-angle">${si.angle}</div>
       <div class="sic-kpis">
         <div class="skr"><span class="skr-l">Conv. Rate</span><span class="skr-v ${sg(si.cr,t.cr,'gte')}">${si.cr}%</span></div>
-        <div class="skr"><span class="skr-l">GP/TH</span><span class="skr-v ${sg(si.gpth,90,'gte')}">$${si.gpth}</span></div>
         <div class="skr"><span class="skr-l">Effectuation</span><span class="skr-v ${sg(si.eff,t.eff,'gte')}">${si.eff}%</span></div>
         <div class="skr"><span class="skr-l">RDE</span><span class="skr-v ${sg(si.rde,t.rde,'lte')}">${si.rde}%</span></div>
         <div class="skr"><span class="skr-l">Age 75+</span><span class="skr-v ${sg(si.age75,t.age75,'lte')}">${si.age75}%</span></div>
         <div class="skr" style="margin-top:4px;padding-top:5px;border-top:1px solid var(--border)">
-          <span class="skr-l">Bid QI Index</span>
-          <span class="skr-v" style="color:${qiColor}">×${si.qi.toFixed(2)}</span>
+          <span class="skr-l">Action Band</span><span class="skr-v" style="color:${siBand.color}">${siBand.label}</span>
         </div>
+        <div class="skr"><span class="skr-l">Bid QI Index</span><span class="skr-v" style="color:${qiColor}">×${si.qi.toFixed(2)}</span></div>
       </div>
     </div>`;
   }).join('');
@@ -1741,11 +1805,10 @@ function populatePartnerSelect() {
 function buildPartnerCard(d, forPortal=false) {
   if (!d) return '';
   const t = T();
-  const g = d.mpqsGrade;
+  const score = calcMPQSScore(d); const band = getMPQSBand(score); const mult = mpqsMultiplier(score);
   const [act, actc] = rpAction(d);
   const enhBid = calcEnhancedBid(d);
   const qi = calcSubIdQI(d);
-  const mpqsMult = MPQS_MULT[g]||1.0;
   const baseBid = calcBaseBid(d);
   // sc built entirely from PUBS (CSV data) — no SCORECARD_DATA for call metrics
   const _scd = getScorecardForPub(d.name) || {};
@@ -1772,11 +1835,11 @@ function buildPartnerCard(d, forPortal=false) {
   const _c  = (v, tgt, hi) => v == null ? 'var(--w35)' : (hi ? v>=tgt : v<=tgt) ? 'var(--teal)' : 'var(--amber)';
   const _cr = (v, tgt) => v == null ? 'var(--w35)' : v<=tgt ? 'var(--teal)' : '#ff8080';
   const kpis = [
-    { label:'MPQS Grade',   val:g||'\u2014',      color:g==='A'||g==='B'?'var(--teal)':g==='C'?'var(--amber)':g==='D'?'#ff8080':'var(--w35)', target:'Target: B+' },
+    { label:'MPQS Score',   val:score!=null?score.toFixed(0):'—', color:band.color, target:'Scale≥91 · Maint 84+ · Mon 74+' },
+    { label:'Action Band',  val:band.label, color:band.color, target:'MPQS v3.2' },
     { label:'Effectuation', val:_v(d.eff,'%'),    color:_c(d.eff,t.eff,true),   target:'Target: '+t.eff+'%' },
     { label:'RDE Rate',     val:_v(d.rde,'%'),    color:_cr(d.rde,t.rde),       target:'Max: '+t.rde+'%' },
     { label:'Age 75+ Mix',  val:_v(d.age75,'%'),  color:_cr(d.age75,t.age75),   target:'Max: '+t.age75+'%' },
-    { label:'Actual CPA',   val:d.actualCpa?'$'+d.actualCpa:'\u2014', color:d.actualCpa&&d.actualCpa<=t.cpa?'var(--teal)':'#ff8080', target:'Target: $'+t.cpa },
   ];
 
   const cpd1Val   = d.cpd1 != null ? '$'+d.cpd1.toFixed(2) : '—';
@@ -1790,10 +1853,10 @@ function buildPartnerCard(d, forPortal=false) {
       <div style="font-size:9px;font-weight:700;color:var(--teal);font-family:var(--font-mono);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">What this means for you</div>
       <div style="font-size:11px;color:var(--w60);line-height:1.7;font-family:var(--font-mono)">
         ${d.actualCpa&&d.actualCpa>t.cpa
-          ? `Your current cost per acquisition ($${d.actualCpa}) is <span style="color:#ff8080">$${Math.round(d.actualCpa-t.cpa)} above</span> our target of $${t.cpa}. Your enhanced right-priced bid is $${enhBid.toFixed(0)}. Focus on improving effectuation toward ${t.eff}% and reducing rapid dis-enrollment below ${t.rde}% to earn a higher bid and better placement.`
+          ? `Your current cost per acquisition ($${d.actualCpa}) is <span style="color:#ff8080">$${Math.round(d.actualCpa-t.cpa)} above</span> our target of $${t.cpa}. Your enhanced right-priced bid is $${enhBid.toFixed(0)}. Focus on improving effectuation toward ${t.eff}% and reducing rapid dis-enrollment below ${t.rde}% to earn a higher score and bid.`
           : d.actualCpa&&d.actualCpa<=t.cpa
-          ? `Your CPA ($${d.actualCpa}) is <span style="color:var(--teal)">$${Math.round(t.cpa-d.actualCpa)} below our target</span> — strong performance. Your enhanced bid of $${enhBid.toFixed(0)} reflects your ${g}-grade MPQS profile. Maintain your Sub ID mix and quality to hold or improve this pricing.`
-          : `No active spend recorded this season. When you activate, your enhanced right-priced bid will be $${enhBid.toFixed(0)}, based on your ${g}-grade MPQS profile and Sub ID quality index of ×${qi.toFixed(2)}.`}
+          ? `Your CPA ($${d.actualCpa}) is <span style="color:var(--teal)">$${Math.round(t.cpa-d.actualCpa)} below our target</span> — strong performance. Your enhanced bid of $${enhBid.toFixed(0)} reflects your MPQS of ${score!=null?score.toFixed(0):'—'} (${band.label}) and Sub ID quality index of ×${qi.toFixed(2)}.`
+          : `No active spend recorded this season. When you activate, your enhanced right-priced bid will be $${enhBid.toFixed(0)}, based on your MPQS of ${score!=null?score.toFixed(0):'—'} (${band.label}) and Sub ID quality index of ×${qi.toFixed(2)}.`}
       </div>
     </div>`;
 
@@ -1801,9 +1864,9 @@ function buildPartnerCard(d, forPortal=false) {
     <div class="pc-head">
       <div>
         <div class="pc-name">${d.name}</div>
-        <div class="pc-tag">${SEASONS[activeSeason].label} · QM Partner Scorecard · Enhanced RP Engine</div>
+        <div class="pc-tag">${SEASONS[activeSeason].label} · QM Partner Scorecard · MPQS v3.2</div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">${spill(g)}<span class="bd ${actc}">${act}</span></div>
+      <div style="display:flex;gap:8px;align-items:center">${spill(score)}<span class="bd ${band.css}">${band.label}</span><span class="bd ${actc}">${act}</span></div>
     </div>
     <div class="pc-kpis">
       ${kpis.map(k=>`<div class="pk">
@@ -1825,7 +1888,7 @@ function buildPartnerCard(d, forPortal=false) {
       <div class="pc-formula-title">Enhanced RP Calculation</div>
       <div class="pc-formula-row">
         <span class="pfc">Base: <strong>$${baseBid.toFixed(2)}</strong></span>
-        <span class="pfc">MPQS ${g}: <strong>×${mpqsMult}</strong></span>
+        <span class="pfc">MPQS ${score!=null?score.toFixed(0):'—'}: <strong>×${mult.toFixed(2)}</strong></span>
         <span class="pfc">Sub ID QI: <strong>×${qi.toFixed(2)}</strong></span>
         <span class="pfc">→ Enhanced Bid: <strong>$${enhBid.toFixed(0)}</strong></span>
         <span class="pfc" style="margin-left:auto;color:var(--w35)">LTV × Eff% × LTV% × CR% × MPQS × SubID_QI</span>
@@ -1955,17 +2018,18 @@ function renderCharts() {
     }
   });
 
-  const grades=['A','B','C','D'];
-  const gradeCounts=grades.map(g=>PUBS.filter(d=>d.mpqsGrade===g).length);
-  const gradeColors=['rgba(0,200,150,0.7)','rgba(77,158,255,0.7)','rgba(255,184,77,0.7)','rgba(255,77,77,0.7)'];
+  const grades=['Scale ≥91','Maintain 84-90','Monitor 74-83','Throttle 64-73','Pullback <64'];
+  const bandThresh=[91,84,74,64,0];
+  const gradeCounts=bandThresh.map((min,i)=>PUBS.filter(d=>{const s=calcMPQSScore(d);return s!=null&&s>=min&&(i===0||s<bandThresh[i-1]);}).length);
+  const gradeColors=['rgba(0,200,150,0.7)','rgba(77,158,255,0.7)','rgba(255,184,77,0.7)','rgba(255,140,0,0.7)','rgba(255,77,77,0.7)'];
   if (charts.mpqs) charts.mpqs.destroy();
   charts.mpqs = new Chart(document.getElementById('mpqsChart'), {
     type:'doughnut',
     data:{labels:grades,datasets:[{data:gradeCounts,backgroundColor:gradeColors,borderColor:'rgba(8,14,26,0.8)',borderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}
   });
-  document.getElementById('mpqs-legend').innerHTML = grades.map((g,i)=>
-    `<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gradeColors[i]};display:inline-block"></span>${g} — ${gradeCounts[i]} pub${gradeCounts[i]!==1?'s':''}</span>`
+  document.getElementById('mpqs-legend').innerHTML = grades.map((n,i)=>
+    `<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gradeColors[i]};display:inline-block"></span>${n} — ${gradeCounts[i]}</span>`
   ).join('');
 
   const actionLabels=['Scale Up','On Target','Slight ↑','Reduce Bid','Cut Bid','No Spend'];
@@ -1994,7 +2058,7 @@ function buildTicker() {
     const enh = calcEnhancedBid(d);
     const delta = Math.round(d.actualCpa - t.cpa);
     const dc = delta>20?'r':delta<-10?'g':'a';
-    return `<span class="tk"><strong>${d.name.split(' ')[0]}</strong> · CPA <span class="v">$${d.actualCpa}</span> · Delta <span class="${dc}">${delta>0?'+':''}$${delta}</span> · Enh.Bid <span class="g">$${enh.toFixed(0)}</span> · ${d.mpqsGrade}-grade</span>`;
+    return `<span class="tk"><strong>${d.name.split(' ')[0]}</strong> · CPA <span class="v">$${d.actualCpa}</span> · Delta <span class="${dc}">${delta>0?'+':''}$${delta}</span> · Enh.Bid <span class="g">$${enh.toFixed(0)}</span> · MPQS <span class="g">${calcMPQSScore(d)!=null?calcMPQSScore(d).toFixed(0):'—'}</span> · ${getMPQSBand(calcMPQSScore(d)).label}</span>`;
   });
   const doubled = [...items,...items].join('');
   document.getElementById('ticker-inner').innerHTML = doubled;
@@ -2028,17 +2092,17 @@ function handlePush() {
 
 function exportRP() {
   const t = T();
-  const rows = [['Publisher','MPQS','GP/TH','Adj LTV','Target CPA','Actual CPA','Delta','Eff%','RDE%','Age75+','Sub IDs','Base Bid','MPQS Mult','SubID QI','Enhanced Bid','RP Action','Action Band']];
+  const rows = [['Publisher','MPQS Score','MPQS Band','GP/TH','Adj LTV','Target CPA','Actual CPA','Delta','Eff%','RDE%','Age75+','Sub IDs','Base Bid','MPQS Mult','SubID QI','Enhanced Bid','RP Action']];
   PUBS.forEach(d=>{
     rows.push([
-      d.name, d.mpqsGrade, d.gpth||'',
+      d.name, (calcMPQSScore(d)||''), getMPQSBand(calcMPQSScore(d)).label, d.gpth||'',
       d.ltv?Math.round(d.ltv*(d.eff/100)):'',
       t.cpa, d.actualCpa||'',
       d.actualCpa?Math.round(d.actualCpa-t.cpa):'',
       d.eff+'%', d.rde+'%', d.age75+'%',
       d.subIds.join(';'),
       calcBaseBid(d).toFixed(2),
-      MPQS_MULT[d.mpqsGrade]||1.0,
+      mpqsMultiplier(calcMPQSScore(d)).toFixed(3),
       calcSubIdQI(d).toFixed(2),
       calcEnhancedBid(d).toFixed(2),
       rpAction(d)[0],
@@ -2171,9 +2235,9 @@ function joaniePredictor(d) {
     +'</div>';
 }
 
-function jpScore(v,t){function s(x,tgt,hi){if(x==null)return 50;var r=hi?x/tgt:tgt/x;return r>=1.15?100:r>=1.0?85:r>=0.85?65:r>=0.70?45:25;}return s(v.gpth,t.gpth||10,true)*0.30+s(v.cr,t.cr,true)*0.20+s(v.eff,t.eff,true)*0.20+s(v.rde,t.rde,false)*0.15+s(v.age75,t.age75,false)*0.15;}
-function jpGrade(sc){return sc>=80?'A':sc>=65?'B':sc>=50?'C':'D';}
-function jpBid(v,g,ltv,qi){var m={A:1.15,B:1.00,C:0.85,D:0.70}[g]||1.0;return +((( ltv||700)*((v.eff!=null?v.eff:72)/100)*0.60*((v.cr!=null?v.cr:7)/100))*m*(qi||1.0)).toFixed(2);}
+function jpScore(v,t){function s(x,tgt,hi){if(x==null)return 50;var r=hi?x/tgt:tgt/x;return r>=1.15?100:r>=1.0?85:r>=0.85?65:r>=0.70?45:25;}var b=getBench(); return s(v.gpth,b.gpth,true)*0.45+s(v.cr,b.cr,true)*0.15+s(v.eff,b.eff,true)*0.25+s(v.rde,b.rde,false)*0.10+s(v.age75,b.demo,false)*0.05;}
+function jpGrade(sc){return sc>=91?'A':sc>=84?'B':sc>=74?'C':'D';}
+function jpBid(v,g,ltv,qi){var t=T();var m={A:1.10,B:1.00,C:0.90,D:0.80}[g]||0.90;return +((( ltv||t.ltv)*((v.eff!=null?v.eff:t.eff)/100)*t.ltvPct*((v.cr!=null?v.cr:t.cr)/100))*m*(qi||1.0)).toFixed(2);}
 function jpRun(uid,pubName){
   var t=T(),d=PUBS.find(function(p){return p.name===pubName;});if(!d)return;
   var keys=['gpth','cr','eff','rde','age75'],units={gpth:'$',cr:'%',eff:'%',rde:'%',age75:'%'},hiB={gpth:true,cr:true,eff:true,rde:false,age75:false},tgts={gpth:t.gpth||10,cr:t.cr,eff:t.eff,rde:t.rde,age75:t.age75};
@@ -2341,15 +2405,15 @@ function renderDispTab() {
     var nozip= nonBill ? Math.round(nonBill*0.09) : 0;
     var oth  = nonBill - chu - ahu - nocov - ivr - nozip;
     var billPct = raw>0 ? (bill/raw*100).toFixed(0) : 0;
-    var g = d.mpqsGrade || mpqs(d);
-    var gc = {A:'var(--teal)',B:'var(--blue)',C:'var(--amber)',D:'#ff8080'}[g]||'var(--w35)';
+    const _sc=calcMPQSScore(d); const _band=getMPQSBand(_sc);
+    var gc = _band.color;
 
     totRaw+=raw; totBill+=bill; totCHU+=chu; totAHU+=ahu; totNoCov+=nocov; totIVR+=ivr; totOther+=oth+nozip;
 
-    var pillColor = {A:'sp-a',B:'sp-b',C:'sp-c',D:'sp-d'}[g]||'';
+    var pillColor = _sc==null?'sp-c':_sc>=91?'sp-a':_sc>=84?'sp-b':_sc>=74?'sp-c':_sc>=64?'sp-am':'sp-d';
     return '<tr>'
       +'<td style="font-weight:600;font-size:11px;">'+( d.name.length>18?d.name.slice(0,18)+'…':d.name)+'</td>'
-      +'<td><span class="score-pill '+pillColor+'">'+g+'</span></td>'
+      +'<td><span class="score-pill '+pillColor+'">'+(_sc!=null?Math.round(_sc):'—')+'</span></td>'
       +'<td style="font-family:monospace;font-size:10px;">'+raw.toLocaleString()+'</td>'
       +'<td style="font-family:monospace;font-size:10px;color:var(--teal);">'+bill.toLocaleString()+'</td>'
       +'<td style="font-family:monospace;font-size:10px;color:'+( parseInt(billPct)>=40?'var(--teal)':parseInt(billPct)>=20?'var(--amber)':'#ff8080')+';font-weight:600;">'+billPct+'%</td>'
