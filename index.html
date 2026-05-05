@@ -1302,7 +1302,7 @@ function renderRP() {
     const enhBid = calcEnhancedBid(d);
     const qi = calcSubIdQI(d);
     const mpqsMult = MPQS_MULT[g]||1.0;
-    const adjLtv = d.ltv ? Math.round(d.ltv*(d.eff/100)) : null;
+    const adjLtv = d.ltv ? Math.round(d.ltv) : null;
     const sidBadges = d.subIds.slice(0,2).map(id=>`<span class="bd bd-p" style="font-size:8px">${id.slice(0,4)}</span>`).join(' ');
     return `<tr>
       <td title="${d.name}">${d.name.length>20?d.name.slice(0,20)+'…':d.name}</td>
