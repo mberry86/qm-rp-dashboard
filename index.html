@@ -1765,7 +1765,7 @@ function buildPartnerCard(d, forPortal=false) {
       <div class="pf"><div class="pf-l">Enhanced RP Bid</div><div class="pf-v" style="color:var(--teal)">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</div></div>
       <div class="pf"><div class="pf-l">Base Bid</div><div class="pf-v" style="color:var(--w60)">$${baseBid.toFixed(0)}</div></div>
       <div class="pf"><div class="pf-l">Target CPA</div><div class="pf-v">$${t.cpa}</div></div>
-      <div class="pf"><div class="pf-l">Adj LTV</div><div class="pf-v">${d.ltv?'$'+Math.round(d.ltv*(d.eff/100)):'—'}</div></div>
+      <div class="pf"><div class="pf-l">Adj LTV</div><div class="pf-v">${d.ltv?'$'+Math.round(d.ltv):'-'}</div></div>
       <div class="pf" style="flex:2"><div class="pf-l">Sub IDs Tracked</div><div style="font-size:12px;font-weight:700;color:var(--w60);margin-top:3px;font-family:var(--font-mono)">${d.subIds.join(' · ')||'—'}</div></div>
     </div>` : ''}
     ${!forPortal ? `<div class="pc-rp-formula">
