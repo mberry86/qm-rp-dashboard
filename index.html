@@ -5,39 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QM Right Pricing Command Center | Centerfield Health & Medicare</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {
-  --bg:       #1c1c1c;
-  --surface:  #252525;
-  --surface2: #2e2e2e;
-  --surface3: #383838;
-  --border:   rgba(255,255,255,0.08);
-  --border2:  rgba(255,255,255,0.15);
+  /* ── Datalot brand tokens (v2.0 May 2026) ── */
+  --bg:       #1c1c1c;   /* dl-bg */
+  --surface:  #252525;   /* dl-card */
+  --surface2: #2e2e2e;   /* dl-card-raised */
+  --surface3: #383838;   /* dl-well */
+  --border:   rgba(255,255,255,0.08);   /* dl-border */
+  --border2:  rgba(255,255,255,0.15);   /* dl-border-md */
   --border3:  rgba(255,255,255,0.22);
-  --teal:     #29b6d8;
+
+  /* Primary accent: Datalot cyan replaces dashboard teal */
+  --teal:     #29b6d8;   /* dl-cyan */
   --teal-dim: rgba(41,182,216,0.13);
-  --teal-glow:rgba(41,182,216,0.25);
-  --gold:     #ffb830;
+  --teal-glow:rgba(41,182,216,0.28);
+
+  /* Secondary accent: gold maps to Datalot amber */
+  --gold:     #ffb830;   /* dl-amber */
   --gold-dim: rgba(255,184,48,0.13);
-  --red:      #ff5555;
+
+  /* Status colours */
+  --red:      #ff5555;   /* dl-red */
   --red-dim:  rgba(255,85,85,0.12);
   --blue:     #4d9eff;
   --blue-dim: rgba(77,158,255,0.12);
-  --amber:    #ffb830;
+  --amber:    #ffb830;   /* dl-amber */
   --amber-dim:rgba(255,184,48,0.13);
-  --purple:   #a07eff;
-  --white:    #ffffff;
-  --w80: rgba(255,255,255,0.80);
-  --w60: rgba(255,255,255,0.60);
-  --w35: rgba(255,255,255,0.35);
-  --w15: rgba(255,255,255,0.15);
-  --w08: rgba(255,255,255,0.08);
-  --w04: rgba(255,255,255,0.04);
-  --font:      'Inter', sans-serif;
-  --font-head: 'Barlow Condensed', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --purple:   #a07eff;   /* dl-purple */
+
+  /* Text scale */
+  --white: #ffffff;      /* dl-text */
+  --w80:   rgba(255,255,255,0.8);   /* dl-text-2 range */
+  --w60:   rgba(255,255,255,0.6);   /* dl-text-2 */
+  --w35:   rgba(255,255,255,0.35);  /* dl-text-3 */
+  --w15:   rgba(255,255,255,0.15);
+  --w08:   rgba(255,255,255,0.08);
+  --w04:   rgba(255,255,255,0.04);
+
+  /* Typography — Datalot brand fonts */
+  --font:      'Inter', sans-serif;            /* dl-font: body/UI */
+  --font-head: 'Barlow Condensed', sans-serif; /* dl-font-disp: headlines, KPIs */
+  --font-mono: 'IBM Plex Mono', monospace;     /* dl-font-mono: unchanged */
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{font-size:13px;scroll-behavior:smooth}
@@ -91,6 +102,8 @@ body::before{
 .pill-btn:hover{background:var(--w15);color:var(--white)}
 .pill-btn.teal{border-color:rgba(0,200,150,0.35);background:rgba(0,200,150,0.1);color:var(--teal)}
 .pill-btn.teal:hover{background:rgba(0,200,150,0.2)}
+.pill-btn.gold{border-color:rgba(240,165,0,0.35);background:rgba(240,165,0,0.1);color:var(--gold)}
+.pill-btn.gold:hover{background:rgba(240,165,0,0.22)}
 
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--w35);transition:all .3s}
 .sync-dot.live{background:var(--teal);box-shadow:0 0 0 3px rgba(0,200,150,0.2)}
@@ -112,7 +125,7 @@ body::before{
 }
 .ticker-scroll{
   display:flex;gap:24px;align-items:center;
-  animation:ticker 90s linear infinite;
+  animation:ticker 40s linear infinite;
   white-space:nowrap;
 }
 @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -219,6 +232,7 @@ table.dt tbody tr:hover td{background:var(--w04)}
 .bd-g{background:rgba(0,200,150,.15);color:var(--teal);border:1px solid rgba(0,200,150,.25)}
 .bd-a{background:rgba(255,184,77,.13);color:var(--amber);border:1px solid rgba(255,184,77,.22)}
 .bd-r{background:rgba(255,77,77,.13);color:#ff8080;border:1px solid rgba(255,77,77,.22)}
+.bd-am{background:rgba(255,140,0,.15);color:#ffb347;border:1px solid rgba(255,140,0,.25)}
 .bd-b{background:rgba(77,158,255,.13);color:#7ab8ff;border:1px solid rgba(77,158,255,.22)}
 .bd-p{background:rgba(157,126,255,.13);color:#b9a4ff;border:1px solid rgba(157,126,255,.22)}
 .bd-x{background:var(--w04);color:var(--w35);border:1px solid var(--border2)}
@@ -233,6 +247,7 @@ table.dt tbody tr:hover td{background:var(--w04)}
 .sp-b{background:rgba(77,158,255,.2);color:#7ab8ff;border:1px solid rgba(77,158,255,.28)}
 .sp-c{background:rgba(255,184,77,.18);color:#ffd080;border:1px solid rgba(255,184,77,.28)}
 .sp-d{background:rgba(255,77,77,.18);color:#ff9090;border:1px solid rgba(255,77,77,.28)}
+.sp-am{background:rgba(255,140,0,.18);color:#ffb347;border:1px solid rgba(255,140,0,.28)}
 
 /* ── COLORS ── */
 .cg{color:var(--teal)}.ca{color:var(--amber)}.cr{color:#ff8080}.cm{color:var(--w35)}.cb{color:#7ab8ff}
@@ -556,15 +571,7 @@ textarea.pub-comment::placeholder{color:var(--w35)}
 .dp-now{font-size:9px;font-family:var(--font-mono,'IBM Plex Mono'),monospace;font-weight:600;padding:3px 8px;border-radius:4px;border:1px solid var(--border2,rgba(255,255,255,0.1));background:transparent;color:var(--w35,rgba(255,255,255,0.35));cursor:pointer;transition:all .12s}
 .dp-now:hover{color:var(--w60,rgba(255,255,255,0.6));border-color:var(--w35,rgba(255,255,255,0.35))}
 
-
-.data-stamp{display:flex;align-items:center;gap:8px;padding:6px 14px;margin-bottom:16px;background:rgba(29,158,117,0.06);border:1px solid rgba(29,158,117,0.14);border-radius:6px;font-size:11px;}
-.ds-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;box-shadow:0 0 0 3px rgba(29,158,117,0.18);}
-.ds-tab{font-weight:600;color:var(--teal-light);}
-.ds-txt{color:var(--w35);}
-.ds-ok{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:rgba(29,158,117,0.12);color:var(--teal);border:1px solid rgba(29,158,117,0.2);}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -600,19 +607,32 @@ textarea.pub-comment::placeholder{color:var(--w35)}
       </div>
       <div class="dp-divider"></div>
       <div class="dp-inputs" id="dp-inputs">
-        <input class="dp-input" type="month" id="dp-month" value="2026-05" onchange="dpApply()">
+        <input class="dp-input" type="month" id="dp-month" value="2026-04" onchange="dpApply()">
       </div>
       <div class="dp-divider"></div>
-      <button class="dp-now" onclick="dpReset()" title="Reset to May 2026">&#8635;</button>
+      <button class="dp-now" onclick="dpReset()" title="Reset to Apr 2026">&#8635;</button>
     </div>
     <div class="pill-btn" id="sync-status-btn">
       <span class="sync-dot" id="sync-dot"></span>
       <span id="sync-label">Connecting…</span>
     </div>
     <button class="pill-btn teal" onclick="handlePull()">⟳ Pull Notion</button>
+    <button class="pill-btn gold" onclick="triggerCsvUpload()" title="Upload weekly Looker CSV to refresh actuals">⬆ Upload CSV</button>
     <button class="pill-btn" onclick="openPortal()">⊞ Partner Portal</button>
   </div>
 </nav>
+
+<!-- HIDDEN CSV INPUT -->
+<input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCsvFile(event)">
+
+<!-- CSV UPLOAD TOAST -->
+<div id="csv-toast" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:16px 20px;min-width:340px;max-width:420px;font-family:var(--font-mono);font-size:11px;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <span style="font-size:10px;font-weight:600;color:var(--teal);letter-spacing:.1em;text-transform:uppercase" id="csv-toast-title">CSV Upload</span>
+    <button onclick="document.getElementById('csv-toast').style.display='none'" style="background:none;border:none;color:var(--w35);cursor:pointer;font-size:14px;padding:0">✕</button>
+  </div>
+  <div id="csv-toast-body" style="color:var(--w60);line-height:1.7"></div>
+</div>
 
 <!-- TICKER -->
 <div class="ticker" id="ticker-wrap">
@@ -632,7 +652,7 @@ textarea.pub-comment::placeholder{color:var(--w35)}
 
   <!-- RP FORMULA EXPLAINER -->
   <div class="formula-box">
-    <div class="fb-title">Enhanced RP Formula — MPQS + Sub ID Weighted Bid Calculation</div>
+    <div class="fb-title">MPQS v3.2 Right Pricing Formula — Indexed Score + Sub ID Weighted Bid</div>
     <div class="fb-grid">
       <div class="fblock teal">
         <div class="fblock-label">Base Bid</div>
@@ -641,8 +661,8 @@ textarea.pub-comment::placeholder{color:var(--w35)}
       </div>
       <div class="fblock gold">
         <div class="fblock-label">MPQS Multiplier</div>
-        <div class="fblock-eq">A=×1.15 · B=×1.00 · C=×0.85 · D=×0.70</div>
-        <div class="fblock-note">Rewards durable, high-quality traffic. D-grade = 26% discount vs A</div>
+        <div class="fblock-eq">Score ≥91=×1.10 · 84–90=×1.00 · 74–83=×0.90 · 64–73=×0.80 · &lt;64=×0.70</div>
+        <div class="fblock-note">GPpTH 45% · CR 15% · Effectuation 25% · RDE 10% · Demo 5% · indexed vs season targets</div>
       </div>
       <div class="fblock blue">
         <div class="fblock-label">Sub ID Quality Index</div>
@@ -665,19 +685,6 @@ textarea.pub-comment::placeholder{color:var(--w35)}
     <button class="tbtn" onclick="showTab('disp',this)">Call Dispositions</button>
     <button class="tbtn" onclick="showTab('ping',this)">Ping Analysis</button>
     <button class="tbtn" onclick="showTab('charts',this)">Charts</button>
-  </div>
-
-  <!-- DATA FRESHNESS STAMP -->
-  <div class="data-stamp">
-    <div class="ds-dot"></div>
-    <span class="ds-tab" id="stamp-tab">Right Pricing</span>
-    <span class="ds-txt">·</span>
-    <span class="ds-txt">Most recent data run: <strong style="color:var(--white-70)">May 18, 2026</strong></span>
-    <span class="ds-txt">·</span>
-    <span class="ds-txt" id="stamp-src">Notion pull · Media CPA · SEP season</span>
-    <span class="ds-txt">·</span>
-    <span class="ds-txt">No issues</span>
-    <span class="ds-ok">✓ CLEAN</span>
   </div>
 
   <!-- TAB: RIGHT PRICING -->
@@ -728,15 +735,19 @@ textarea.pub-comment::placeholder{color:var(--w35)}
       <table class="dt">
         <thead><tr>
           <th style="width:150px;text-align:left">Publisher</th>
-          <th style="width:100px;text-align:left">Score</th>
-          <th style="width:60px">CR%</th>
-          <th style="width:62px">GP/TH</th>
-          <th style="width:80px">Effectuation</th>
-          <th style="width:58px">RDE</th>
-          <th style="width:68px">Age 75+</th>
-          <th style="width:68px">Adj LTV</th>
+          <th style="width:90px;text-align:left">MPQS Score</th>
+          <th style="width:55px">CR%</th>
+          <th style="width:55px">GP/TH</th>
+          <th style="width:68px">Effectuation</th>
+          <th style="width:50px">RDE</th>
+          <th style="width:58px">Age 75+</th>
+          <th style="width:48px" title="GPpTH score (45%)">GPpTH §</th>
+          <th style="width:40px" title="CR score (15%)">CR §</th>
+          <th style="width:40px" title="Effectuation score (25%)">Eff §</th>
+          <th style="width:40px" title="RDE score (10%)">RDE §</th>
+          <th style="width:48px" title="Demo score (5%)">Demo §</th>
           <th style="width:80px">Sub IDs</th>
-          <th style="width:100px">Action Band</th>
+          <th style="width:110px">Action Band</th>
         </tr></thead>
         <tbody id="mpqs-tbody"></tbody>
       </table>
@@ -748,6 +759,18 @@ textarea.pub-comment::placeholder{color:var(--w35)}
   <div id="tab-subid" class="tpanel">
     <div style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--w35);font-family:var(--font-mono);margin-bottom:14px">Marketing angle performance · scored vs active season targets · Sub ID Quality Index drives bid multiplier</div>
     <div class="subid-grid" id="subid-grid"></div>
+
+    <!-- Publisher × Sub ID breakdown -->
+    <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--white);font-family:var(--font-head);letter-spacing:.04em">Publisher × Sub ID QI Breakdown</div>
+          <div style="font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-top:2px">Actual QI = 60% publisher actuals + 40% angle baseline · Baseline QI = angle average only</div>
+        </div>
+        <div id="subid-qi-source-badge" style="font-size:9px;font-family:var(--font-mono);padding:3px 8px;border-radius:4px;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,200,150,0.2)">◈ Source: —</div>
+      </div>
+      <div id="pub-subid-breakdown" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px"></div>
+    </div>
   </div>
 
 
@@ -1038,8 +1061,10 @@ textarea.pub-comment::placeholder{color:var(--w35)}
       <strong>Joanie · Live Notion integration</strong> —
       QM Right Pricing DB <a href="https://www.notion.so/a64a0fd07f5b4aa18b12639b8bf7a87d" target="_blank" class="nlink">notion.so/QM-Right-Pricing</a>
       · Publisher data pulled live on demand · Enhanced RP formula runs client-side · RP outputs push back to Notion
+      · <strong>Weekly CSV:</strong> upload Looker <code>source_performance.csv</code> to refresh actuals (IB calls · D1 60+s · spend · sales · CPD1)
     </div>
     <button class="pill-btn teal" onclick="handlePull()">◈ Pull Notion</button>
+    <button class="pill-btn gold" onclick="triggerCsvUpload()">⬆ Upload CSV</button>
     <button class="pill-btn" onclick="handlePush()">↑ Push RP to Notion</button>
   </div>
 </div>
@@ -1064,1516 +1089,168 @@ textarea.pub-comment::placeholder{color:var(--w35)}
 /* ─── SEASON CONFIG ─── */
 const SEASONS = {
   SEP:{ cr:7.0,  cpa:400, eff:72, rde:15, age75:15, gpth:10, ltv:710, ltvPct:0.60, tgtCpd1:30, label:'SEP — Special Enrollment', note:'Apr 2026 targets: CPA $400 · CR 7% · Eff 72% · RDE ≥15% · GP/TH $10.' },
-  OEP:{ cr:10.0, cpa:325, eff:72, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'OEP — Open Enrollment',    note:'Higher CR target (10%). RDE tolerance widens to 15%.' },
-  AEP:{ cr:16.0, cpa:275, eff:74, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'AEP — Annual Enrollment',  note:'CR doubles to 16%. CPA drops to $275 — tightest economics.' },
+  OEP:{ cr:9.0,  gpth:75,  cpa:325, eff:70, rde:15, age75:15, ltv:720, ltvPct:0.60, tgtCpd1:30, label:'OEP — Open Enrollment',    note:'OEP targets: CPA $325 · CR 9% · Eff 70% · RDE ≤15% · GP/TH $75.' },
+  AEP:{ cr:16.0, gpth:175, cpa:275, eff:74, rde:15, age75:15, ltv:800, ltvPct:0.60, tgtCpd1:30, label:'AEP — Annual Enrollment',  note:'AEP targets: CPA $275 · CR 16% · Eff 74% · RDE ≤15% · GP/TH $175.' },
 };
 
 /* ─── SUB ID CONFIG ─── */
-const SUBID_DATA = [
-  { id:'FLEX-CARD',  angle:'Flex card / allowance benefit',  cr:9.4, gpth:92, eff:74, rde:8,  age75:13, qi:1.10 },
-  { id:'GROCERY',    angle:'Grocery / food allowance',       cr:8.8, gpth:85, eff:72, rde:9,  age75:16, qi:1.05 },
-  { id:'DENTAL',     angle:'Dental coverage emphasis',       cr:7.9, gpth:78, eff:69, rde:11, age75:14, qi:0.95 },
-  { id:'OTC',        angle:'OTC / pharmacy benefit',         cr:7.2, gpth:71, eff:67, rde:13, age75:17, qi:0.88 },
-  { id:'VISION',     angle:'Vision + dental combo',          cr:8.1, gpth:80, eff:70, rde:10, age75:15, qi:0.92 },
-  { id:'TRANSPORT',  angle:'Transportation benefit',         cr:6.4, gpth:63, eff:64, rde:15, age75:19, qi:0.80 },
+// Baseline QI values — sourced from Notion QM Sub ID Intelligence DB
+// Override via window._subIdData (populated on Notion pull)
+// QI range 0.75–1.10: higher = better bid multiplier
+const SUBID_BASELINE = [
+  { id:'FLEX-CARD',  angle:'Flex card / allowance benefit',  cr:9.4, gpth:92, eff:74, rde:8,  age75:13, qi:1.10, status:'Active' },
+  { id:'GROCERY',    angle:'Grocery / food allowance',       cr:8.8, gpth:85, eff:72, rde:9,  age75:16, qi:1.05, status:'Active' },
+  { id:'DENTAL',     angle:'Dental coverage emphasis',       cr:7.9, gpth:78, eff:69, rde:11, age75:14, qi:0.95, status:'Active' },
+  { id:'OTC',        angle:'OTC / pharmacy benefit',         cr:7.2, gpth:71, eff:67, rde:13, age75:17, qi:0.88, status:'Active' },
+  { id:'VISION',     angle:'Vision + dental combo',          cr:8.1, gpth:80, eff:70, rde:10, age75:15, qi:0.92, status:'Active' },
+  { id:'TRANSPORT',  angle:'Transportation benefit',         cr:6.4, gpth:63, eff:64, rde:15, age75:19, qi:0.80, status:'Watch'  },
 ];
 
-const SUBID_MAP = Object.fromEntries(SUBID_DATA.map(s => [s.id, s]));
+// Live data — replaced by Notion pull; falls back to SUBID_BASELINE
+window._subIdData = null;
+
+function getSubIdData() {
+  return window._subIdData || SUBID_BASELINE;
+}
+
+// SUBID_DATA and SUBID_MAP are rebuilt on every getSubIdData() call
+// Use these accessors everywhere — never reference SUBID_DATA directly
+let SUBID_DATA = getSubIdData();
+let SUBID_MAP  = Object.fromEntries(SUBID_DATA.map(s => [s.id, s]));
+
+function rebuildSubIdMap() {
+  SUBID_DATA = getSubIdData();
+  SUBID_MAP  = Object.fromEntries(SUBID_DATA.map(s => [s.id, s]));
+}
 
 /* ─── MPQS MULTIPLIERS ─── */
-const MPQS_MULT = { A:1.15, B:1.00, C:0.85, D:0.70 };
+/* ─── MPQS v3.2 ENGINE ─── */
+const MPQS_WEIGHTS = { gpth:0.45, cr:0.15, eff:0.25, rde:0.10, demo:0.05 };
+const MPQS_BANDS = [
+  { min:91, label:'Scale Eligible', css:'bd-g',  color:'var(--teal)'  },
+  { min:84, label:'Maintain',       css:'bd-b',  color:'var(--blue)'  },
+  { min:74, label:'Monitor',        css:'bd-a',  color:'var(--amber)' },
+  { min:64, label:'Throttle',       css:'bd-am', color:'#ffb347'      },
+  { min:0,  label:'Pullback',       css:'bd-r',  color:'#ff8080'      },
+];
+
+function getBench() {
+  const t = SEASONS[activeSeason] || SEASONS['SEP'];
+  return { gpth:t.gpth, cr:t.cr, eff:t.eff, rde:t.rde, demo:t.age75 };
+}
+
+function scoreComponent(partnerVal, benchVal, inverted, cap) {
+  if (partnerVal == null || benchVal == null || benchVal === 0) return null;
+  const raw = inverted
+    ? (benchVal / Math.max(partnerVal, 0.1)) * 100
+    : (partnerVal / benchVal) * 100;
+  return Math.min(Math.max(raw, cap[0]), cap[1]);
+}
+
+function calcMPQSScore(d) {
+  const b = getBench();
+  const parts = [
+    { s:scoreComponent(d.gpth,  b.gpth, false, [50,120]), w:MPQS_WEIGHTS.gpth },
+    { s:scoreComponent(d.cr,    b.cr,   false, [70,115]), w:MPQS_WEIGHTS.cr   },
+    { s:scoreComponent(d.eff,   b.eff,  false, [60,115]), w:MPQS_WEIGHTS.eff  },
+    { s:scoreComponent(d.rde,   b.rde,  true,  [50,115]), w:MPQS_WEIGHTS.rde  },
+    { s:scoreComponent(d.age75, b.demo, true,  [60,115]), w:MPQS_WEIGHTS.demo },
+  ];
+  let totalWeight = 0, totalScore = 0;
+  parts.forEach(p => { if (p.s != null) { totalScore += p.s * p.w; totalWeight += p.w; } });
+  if (totalWeight === 0) return null;
+  return +(totalScore / totalWeight).toFixed(1);
+}
+
+function getMPQSBand(score) {
+  if (score == null) return MPQS_BANDS[4];
+  return MPQS_BANDS.find(b => score >= b.min) || MPQS_BANDS[4];
+}
+
+function mpqsMultiplier(score) {
+  if (score == null) return 0.85;
+  if (score >= 91) return 1.10;
+  if (score >= 84) return 1.00 + (score - 84) / 70;
+  if (score >= 74) return 0.90 + (score - 74) / 100;
+  if (score >= 64) return 0.80 + (score - 64) / 100;
+  return Math.max(0.70, 0.70 + (score - 50) / 140);
+}
 
 /* ─── STATE ─── */
 let activeSeason = 'SEP';
 let PUBS = [];
 let charts = {};
 const F = { filter:'all', sort:'name' };
-var DP = { mode:'month', start:'2026-05-01', end:'2026-05-11', label:'May 2026' }; // date picker state — must be before loadData()
 
 /* ─── LIVE DATA LOADED FROM NOTION ─── */
 const NOTION_DATA = [
-  {
-    "Publisher": "SkyLab Digital, LLC",
-    "Season": "SEP",
-    "MPQS Score": "A",
-    "GP/TH": 10,
-    "Adjusted LTV": 710,
-    "Actual CPA": 424,
-    "Target CPA": 400,
-    "Suggested Bid": 23,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 10,
-    "Demo Age Over 75 %": 26.1,
-    "SC % 60+": 83.0,
-    "Conversion Rate %": 7.3,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Reduce Bid",
-    "Action Band": "Scale Eligible",
-    "Status": "Watch",
-    "CPA Delta": 24,
-    "Partner Notes": "Best GP in May at $6.5K. Strong volume, positive GP/TH. CPA $24 over target — minor adjustment. Age75 at 26% warrants monitoring. Highest-priority partner."
-  },
-  {
-    "Publisher": "SkyLab Digital, LLC",
-    "Season": "OEP",
-    "MPQS Score": "A",
-    "GP/TH": 10,
-    "Adjusted LTV": 710,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 23,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 10,
-    "Demo Age Over 75 %": 26.1,
-    "SC % 60+": 83.0,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "SkyLab Digital, LLC",
-    "Season": "AEP",
-    "MPQS Score": "A",
-    "GP/TH": 10,
-    "Adjusted LTV": 710,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 23,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 10,
-    "Demo Age Over 75 %": 26.1,
-    "SC % 60+": 83.0,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Paragon Media",
-    "Season": "SEP",
-    "MPQS Score": "C",
-    "GP/TH": 4,
-    "Adjusted LTV": 643,
-    "Actual CPA": 390,
-    "Target CPA": 400,
-    "Suggested Bid": 16,
-    "Bid Floor": 30,
-    "Effectuation %": 68,
-    "RDE %": 11,
-    "Demo Age Over 75 %": 18.3,
-    "SC % 60+": 75.6,
-    "Conversion Rate %": 7.0,
-    "Sub IDs": "GROCERY",
-    "RP Action": "On Target",
-    "Action Band": "Monitor",
-    "Status": "On Target",
-    "CPA Delta": -10,
-    "Partner Notes": "Positive GP but GP/TH of $4 is slim. Grocery angle adequate. CPA slightly below target — maintain and monitor."
-  },
-  {
-    "Publisher": "Paragon Media",
-    "Season": "OEP",
-    "MPQS Score": "C",
-    "GP/TH": 4,
-    "Adjusted LTV": 643,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 16,
-    "Bid Floor": 30,
-    "Effectuation %": 68,
-    "RDE %": 11,
-    "Demo Age Over 75 %": 18.3,
-    "SC % 60+": 75.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY",
-    "RP Action": "No Spend",
-    "Action Band": "Monitor",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Paragon Media",
-    "Season": "AEP",
-    "MPQS Score": "C",
-    "GP/TH": 4,
-    "Adjusted LTV": 643,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 16,
-    "Bid Floor": 30,
-    "Effectuation %": 68,
-    "RDE %": 11,
-    "Demo Age Over 75 %": 18.3,
-    "SC % 60+": 75.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY",
-    "RP Action": "No Spend",
-    "Action Band": "Monitor",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Adolent Marketing",
-    "Season": "SEP",
-    "MPQS Score": "D",
-    "GP/TH": 7,
-    "Adjusted LTV": 703,
-    "Actual CPA": 373,
-    "Target CPA": 400,
-    "Suggested Bid": 9,
-    "Bid Floor": 18,
-    "Effectuation %": 70,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 49.2,
-    "SC % 60+": 67.8,
-    "Conversion Rate %": 4.6,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Slight ↑",
-    "Action Band": "Pullback",
-    "Status": "On Target",
-    "CPA Delta": -27,
-    "Partner Notes": "Age75+ at 49.2% — 3x the 15% benchmark. Serious durability concern despite favorable CPA. Shift creative angle to younger-skewing sub IDs."
-  },
-  {
-    "Publisher": "Adolent Marketing",
-    "Season": "OEP",
-    "MPQS Score": "D",
-    "GP/TH": 7,
-    "Adjusted LTV": 703,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 9,
-    "Bid Floor": 18,
-    "Effectuation %": 70,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 49.2,
-    "SC % 60+": 67.8,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Adolent Marketing",
-    "Season": "AEP",
-    "MPQS Score": "D",
-    "GP/TH": 7,
-    "Adjusted LTV": 703,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 9,
-    "Bid Floor": 18,
-    "Effectuation %": 70,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 49.2,
-    "SC % 60+": 67.8,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "UAB Inulti",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -4,
-    "Adjusted LTV": 698,
-    "Actual CPA": 422,
-    "Target CPA": 400,
-    "Suggested Bid": 6,
-    "Bid Floor": 18,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 47.7,
-    "SC % 60+": 65.9,
-    "Conversion Rate %": 4.1,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Reduce Bid",
-    "Action Band": "Pullback",
-    "Status": "Watch",
-    "CPA Delta": 22,
-    "Partner Notes": "47.7% age75+ — 2nd highest in portfolio. Borderline CPA but durability profile is unacceptable. Reduce bid and require demographic angle shift."
-  },
-  {
-    "Publisher": "UAB Inulti",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -4,
-    "Adjusted LTV": 698,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 6,
-    "Bid Floor": 18,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 47.7,
-    "SC % 60+": 65.9,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "UAB Inulti",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -4,
-    "Adjusted LTV": 698,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 6,
-    "Bid Floor": 18,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 47.7,
-    "SC % 60+": 65.9,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Quote Velocity",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -30,
-    "Adjusted LTV": 695,
-    "Actual CPA": 602,
-    "Target CPA": 400,
-    "Suggested Bid": 8,
-    "Bid Floor": 30,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 11.5,
-    "SC % 60+": 72.4,
-    "Conversion Rate %": 5.5,
-    "Sub IDs": "OTC, GENERAL, FLEX-CARD",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 202,
-    "Partner Notes": "$10K negative GP. All creative angles underperforming. CPA 50% over target. Creative strategy overhaul required."
-  },
-  {
-    "Publisher": "Quote Velocity",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -30,
-    "Adjusted LTV": 695,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 8,
-    "Bid Floor": 30,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 11.5,
-    "SC % 60+": 72.4,
-    "Conversion Rate %": null,
-    "Sub IDs": "OTC, GENERAL, FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Quote Velocity",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -30,
-    "Adjusted LTV": 695,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 8,
-    "Bid Floor": 30,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 11.5,
-    "SC % 60+": 72.4,
-    "Conversion Rate %": null,
-    "Sub IDs": "OTC, GENERAL, FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Cobra Solutions",
-    "Season": "SEP",
-    "MPQS Score": "A",
-    "GP/TH": 18,
-    "Adjusted LTV": 705,
-    "Actual CPA": 385,
-    "Target CPA": 400,
-    "Suggested Bid": 29,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 8,
-    "Demo Age Over 75 %": 11.8,
-    "SC % 60+": 88.5,
-    "Conversion Rate %": 8.0,
-    "Sub IDs": "GROCERY, FLEX-CARD",
-    "RP Action": "Slight ↑",
-    "Action Band": "Scale Eligible",
-    "Status": "On Target",
-    "CPA Delta": -15,
-    "Partner Notes": "Strong May — positive GP, low age75 at 11.8%, above-avg CR. Grocery + flex-card mix is best practice. Scale eligible."
-  },
-  {
-    "Publisher": "Cobra Solutions",
-    "Season": "OEP",
-    "MPQS Score": "A",
-    "GP/TH": 18,
-    "Adjusted LTV": 705,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 29,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 8,
-    "Demo Age Over 75 %": 11.8,
-    "SC % 60+": 88.5,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY, FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Cobra Solutions",
-    "Season": "AEP",
-    "MPQS Score": "A",
-    "GP/TH": 18,
-    "Adjusted LTV": 705,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 29,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 8,
-    "Demo Age Over 75 %": 11.8,
-    "SC % 60+": 88.5,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY, FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "EngageCX",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -18,
-    "Adjusted LTV": 712,
-    "Actual CPA": 551,
-    "Target CPA": 400,
-    "Suggested Bid": 10,
-    "Bid Floor": 38,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 24.1,
-    "SC % 60+": 75.4,
-    "Conversion Rate %": 6.8,
-    "Sub IDs": "GROCERY, PART-B",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 151,
-    "Partner Notes": "Negative GP/TH, $-9.5K GP. Part-B angle dragging quality; 24% age75+. Cut bid immediately and reassess creative mix."
-  },
-  {
-    "Publisher": "EngageCX",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -18,
-    "Adjusted LTV": 712,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 10,
-    "Bid Floor": 38,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 24.1,
-    "SC % 60+": 75.4,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY, PART-B",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "EngageCX",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -18,
-    "Adjusted LTV": 712,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 10,
-    "Bid Floor": 38,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 24.1,
-    "SC % 60+": 75.4,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY, PART-B",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "DigiPeak, LLC",
-    "Season": "SEP",
-    "MPQS Score": "A",
-    "GP/TH": 9,
-    "Adjusted LTV": 669,
-    "Actual CPA": 376,
-    "Target CPA": 400,
-    "Suggested Bid": 22,
-    "Bid Floor": 25,
-    "Effectuation %": 70,
-    "RDE %": 7,
-    "Demo Age Over 75 %": 7.2,
-    "SC % 60+": 68.6,
-    "Conversion Rate %": 6.4,
-    "Sub IDs": "GROCERY",
-    "RP Action": "Slight ↑",
-    "Action Band": "Scale Eligible",
-    "Status": "On Target",
-    "CPA Delta": -24,
-    "Partner Notes": "Best-in-class age75 at 7.2% — cleanest demo in portfolio. Grocery angle driving quality. Slight CPA advantage — consider bid increase."
-  },
-  {
-    "Publisher": "DigiPeak, LLC",
-    "Season": "OEP",
-    "MPQS Score": "A",
-    "GP/TH": 9,
-    "Adjusted LTV": 669,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 22,
-    "Bid Floor": 25,
-    "Effectuation %": 70,
-    "RDE %": 7,
-    "Demo Age Over 75 %": 7.2,
-    "SC % 60+": 68.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "DigiPeak, LLC",
-    "Season": "AEP",
-    "MPQS Score": "A",
-    "GP/TH": 9,
-    "Adjusted LTV": 669,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 22,
-    "Bid Floor": 25,
-    "Effectuation %": 70,
-    "RDE %": 7,
-    "Demo Age Over 75 %": 7.2,
-    "SC % 60+": 68.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "GROCERY",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Scalability.io",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -49,
-    "Adjusted LTV": 702,
-    "Actual CPA": 749,
-    "Target CPA": 400,
-    "Suggested Bid": 6,
-    "Bid Floor": 20,
-    "Effectuation %": 65,
-    "RDE %": 13,
-    "Demo Age Over 75 %": 16.9,
-    "SC % 60+": 83.2,
-    "Conversion Rate %": 4.6,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 349,
-    "Partner Notes": "CPA nearly double target. -$5.9K GP, -$49 GP/TH. General angle not converting. Cut or pause to reconfigure."
-  },
-  {
-    "Publisher": "Scalability.io",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -49,
-    "Adjusted LTV": 702,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 6,
-    "Bid Floor": 20,
-    "Effectuation %": 65,
-    "RDE %": 13,
-    "Demo Age Over 75 %": 16.9,
-    "SC % 60+": 83.2,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Scalability.io",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -49,
-    "Adjusted LTV": 702,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 6,
-    "Bid Floor": 20,
-    "Effectuation %": 65,
-    "RDE %": 13,
-    "Demo Age Over 75 %": 16.9,
-    "SC % 60+": 83.2,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Milestone Marketing Solutions",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -43,
-    "Adjusted LTV": 718,
-    "Actual CPA": 706,
-    "Target CPA": 400,
-    "Suggested Bid": 9,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 18.9,
-    "SC % 60+": 75.6,
-    "Conversion Rate %": 5.4,
-    "Sub IDs": "FLEX-CARD, GROCERY",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 306,
-    "Partner Notes": "$11.4K negative GP — worst economic performer in May. CPA $306 over target. Mixed angles not offsetting quality drag."
-  },
-  {
-    "Publisher": "Milestone Marketing Solutions",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -43,
-    "Adjusted LTV": 718,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 9,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 18.9,
-    "SC % 60+": 75.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD, GROCERY",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Milestone Marketing Solutions",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -43,
-    "Adjusted LTV": 718,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 9,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 18.9,
-    "SC % 60+": 75.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD, GROCERY",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "The Wisdom Companies, LLC",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -2,
-    "Adjusted LTV": 717,
-    "Actual CPA": 471,
-    "Target CPA": 400,
-    "Suggested Bid": 7,
-    "Bid Floor": 25,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 11.8,
-    "SC % 60+": 77.0,
-    "Conversion Rate %": 5.2,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Reduce Bid",
-    "Action Band": "Pullback",
-    "Status": "Watch",
-    "CPA Delta": 71,
-    "Partner Notes": "Slightly negative GP/TH. CPA $71 over target. Low age75 is positive but economic KPIs drag the score. Reduce bid."
-  },
-  {
-    "Publisher": "The Wisdom Companies, LLC",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -2,
-    "Adjusted LTV": 717,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 7,
-    "Bid Floor": 25,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 11.8,
-    "SC % 60+": 77.0,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "The Wisdom Companies, LLC",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -2,
-    "Adjusted LTV": 717,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 7,
-    "Bid Floor": 25,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 11.8,
-    "SC % 60+": 77.0,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "InsurCo, LLC (formerly Fluent Media)",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -57,
-    "Adjusted LTV": 720,
-    "Actual CPA": 827,
-    "Target CPA": 400,
-    "Suggested Bid": 7,
-    "Bid Floor": 40,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 7.9,
-    "SC % 60+": 76.7,
-    "Conversion Rate %": 4.7,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 427,
-    "Partner Notes": "CPA more than double target at $827. GP/TH -$57. Despite low age75, all economic KPIs fail. Pullback required."
-  },
-  {
-    "Publisher": "InsurCo, LLC (formerly Fluent Media)",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -57,
-    "Adjusted LTV": 720,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 7,
-    "Bid Floor": 40,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 7.9,
-    "SC % 60+": 76.7,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "InsurCo, LLC (formerly Fluent Media)",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -57,
-    "Adjusted LTV": 720,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 7,
-    "Bid Floor": 40,
-    "Effectuation %": 65,
-    "RDE %": 12,
-    "Demo Age Over 75 %": 7.9,
-    "SC % 60+": 76.7,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "HLG Solutions",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -45,
-    "Adjusted LTV": 648,
-    "Actual CPA": 666,
-    "Target CPA": 400,
-    "Suggested Bid": 7,
-    "Bid Floor": 22,
-    "Effectuation %": 65,
-    "RDE %": 15,
-    "Demo Age Over 75 %": 23.3,
-    "SC % 60+": 90.8,
-    "Conversion Rate %": 4.4,
-    "Sub IDs": "FLEX-CARD",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 266,
-    "Partner Notes": "Flex-card not converting to durable sales. CPA $266 over target. Negative GP, elevated age75. Cut immediately."
-  },
-  {
-    "Publisher": "HLG Solutions",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -45,
-    "Adjusted LTV": 648,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 7,
-    "Bid Floor": 22,
-    "Effectuation %": 65,
-    "RDE %": 15,
-    "Demo Age Over 75 %": 23.3,
-    "SC % 60+": 90.8,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "HLG Solutions",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -45,
-    "Adjusted LTV": 648,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 7,
-    "Bid Floor": 22,
-    "Effectuation %": 65,
-    "RDE %": 15,
-    "Demo Age Over 75 %": 23.3,
-    "SC % 60+": 90.8,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Palo Media Group",
-    "Season": "SEP",
-    "MPQS Score": "A",
-    "GP/TH": 85,
-    "Adjusted LTV": 716,
-    "Actual CPA": 255,
-    "Target CPA": 400,
-    "Suggested Bid": 44,
-    "Bid Floor": 35,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 17.9,
-    "SC % 60+": 78.8,
-    "Conversion Rate %": 13.0,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Scale Up",
-    "Action Band": "Scale Eligible",
-    "Status": "Scale",
-    "CPA Delta": -145,
-    "Partner Notes": "Star performer. $85 GP/TH, CPA $145 below target, 13% CR. Scale aggressively — small base with major upside."
-  },
-  {
-    "Publisher": "Palo Media Group",
-    "Season": "OEP",
-    "MPQS Score": "A",
-    "GP/TH": 85,
-    "Adjusted LTV": 716,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 44,
-    "Bid Floor": 35,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 17.9,
-    "SC % 60+": 78.8,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Palo Media Group",
-    "Season": "AEP",
-    "MPQS Score": "A",
-    "GP/TH": 85,
-    "Adjusted LTV": 716,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 44,
-    "Bid Floor": 35,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 17.9,
-    "SC % 60+": 78.8,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "RateQuote",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -21,
-    "Adjusted LTV": 664,
-    "Actual CPA": 504,
-    "Target CPA": 400,
-    "Suggested Bid": 7,
-    "Bid Floor": 30,
-    "Effectuation %": 65,
-    "RDE %": 15,
-    "Demo Age Over 75 %": 30.6,
-    "SC % 60+": 80.1,
-    "Conversion Rate %": 4.9,
-    "Sub IDs": "FLEX-CARD, GROCERY, OTC",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 104,
-    "Partner Notes": "30.6% age75+, CPA $104 over target, negative GP/TH. Multiple angles failing. Cut bid and review creative mix."
-  },
-  {
-    "Publisher": "RateQuote",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -21,
-    "Adjusted LTV": 664,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 7,
-    "Bid Floor": 30,
-    "Effectuation %": 65,
-    "RDE %": 15,
-    "Demo Age Over 75 %": 30.6,
-    "SC % 60+": 80.1,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD, GROCERY, OTC",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "RateQuote",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -21,
-    "Adjusted LTV": 664,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 7,
-    "Bid Floor": 30,
-    "Effectuation %": 65,
-    "RDE %": 15,
-    "Demo Age Over 75 %": 30.6,
-    "SC % 60+": 80.1,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD, GROCERY, OTC",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "GoldMineLeads",
-    "Season": "SEP",
-    "MPQS Score": "A",
-    "GP/TH": 12,
-    "Adjusted LTV": 706,
-    "Actual CPA": 447,
-    "Target CPA": 400,
-    "Suggested Bid": 24,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 10,
-    "Demo Age Over 75 %": 37.9,
-    "SC % 60+": 83.9,
-    "Conversion Rate %": 7.6,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Reduce Bid",
-    "Action Band": "Scale Eligible",
-    "Status": "Watch",
-    "CPA Delta": 47,
-    "Partner Notes": "Positive GP and good CR but 37.9% age75+ is a durability flag. CPA slightly above target. Monitor demographic trend."
-  },
-  {
-    "Publisher": "GoldMineLeads",
-    "Season": "OEP",
-    "MPQS Score": "A",
-    "GP/TH": 12,
-    "Adjusted LTV": 706,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 24,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 10,
-    "Demo Age Over 75 %": 37.9,
-    "SC % 60+": 83.9,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "GoldMineLeads",
-    "Season": "AEP",
-    "MPQS Score": "A",
-    "GP/TH": 12,
-    "Adjusted LTV": 706,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 24,
-    "Bid Floor": 35,
-    "Effectuation %": 70,
-    "RDE %": 10,
-    "Demo Age Over 75 %": 37.9,
-    "SC % 60+": 83.9,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "RevRise Media",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -83,
-    "Adjusted LTV": 708,
-    "Actual CPA": 1015,
-    "Target CPA": 400,
-    "Suggested Bid": 5,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 21.7,
-    "SC % 60+": 81.1,
-    "Conversion Rate %": 3.3,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Cut Bid",
-    "Action Band": "Pullback",
-    "Status": "At Risk",
-    "CPA Delta": 615,
-    "Partner Notes": "CPA over $1K — worst in active set. GP/TH -$83. Only 2 sales in May. Suspend immediately."
-  },
-  {
-    "Publisher": "RevRise Media",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -83,
-    "Adjusted LTV": 708,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 5,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 21.7,
-    "SC % 60+": 81.1,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "RevRise Media",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -83,
-    "Adjusted LTV": 708,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 5,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 21.7,
-    "SC % 60+": 81.1,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Ring2Media (d/b/a Quote.com)",
-    "Season": "SEP",
-    "MPQS Score": "D",
-    "GP/TH": null,
-    "Adjusted LTV": 735,
-    "Actual CPA": null,
-    "Target CPA": 400,
-    "Suggested Bid": 8,
-    "Bid Floor": 65,
-    "Effectuation %": 68,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 44.4,
-    "SC % 60+": 35.1,
-    "Conversion Rate %": 4.1,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": "44.4% age75+, SC60+ 35%. Poor quality profile. Do not reactivate without demographic targeting overhaul."
-  },
-  {
-    "Publisher": "Ring2Media (d/b/a Quote.com)",
-    "Season": "OEP",
-    "MPQS Score": "D",
-    "GP/TH": null,
-    "Adjusted LTV": 735,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 8,
-    "Bid Floor": 65,
-    "Effectuation %": 68,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 44.4,
-    "SC % 60+": 35.1,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Ring2Media (d/b/a Quote.com)",
-    "Season": "AEP",
-    "MPQS Score": "D",
-    "GP/TH": null,
-    "Adjusted LTV": 735,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 8,
-    "Bid Floor": 65,
-    "Effectuation %": 68,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 44.4,
-    "SC % 60+": 35.1,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Vertical Pulse Media Operations LLC",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -136,
-    "Adjusted LTV": null,
-    "Actual CPA": null,
-    "Target CPA": 400,
-    "Suggested Bid": 9,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 50.0,
-    "SC % 60+": 68.6,
-    "Conversion Rate %": 6.6,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": "50% age75+ — highest in portfolio. GP/TH -$136. No sales in May. Do not activate."
-  },
-  {
-    "Publisher": "Vertical Pulse Media Operations LLC",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -136,
-    "Adjusted LTV": null,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 9,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 50.0,
-    "SC % 60+": 68.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Vertical Pulse Media Operations LLC",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -136,
-    "Adjusted LTV": null,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 9,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": 50.0,
-    "SC % 60+": 68.6,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Health Is Wealth Marketing LLC",
-    "Season": "SEP",
-    "MPQS Score": "A",
-    "GP/TH": 74,
-    "Adjusted LTV": 661,
-    "Actual CPA": 140,
-    "Target CPA": 400,
-    "Suggested Bid": 78,
-    "Bid Floor": null,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 25.0,
-    "SC % 60+": 88.9,
-    "Conversion Rate %": 25.0,
-    "Sub IDs": "GENERAL",
-    "RP Action": "Scale Up",
-    "Action Band": "Scale Eligible",
-    "Status": "Scale",
-    "CPA Delta": -260,
-    "Partner Notes": "Exceptional CR 25% and GP/TH $74. CPA $260 below target — major scale opportunity. Monitor age75 of 25% for durability."
-  },
-  {
-    "Publisher": "Health Is Wealth Marketing LLC",
-    "Season": "OEP",
-    "MPQS Score": "A",
-    "GP/TH": 74,
-    "Adjusted LTV": 661,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 78,
-    "Bid Floor": null,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 25.0,
-    "SC % 60+": 88.9,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Health Is Wealth Marketing LLC",
-    "Season": "AEP",
-    "MPQS Score": "A",
-    "GP/TH": 74,
-    "Adjusted LTV": 661,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 78,
-    "Bid Floor": null,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 25.0,
-    "SC % 60+": 88.9,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL",
-    "RP Action": "No Spend",
-    "Action Band": "Scale Eligible",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Barrington Media Group",
-    "Season": "SEP",
-    "MPQS Score": "F",
-    "GP/TH": -502,
-    "Adjusted LTV": 806,
-    "Actual CPA": null,
-    "Target CPA": 400,
-    "Suggested Bid": 32,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": null,
-    "SC % 60+": 100.0,
-    "Conversion Rate %": 16.7,
-    "Sub IDs": "FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": "Essentially no May volume. GP/TH deeply negative. Do not reactivate without full quality review."
-  },
-  {
-    "Publisher": "Barrington Media Group",
-    "Season": "OEP",
-    "MPQS Score": "F",
-    "GP/TH": -502,
-    "Adjusted LTV": 806,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 32,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": null,
-    "SC % 60+": 100.0,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Barrington Media Group",
-    "Season": "AEP",
-    "MPQS Score": "F",
-    "GP/TH": -502,
-    "Adjusted LTV": 806,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 32,
-    "Bid Floor": null,
-    "Effectuation %": 65,
-    "RDE %": 14,
-    "Demo Age Over 75 %": null,
-    "SC % 60+": 100.0,
-    "Conversion Rate %": null,
-    "Sub IDs": "FLEX-CARD",
-    "RP Action": "No Spend",
-    "Action Band": "Pullback",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Healthcare.com",
-    "Season": "SEP",
-    "MPQS Score": "B",
-    "GP/TH": null,
-    "Adjusted LTV": null,
-    "Actual CPA": null,
-    "Target CPA": 400,
-    "Suggested Bid": 21,
-    "Bid Floor": 45,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 0.0,
-    "SC % 60+": null,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL, DENTAL",
-    "RP Action": "No Spend",
-    "Action Band": "Maintain",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": "Negligible May volume. Strong historical quality profile. Reconnect for June."
-  },
-  {
-    "Publisher": "Healthcare.com",
-    "Season": "OEP",
-    "MPQS Score": "B",
-    "GP/TH": null,
-    "Adjusted LTV": null,
-    "Actual CPA": null,
-    "Target CPA": 325,
-    "Suggested Bid": 21,
-    "Bid Floor": 45,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 0.0,
-    "SC % 60+": null,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL, DENTAL",
-    "RP Action": "No Spend",
-    "Action Band": "Maintain",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  },
-  {
-    "Publisher": "Healthcare.com",
-    "Season": "AEP",
-    "MPQS Score": "B",
-    "GP/TH": null,
-    "Adjusted LTV": null,
-    "Actual CPA": null,
-    "Target CPA": 275,
-    "Suggested Bid": 21,
-    "Bid Floor": 45,
-    "Effectuation %": 74,
-    "RDE %": 9,
-    "Demo Age Over 75 %": 0.0,
-    "SC % 60+": null,
-    "Conversion Rate %": null,
-    "Sub IDs": "GENERAL, DENTAL",
-    "RP Action": "No Spend",
-    "Action Band": "Maintain",
-    "Status": "No Spend",
-    "CPA Delta": null,
-    "Partner Notes": null
-  }
+  {"Publisher":"Adolent Marketing","Season":"SEP","MPQS Score":"B","GP/TH":81,"Adjusted LTV":689,"Actual CPA":320,"Target CPA":325,"Suggested Bid":18,"Effectuation %":71,"RDE %":9,"Demo Age Over 75 %":17,"SC % 60+":6.1,"Conversion Rate %":8.2,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"On Target","Action Band":"Maintain","Status":"On Target","CPA Delta":3,"Partner Notes":null},
+  {"Publisher":"Adolent Marketing","Season":"OEP","MPQS Score":"B","GP/TH":81,"Adjusted LTV":689,"Actual CPA":null,"Target CPA":325,"Suggested Bid":18,"Effectuation %":71,"RDE %":9,"Demo Age Over 75 %":17,"SC % 60+":6.1,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Adolent Marketing","Season":"AEP","MPQS Score":"B","GP/TH":81,"Adjusted LTV":689,"Actual CPA":null,"Target CPA":275,"Suggested Bid":26,"Effectuation %":71,"RDE %":9,"Demo Age Over 75 %":17,"SC % 60+":6.1,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Barrington Media Group","Season":"SEP","MPQS Score":"D","GP/TH":9,"Adjusted LTV":862,"Actual CPA":911,"Target CPA":325,"Suggested Bid":null,"Effectuation %":68,"RDE %":14,"Demo Age Over 75 %":21,"SC % 60+":15.5,"Conversion Rate %":6.1,"Sub IDs":"FLEX-CARD","RP Action":"Cut Bid","Action Band":"Pullback","Status":"At Risk","CPA Delta":440,"Partner Notes":null},
+  {"Publisher":"Barrington Media Group","Season":"OEP","MPQS Score":"D","GP/TH":9,"Adjusted LTV":862,"Actual CPA":null,"Target CPA":325,"Suggested Bid":null,"Effectuation %":68,"RDE %":14,"Demo Age Over 75 %":21,"SC % 60+":15.5,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Pullback","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Barrington Media Group","Season":"AEP","MPQS Score":"D","GP/TH":9,"Adjusted LTV":862,"Actual CPA":null,"Target CPA":275,"Suggested Bid":null,"Effectuation %":68,"RDE %":14,"Demo Age Over 75 %":21,"SC % 60+":15.5,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Pullback","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"DigiPeak LLC","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":720,"Actual CPA":478,"Target CPA":325,"Suggested Bid":25,"Effectuation %":73,"RDE %":8,"Demo Age Over 75 %":14,"SC % 60+":7,"Conversion Rate %":7,"Sub IDs":"GROCERY, DENTAL","RP Action":"Reduce Bid","Action Band":"Monitor","Status":"Watch","CPA Delta":62,"Partner Notes":null},
+  {"Publisher":"DigiPeak LLC","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":720,"Actual CPA":null,"Target CPA":325,"Suggested Bid":28,"Effectuation %":73,"RDE %":8,"Demo Age Over 75 %":14,"SC % 60+":7,"Conversion Rate %":null,"Sub IDs":"GROCERY, DENTAL","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"DigiPeak LLC","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":720,"Actual CPA":null,"Target CPA":275,"Suggested Bid":38,"Effectuation %":73,"RDE %":8,"Demo Age Over 75 %":14,"SC % 60+":7,"Conversion Rate %":null,"Sub IDs":"GROCERY, DENTAL","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Elijay Marketing Solutions","Season":"SEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":693,"Actual CPA":null,"Target CPA":325,"Suggested Bid":null,"Effectuation %":70,"RDE %":10,"Demo Age Over 75 %":15,"SC % 60+":0,"Conversion Rate %":0,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"EngageCX","Season":"SEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":690,"Actual CPA":465,"Target CPA":325,"Suggested Bid":38,"Effectuation %":70,"RDE %":11,"Demo Age Over 75 %":18,"SC % 60+":10.1,"Conversion Rate %":7.8,"Sub IDs":"FLEX-CARD, OTC","RP Action":"Reduce Bid","Action Band":"Throttle","Status":"Watch","CPA Delta":117,"Partner Notes":null},
+  {"Publisher":"EngageCX","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":690,"Actual CPA":null,"Target CPA":325,"Suggested Bid":40,"Effectuation %":70,"RDE %":11,"Demo Age Over 75 %":18,"SC % 60+":10.1,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, OTC","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"EngageCX","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":690,"Actual CPA":null,"Target CPA":275,"Suggested Bid":46,"Effectuation %":70,"RDE %":11,"Demo Age Over 75 %":18,"SC % 60+":10.1,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, OTC","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Healthcare.com","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":null,"Actual CPA":360,"Target CPA":325,"Suggested Bid":40,"Effectuation %":74,"RDE %":9,"Demo Age Over 75 %":15,"SC % 60+":11.1,"Conversion Rate %":8.5,"Sub IDs":"FLEX-CARD, GROCERY, DENTAL","RP Action":"Reduce Bid","Action Band":"Maintain","Status":"Watch","CPA Delta":23,"Partner Notes":null},
+  {"Publisher":"Healthcare.com","Season":"AEP","MPQS Score":"A","GP/TH":null,"Adjusted LTV":null,"Actual CPA":null,"Target CPA":275,"Suggested Bid":55,"Effectuation %":74,"RDE %":9,"Demo Age Over 75 %":15,"SC % 60+":11.1,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY, DENTAL","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Healthcare.com","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":null,"Actual CPA":null,"Target CPA":325,"Suggested Bid":45,"Effectuation %":74,"RDE %":9,"Demo Age Over 75 %":15,"SC % 60+":11.1,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY, DENTAL","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"HLG Solutions","Season":"SEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":685,"Actual CPA":520,"Target CPA":325,"Suggested Bid":22,"Effectuation %":69,"RDE %":12,"Demo Age Over 75 %":20,"SC % 60+":14.1,"Conversion Rate %":9.8,"Sub IDs":"OTC","RP Action":"Reduce Bid","Action Band":"Monitor","Status":"Watch","CPA Delta":-51,"Partner Notes":"CPA below target but durability KPIs (RDE, demo age) are elevated — bid reduction despite favorable CPA"},
+  {"Publisher":"HLG Solutions","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":685,"Actual CPA":null,"Target CPA":325,"Suggested Bid":25,"Effectuation %":69,"RDE %":12,"Demo Age Over 75 %":20,"SC % 60+":14.1,"Conversion Rate %":null,"Sub IDs":"OTC","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"HLG Solutions","Season":"AEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":685,"Actual CPA":null,"Target CPA":275,"Suggested Bid":30,"Effectuation %":69,"RDE %":12,"Demo Age Over 75 %":20,"SC % 60+":14.1,"Conversion Rate %":null,"Sub IDs":"OTC","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Insurco","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":799,"Actual CPA":692,"Target CPA":325,"Suggested Bid":40,"Effectuation %":75,"RDE %":7,"Demo Age Over 75 %":12,"SC % 60+":10.5,"Conversion Rate %":8.1,"Sub IDs":"GROCERY","RP Action":"Reduce Bid","Action Band":"Monitor","Status":"Watch","CPA Delta":100,"Partner Notes":null},
+  {"Publisher":"Insurco","Season":"OEP","MPQS Score":"A","GP/TH":null,"Adjusted LTV":799,"Actual CPA":null,"Target CPA":325,"Suggested Bid":45,"Effectuation %":75,"RDE %":7,"Demo Age Over 75 %":12,"SC % 60+":10.5,"Conversion Rate %":null,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Scale Eligible","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Insurco","Season":"AEP","MPQS Score":"A","GP/TH":null,"Adjusted LTV":799,"Actual CPA":null,"Target CPA":275,"Suggested Bid":47,"Effectuation %":75,"RDE %":7,"Demo Age Over 75 %":12,"SC % 60+":10.5,"Conversion Rate %":null,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Scale Eligible","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Milestone Marketing Solutions","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":745,"Actual CPA":539,"Target CPA":325,"Suggested Bid":45,"Effectuation %":72,"RDE %":9,"Demo Age Over 75 %":16,"SC % 60+":8.6,"Conversion Rate %":7.2,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"Reduce Bid","Action Band":"Throttle","Status":"At Risk","CPA Delta":155,"Partner Notes":null},
+  {"Publisher":"Milestone Marketing Solutions","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":745,"Actual CPA":null,"Target CPA":325,"Suggested Bid":50,"Effectuation %":72,"RDE %":9,"Demo Age Over 75 %":16,"SC % 60+":8.6,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Milestone Marketing Solutions","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":745,"Actual CPA":null,"Target CPA":275,"Suggested Bid":55,"Effectuation %":72,"RDE %":9,"Demo Age Over 75 %":16,"SC % 60+":8.6,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Throttle","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"MyHealthAngel","Season":"SEP","MPQS Score":"D","GP/TH":null,"Adjusted LTV":616,"Actual CPA":421,"Target CPA":325,"Suggested Bid":null,"Effectuation %":66,"RDE %":15,"Demo Age Over 75 %":23,"SC % 60+":6.1,"Conversion Rate %":6.5,"Sub IDs":"GROCERY","RP Action":"Cut Bid","Action Band":"Pullback","Status":"At Risk","CPA Delta":96,"Partner Notes":"Low LTV, elevated RDE and demo age over 75 — durability profile unacceptable at current spend"},
+  {"Publisher":"MyHealthAngel","Season":"OEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":616,"Actual CPA":null,"Target CPA":325,"Suggested Bid":null,"Effectuation %":66,"RDE %":15,"Demo Age Over 75 %":23,"SC % 60+":6.1,"Conversion Rate %":null,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Pullback","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"MyHealthAngel","Season":"AEP","MPQS Score":"D","GP/TH":null,"Adjusted LTV":616,"Actual CPA":null,"Target CPA":275,"Suggested Bid":null,"Effectuation %":66,"RDE %":15,"Demo Age Over 75 %":23,"SC % 60+":6.1,"Conversion Rate %":null,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Pullback","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Paragon","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":766,"Actual CPA":363,"Target CPA":325,"Suggested Bid":30,"Effectuation %":73,"RDE %":8,"Demo Age Over 75 %":13,"SC % 60+":10.6,"Conversion Rate %":0,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Paragon","Season":"OEP","MPQS Score":"A","GP/TH":null,"Adjusted LTV":766,"Actual CPA":null,"Target CPA":325,"Suggested Bid":30,"Effectuation %":73,"RDE %":8,"Demo Age Over 75 %":13,"SC % 60+":10.6,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Scale Eligible","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Paragon","Season":"AEP","MPQS Score":"A","GP/TH":null,"Adjusted LTV":766,"Actual CPA":null,"Target CPA":275,"Suggested Bid":null,"Effectuation %":73,"RDE %":8,"Demo Age Over 75 %":13,"SC % 60+":10.6,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Scale Eligible","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Quote Velocity","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":687,"Actual CPA":443,"Target CPA":325,"Suggested Bid":35,"Effectuation %":72,"RDE %":10,"Demo Age Over 75 %":15,"SC % 60+":8.7,"Conversion Rate %":9.1,"Sub IDs":"DENTAL, OTC","RP Action":"On Target","Action Band":"Maintain","Status":"On Target","CPA Delta":-61,"Partner Notes":null},
+  {"Publisher":"Quote Velocity","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":687,"Actual CPA":null,"Target CPA":325,"Suggested Bid":35,"Effectuation %":72,"RDE %":10,"Demo Age Over 75 %":15,"SC % 60+":8.7,"Conversion Rate %":null,"Sub IDs":"DENTAL, OTC","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Quote Velocity","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":687,"Actual CPA":null,"Target CPA":275,"Suggested Bid":40,"Effectuation %":72,"RDE %":10,"Demo Age Over 75 %":15,"SC % 60+":8.7,"Conversion Rate %":null,"Sub IDs":"DENTAL, OTC","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"RateQuote","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":709,"Actual CPA":568,"Target CPA":325,"Suggested Bid":18,"Effectuation %":70,"RDE %":8,"Demo Age Over 75 %":12,"SC % 60+":5.5,"Conversion Rate %":7.5,"Sub IDs":"GROCERY","RP Action":"Reduce Bid","Action Band":"Monitor","Status":"Watch","CPA Delta":42,"Partner Notes":null},
+  {"Publisher":"RateQuote","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":709,"Actual CPA":null,"Target CPA":325,"Suggested Bid":22,"Effectuation %":70,"RDE %":8,"Demo Age Over 75 %":12,"SC % 60+":5.5,"Conversion Rate %":null,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"RateQuote","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":709,"Actual CPA":null,"Target CPA":275,"Suggested Bid":29,"Effectuation %":70,"RDE %":8,"Demo Age Over 75 %":12,"SC % 60+":5.5,"Conversion Rate %":null,"Sub IDs":"GROCERY","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"RevRise Media","Season":"SEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":800,"Actual CPA":369,"Target CPA":325,"Suggested Bid":35,"Effectuation %":74,"RDE %":11,"Demo Age Over 75 %":18,"SC % 60+":15.2,"Conversion Rate %":0,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"RevRise Media","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":800,"Actual CPA":null,"Target CPA":325,"Suggested Bid":35,"Effectuation %":74,"RDE %":11,"Demo Age Over 75 %":18,"SC % 60+":15.2,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"RevRise Media","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":800,"Actual CPA":null,"Target CPA":275,"Suggested Bid":30,"Effectuation %":74,"RDE %":11,"Demo Age Over 75 %":18,"SC % 60+":15.2,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD, GROCERY","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Scalability.io","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":696,"Actual CPA":463,"Target CPA":325,"Suggested Bid":27,"Effectuation %":71,"RDE %":9,"Demo Age Over 75 %":16,"SC % 60+":7.5,"Conversion Rate %":8.8,"Sub IDs":"DENTAL","RP Action":"Reduce Bid","Action Band":"Monitor","Status":"Watch","CPA Delta":-36,"Partner Notes":null},
+  {"Publisher":"Scalability.io","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":696,"Actual CPA":null,"Target CPA":325,"Suggested Bid":30,"Effectuation %":71,"RDE %":9,"Demo Age Over 75 %":16,"SC % 60+":7.5,"Conversion Rate %":null,"Sub IDs":"DENTAL","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"Scalability.io","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":696,"Actual CPA":null,"Target CPA":275,"Suggested Bid":43,"Effectuation %":71,"RDE %":9,"Demo Age Over 75 %":16,"SC % 60+":7.5,"Conversion Rate %":null,"Sub IDs":"DENTAL","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"The Wisdom Companies LLC","Season":"SEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":672,"Actual CPA":454,"Target CPA":325,"Suggested Bid":20,"Effectuation %":68,"RDE %":10,"Demo Age Over 75 %":19,"SC % 60+":4.8,"Conversion Rate %":7.8,"Sub IDs":"GROCERY, OTC","RP Action":"Reduce Bid","Action Band":"Monitor","Status":"Watch","CPA Delta":21,"Partner Notes":null},
+  {"Publisher":"The Wisdom Companies LLC","Season":"OEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":672,"Actual CPA":null,"Target CPA":325,"Suggested Bid":25,"Effectuation %":68,"RDE %":10,"Demo Age Over 75 %":19,"SC % 60+":4.8,"Conversion Rate %":null,"Sub IDs":"GROCERY, OTC","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"The Wisdom Companies LLC","Season":"AEP","MPQS Score":"C","GP/TH":null,"Adjusted LTV":672,"Actual CPA":null,"Target CPA":275,"Suggested Bid":35,"Effectuation %":68,"RDE %":10,"Demo Age Over 75 %":19,"SC % 60+":4.8,"Conversion Rate %":null,"Sub IDs":"GROCERY, OTC","RP Action":"No Spend","Action Band":"Monitor","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"UAB Inulti","Season":"SEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":663,"Actual CPA":400,"Target CPA":325,"Suggested Bid":18,"Effectuation %":70,"RDE %":8,"Demo Age Over 75 %":14,"SC % 60+":5.9,"Conversion Rate %":8.4,"Sub IDs":"FLEX-CARD","RP Action":"On Target","Action Band":"Maintain","Status":"On Target","CPA Delta":-21,"Partner Notes":null},
+  {"Publisher":"UAB Inulti","Season":"OEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":663,"Actual CPA":null,"Target CPA":325,"Suggested Bid":18,"Effectuation %":70,"RDE %":8,"Demo Age Over 75 %":14,"SC % 60+":5.9,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null},
+  {"Publisher":"UAB Inulti","Season":"AEP","MPQS Score":"B","GP/TH":null,"Adjusted LTV":663,"Actual CPA":null,"Target CPA":275,"Suggested Bid":26,"Effectuation %":70,"RDE %":8,"Demo Age Over 75 %":14,"SC % 60+":5.9,"Conversion Rate %":null,"Sub IDs":"FLEX-CARD","RP Action":"No Spend","Action Band":"Maintain","Status":"No Spend","CPA Delta":null,"Partner Notes":null}
 ];
 
 /* ─── LOAD DATA ─── */
 function loadData() {
-  const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,'');
   const rows = NOTION_DATA.filter(r => r.Season === activeSeason);
   PUBS = rows.map(r => {
     const subIdList = r['Sub IDs'] ? r['Sub IDs'].split(',').map(s=>s.trim()).filter(Boolean) : [];
-    // Find the best SCORECARD_DATA row for this publisher + season + date range
-    const scMatch = SCORECARD_DATA.find(s =>
-      norm(s.pub) === norm(r['Publisher']) &&
-      s.season === activeSeason &&
-      dpInRange(s.date)
-    ) || SCORECARD_DATA.find(s =>
-      (norm(r['Publisher']).includes(norm(s.pub.split(' ')[0])) ||
-       norm(s.pub).includes(norm(r['Publisher'].split(' ')[0]))) &&
-      s.season === activeSeason &&
-      dpInRange(s.date)
-    );
     return {
       name:        r['Publisher'],
       gpth:        r['GP/TH'],
       ltv:         r['Adjusted LTV'],
-      actualCpa:   scMatch ? scMatch.cpa         : r['Actual CPA'],
+      actualCpa:   r['Actual CPA'],
       targetCpa:   r['Target CPA'],
-      baseBid:     r['Bid Floor'] != null ? r['Bid Floor'] : 0,
-      eff:         scMatch ? Math.round(scMatch.eff * 100) : r['Effectuation %'],
+      baseBid:     r['Suggested Bid'],
+      eff:         r['Effectuation %'],
       rde:         r['RDE %'],
-      age75:       scMatch ? Math.round(scMatch.age75 * 100) : r['Demo Age Over 75 %'],
-      cr:          scMatch ? +(scMatch.cr * 100).toFixed(1)  : r['Conversion Rate %'],
+      age75:       r['Demo Age Over 75 %'],
+      cr:          r['Conversion Rate %'],
       sc60:        r['SC % 60+'],
       subIds:      subIdList,
       mpqsGrade:   r['MPQS Score'],
@@ -2582,23 +1259,207 @@ function loadData() {
       status:      r['Status'],
       cpaDelta:    r['CPA Delta'],
       notes:       r['Partner Notes'],
-      // Call volume — from scorecard match for the selected period
-      ib:          scMatch ? scMatch.ib       : null,
-      d1:          scMatch ? scMatch.d1       : null,
-      spend:       scMatch ? scMatch.spend    : null,
-      sales:       scMatch ? scMatch.netSales : null,
-      cpd1:        (scMatch && scMatch.d1 > 0) ? +(scMatch.spend / scMatch.d1).toFixed(2) : null,
-      contacts:    scMatch ? scMatch.contacts : null,
-      talkHours:   scMatch ? scMatch.talkHours: null,
     };
   });
-}
-  // ── Merge CSV actuals into PUBS (Apr 2026 from Looker) ──
-// -- Merge CSV actuals into PUBS (May 2026 from Joanie) --
-  const AGG_CPD1 = 30.22;
+  // ── Merge CSV actuals into PUBS ──
+  // Priority: live upload (window._csvActuals) → hardcoded fallback (Apr 2026)
+  const FALLBACK_ACTUALS = {
+    'Paragon':                       { ib:7210, d1:5161, spend:135758, sales:374, cpd1:26.30  },
+    'EngageCX':                      { ib:6791, d1:5387, spend:203262, sales:437, cpd1:37.73  },
+    'Adolent Marketing':             { ib:5751, d1:4058, spend:70380,  sales:220, cpd1:17.34  },
+    'UAB Inulti':                    { ib:5526, d1:3862, spend:66816,  sales:167, cpd1:17.30  },
+    'Quote Velocity':                { ib:5335, d1:3730, spend:126735, sales:286, cpd1:33.98  },
+    'SkyLab Digital':                { ib:4432, d1:3545, spend:109669, sales:297, cpd1:30.94  },
+    'RateQuote':                     { ib:4067, d1:1064, spend:32967,  sales:58,  cpd1:30.98  },
+    'Scalability.io':                { ib:4007, d1:1393, spend:48114,  sales:104, cpd1:34.54  },
+    'DigiPeak LLC':                  { ib:3720, d1:2515, spend:60200,  sales:126, cpd1:23.94  },
+    'Milestone Marketing Solutions': { ib:3329, d1:2445, spend:105715, sales:196, cpd1:43.24  },
+    'The Wisdom Companies LLC':      { ib:2705, d1:1875, spend:45900,  sales:101, cpd1:24.48  },
+    'Cobra Solutions':               { ib:2446, d1:1969, spend:61775,  sales:158, cpd1:31.37  },
+    'Insurco':                       { ib:2601, d1:1587, spend:62955,  sales:91,  cpd1:39.67  },
+    'HLG Solutions':                 { ib:1171, d1:435,  spend:15092,  sales:29,  cpd1:34.69  },
+    'Palo Media Group':              { ib:1081, d1:815,  spend:26565,  sales:49,  cpd1:32.60  },
+    'Ring2Media':                    { ib:354,  d1:123,  spend:11052,  sales:5,   cpd1:89.85  },
+    'Vertical Pulse':                { ib:278,  d1:223,  spend:7560,   sales:16,  cpd1:33.90  },
+    'RevRise Media':                 { ib:269,  d1:200,  spend:6650,   sales:18,  cpd1:33.25  },
+    'GoldMineLeads':                 { ib:113,  d1:93,   spend:3045,   sales:6,   cpd1:32.74  },
+    'Health Is Wealth':              { ib:48,   d1:36,   spend:1225,   sales:5,   cpd1:34.03  },
+    'Healthcare.com':                { ib:18,   d1:8,    spend:360,    sales:1,   cpd1:45.00  },
+    'Barrington Media Group':        { ib:11,   d1:6,    spend:911,    sales:1,   cpd1:151.83 },
+  };
+  const CSV_ACTUALS = window._csvActuals || FALLBACK_ACTUALS;
+  const AGG_CPD1 = window._csvAggCpd1 || 29.67;
   const TGT_CPD1 = 30;
+  PUBS.forEach(d => {
+    const csv = CSV_ACTUALS[d.name];
+    if (csv) { d.ib = csv.ib; d.d1 = csv.d1; d.spend = csv.spend; d.sales = csv.sales; d.cpd1 = csv.cpd1; }
+  });
+}
 
 
+
+/* ─── CSV UPLOAD ENGINE ─── */
+// Expected Looker export columns (flexible — maps common variants):
+// publisher / source / media_source  →  publisher name
+// ib_calls / inbound_calls / inbound_contacts / contacts  →  ib
+// d1_calls / d1_60s / day1_60s / day1_qm_unique / qualified_contacts  →  d1
+// spend / media_spend / qm_marketing_spend / cost  →  spend
+// sales / net_sales / policies / transactions  →  sales
+// cpd1 / cost_per_d1 / cost_per_qualified  →  cpd1 (recalculated if missing)
+
+window._csvActuals    = null;
+window._csvAggCpd1    = null;
+window._csvUploadMeta = null;
+
+function triggerCsvUpload() {
+  document.getElementById('csv-file-input').value = '';
+  document.getElementById('csv-file-input').click();
+}
+
+function showCsvToast(title, html, color) {
+  const t = document.getElementById('csv-toast');
+  const tc = color || 'var(--teal)';
+  document.getElementById('csv-toast-title').style.color = tc;
+  document.getElementById('csv-toast-title').textContent = title;
+  document.getElementById('csv-toast-body').innerHTML = html;
+  t.style.display = 'block';
+  t.style.borderColor = color === 'var(--red)' ? 'rgba(255,77,77,0.3)' : color === 'var(--amber)' ? 'rgba(255,184,77,0.3)' : 'rgba(0,200,150,0.25)';
+}
+
+function handleCsvFile(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  showCsvToast('Parsing CSV…', `<span style="color:var(--w35)">Reading ${file.name}…</span>`, 'var(--teal)');
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const result = parseCsv(e.target.result, file.name);
+      if (result.errors.length && !result.matched) {
+        showCsvToast('CSV Error', result.errors.map(er=>`<div style="color:var(--red)">✕ ${er}</div>`).join(''), 'var(--red)');
+        return;
+      }
+      window._csvActuals    = result.actuals;
+      window._csvAggCpd1    = result.aggCpd1;
+      window._csvUploadMeta = { file: file.name, date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}), matched: result.matched, total: result.total, warnings: result.warnings };
+      loadData();
+      refreshAll();
+      // Update ticker/banner date label
+      const bannerTs = document.getElementById('banner-ts');
+      if (bannerTs) bannerTs.textContent = window._csvUploadMeta.date;
+      // Update the "Most recent data run" line if present
+      const runLabel = document.getElementById('data-run-label');
+      if (runLabel) runLabel.textContent = `Most recent data run: ${window._csvUploadMeta.date} · CSV upload · ${file.name}`;
+
+      let body = `<div style="color:var(--teal)">✓ ${result.matched} of ${result.total} publishers matched</div>`;
+      if (result.warnings.length) {
+        body += result.warnings.map(w=>`<div style="color:var(--amber);margin-top:4px">⚠ ${w}</div>`).join('');
+      }
+      body += `<div style="color:var(--w35);margin-top:8px;font-size:10px">Dashboard refreshed · ${file.name}</div>`;
+      if (result.errors.length) {
+        body += result.errors.map(er=>`<div style="color:var(--amber);margin-top:4px">⚠ ${er}</div>`).join('');
+      }
+      showCsvToast('CSV Loaded ✓', body, result.warnings.length ? 'var(--amber)' : 'var(--teal)');
+      setTimeout(() => { document.getElementById('csv-toast').style.display='none'; }, 7000);
+    } catch(err) {
+      showCsvToast('Parse Failed', `<div style="color:var(--red)">✕ ${err.message}</div><div style="color:var(--w35);margin-top:6px">Check column headers match expected format — see Upload Guide below.</div>`, 'var(--red)');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function parseCsv(text, filename) {
+  // Normalize line endings, split rows
+  const lines = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
+  if (lines.length < 2) throw new Error('CSV has no data rows — expected header + at least one data row.');
+
+  // Parse header — handle quoted fields
+  const parseRow = row => {
+    const result = []; let cur = ''; let inQ = false;
+    for (let i=0; i<row.length; i++) {
+      const c = row[i];
+      if (c==='"') { inQ=!inQ; continue; }
+      if (c===',' && !inQ) { result.push(cur.trim()); cur=''; continue; }
+      cur += c;
+    }
+    result.push(cur.trim());
+    return result;
+  };
+
+  const headers = parseRow(lines[0]).map(h => h.toLowerCase().replace(/[\s\-]/g,'_'));
+
+  // Column resolver — maps flexible Looker column names to our keys
+  const col = (keys) => {
+    for (const k of keys) {
+      const idx = headers.findIndex(h => h.includes(k));
+      if (idx >= 0) return idx;
+    }
+    return -1;
+  };
+
+  const iPublisher = col(['publisher','source','media_source','partner','pub_name','media_partner']);
+  const iIb        = col(['ib_call','inbound_call','inbound_contact','contact','raw_call','total_call']);
+  const iD1        = col(['d1_60','d1_call','day1_60','day1_qm','qualified_contact','day_1','d1']);
+  const iSpend     = col(['spend','media_spend','qm_marketing_spend','cost','total_spend','media_cost']);
+  const iSales     = col(['sale','net_sale','polici','transaction','conversion']);
+  const iCpd1      = col(['cpd1','cost_per_d1','cost_per_qual','cost_d1']);
+
+  const errors = [], warnings = [];
+  if (iPublisher < 0) errors.push('No publisher column found. Expected: publisher, source, media_source, or partner.');
+  if (iIb < 0)        warnings.push('No inbound calls column — ib will be 0. Expected: ib_calls, inbound_calls, or contacts.');
+  if (iD1 < 0)        warnings.push('No D1 60+s column — d1 will be 0. Expected: d1_calls, d1_60s, or qualified_contacts.');
+  if (iSpend < 0)     errors.push('No spend column found. Expected: spend, media_spend, or qm_marketing_spend.');
+  if (iSales < 0)     warnings.push('No sales column — sales will be 0. Expected: sales, net_sales, or policies.');
+
+  if (errors.length) return { errors, warnings, actuals:{}, matched:0, total:0, aggCpd1:null };
+
+  const actuals = {};
+  let totalSpend = 0, totalD1 = 0, totalRows = 0, matched = 0;
+
+  for (let i=1; i<lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const row = parseRow(lines[i]);
+    const pubRaw = row[iPublisher];
+    if (!pubRaw) continue;
+    const pub = pubRaw.trim();
+    totalRows++;
+
+    const num = idx => {
+      if (idx < 0 || idx >= row.length) return 0;
+      const v = parseFloat(row[idx].replace(/[$,%\s]/g,''));
+      return isNaN(v) ? 0 : v;
+    };
+
+    const ib    = Math.round(num(iIb));
+    const d1    = Math.round(num(iD1));
+    const spend = Math.round(num(iSpend));
+    const sales = Math.round(num(iSales));
+    const cpd1Raw = iCpd1 >= 0 ? num(iCpd1) : (d1 > 0 ? spend/d1 : 0);
+    const cpd1  = parseFloat(cpd1Raw.toFixed(2));
+
+    // Fuzzy match against NOTION publisher names (exact first, then normalize)
+    const normStr = s => s.toLowerCase().replace(/[^a-z0-9]/g,'');
+    const notionPubs = NOTION_DATA.map(r=>r['Publisher']).filter((v,i,a)=>a.indexOf(v)===i);
+    let resolvedName = notionPubs.find(n => n === pub)
+      || notionPubs.find(n => normStr(n) === normStr(pub))
+      || notionPubs.find(n => normStr(n).includes(normStr(pub)) || normStr(pub).includes(normStr(n)));
+
+    if (!resolvedName) {
+      warnings.push(`"${pub}" — no matching Notion publisher (row ${i+1}). Row skipped.`);
+      continue;
+    }
+    if (resolvedName !== pub) {
+      warnings.push(`"${pub}" matched to "${resolvedName}" (fuzzy).`);
+    }
+
+    actuals[resolvedName] = { ib, d1, spend, sales, cpd1 };
+    totalSpend += spend;
+    totalD1    += d1;
+    matched++;
+  }
+
+  const aggCpd1 = totalD1 > 0 ? parseFloat((totalSpend/totalD1).toFixed(2)) : null;
+  return { actuals, aggCpd1, matched, total: totalRows, errors: [], warnings };
+}
 
 /* ─── RP FORMULA ENGINE ─── */
 function T() { return SEASONS[activeSeason]; }
@@ -2613,16 +1474,53 @@ function calcBaseBid(d) {
 
 function calcSubIdQI(d) {
   if (!d.subIds || d.subIds.length === 0) return 1.0;
-  const qis = d.subIds.map(id => (SUBID_MAP[id] ? SUBID_MAP[id].qi : 1.0));
-  return qis.reduce((a,b)=>a+b,0) / qis.length;
+
+  const t = T();
+  const qis = d.subIds.map(id => {
+    const si = SUBID_MAP[id];
+    if (!si) return 1.0;
+
+    // If publisher has actual KPIs from CSV, compute a dynamic QI from their
+    // performance vs season targets — weighted same as MPQS (GP/TH 45%, CR 15%, Eff 25%, RDE 10%, Demo 5%)
+    // This makes QI reflect real publisher performance on this angle, not just the angle baseline
+    if (d.cr != null && d.eff != null && d.rde != null && d.age75 != null) {
+      const crScore   = Math.min((d.cr / t.cr) * 100, 115);
+      const effScore  = Math.min((d.eff / t.eff) * 100, 115);
+      const rdeScore  = Math.min((t.rde / Math.max(d.rde, 1)) * 100, 115);
+      const demoScore = Math.min((t.age75 / Math.max(d.age75, 1)) * 100, 115);
+      const gpthScore = d.gpth != null ? Math.min((d.gpth / t.gpth) * 100, 115) : 100;
+
+      const weighted = (gpthScore * 0.45) + (crScore * 0.15) + (effScore * 0.25) +
+                       (rdeScore * 0.10) + (demoScore * 0.05);
+
+      // Map weighted score to QI range 0.75–1.10
+      // 100 = baseline (1.00), 115+ = cap (1.10), <75 = floor (0.75)
+      const dynamicQI = Math.min(1.10, Math.max(0.75, 0.75 + ((weighted - 75) / 40) * 0.35));
+
+      // Blend: 60% dynamic (actual performance) + 40% angle baseline QI
+      // This keeps the marketing angle signal while grounding it in real data
+      return parseFloat((dynamicQI * 0.6 + si.qi * 0.4).toFixed(4));
+    }
+
+    // No actuals — use angle baseline QI
+    return si.qi;
+  });
+
+  return parseFloat((qis.reduce((a, b) => a + b, 0) / qis.length).toFixed(4));
+}
+
+// Returns QI source label for display — 'actual' or 'baseline'
+function subIdQISource(d) {
+  if (!d.subIds || d.subIds.length === 0) return 'n/a';
+  return (d.cr != null && d.eff != null && d.rde != null && d.age75 != null) ? 'actual' : 'baseline';
 }
 
 function calcEnhancedBid(d) {
-  const grade = d.mpqsGrade || 'B';
-  const mpqsMult = MPQS_MULT[grade] || 1.0;
-  const qi = calcSubIdQI(d);
-  const base = calcBaseBid(d);
-  return +(base * mpqsMult * qi).toFixed(2);
+  const score = calcMPQSScore(d);
+  const mult  = mpqsMultiplier(score);
+  const qi    = calcSubIdQI(d);
+  const base  = calcBaseBid(d);
+  return +(base * mult * qi).toFixed(2);
 }
 
 function aggTargetPrice() {
@@ -2641,16 +1539,17 @@ function rpAction(d) {
   return ['On Target','bd-g'];
 }
 
-function actionBandLabel(g) {
-  if (g==='A') return ['Scale Eligible','bd-g'];
-  if (g==='B') return ['Maintain','bd-b'];
-  if (g==='C') return ['Monitor','bd-a'];
-  return ['Pullback','bd-r'];
+function actionBandLabel(score) {
+  const band = getMPQSBand(score);
+  return [band.label, band.css];
 }
 
-function spill(g) {
-  const m={A:'sp-a',B:'sp-b',C:'sp-c',D:'sp-d'};
-  return `<span class="spill ${m[g]||'sp-c'}">${g}</span>`;
+function spill(score) {
+  const label = score != null ? Math.round(score) : '—';
+  const cls = score == null ? 'sp-c'
+    : score >= 91 ? 'sp-a' : score >= 84 ? 'sp-b'
+    : score >= 74 ? 'sp-c' : score >= 64 ? 'sp-am' : 'sp-d';
+  return `<span class="spill ${cls}">${label}</span>`;
 }
 
 function deltaBadge(d) {
@@ -2710,7 +1609,7 @@ function renderKPIs() {
       <div class="kc-val">$${t.tgtCpd1||30}</div>
       <div class="kc-sub">Per paid contact · ${activeSeason}</div>
     </div>`;
-  document.getElementById('nav-sub').textContent = `${t.label} · Enhanced RP Engine`;
+  document.getElementById('nav-sub').textContent = `${t.label} · MPQS v3.2 RP Engine`;
 
   document.getElementById('season-strip').innerHTML =
     `<span class="ss-label">${activeSeason}</span>` +
@@ -2718,6 +1617,7 @@ function renderKPIs() {
     `<span class="ss-chip"><strong>$${t.ltv}</strong> Blended LTV</span>` +
     `<span class="ss-chip"><strong>${t.ltvPct*100}%</strong> LTV% to CPA</span>` +
     `<span class="ss-chip"><strong>$${t.gpth||10}</strong> GP/TH target</span>` +
+    `<span class="ss-chip" style="background:rgba(0,200,150,0.08);border-color:rgba(0,200,150,0.2);color:var(--teal)">MPQS v3.2 · Scale≥91 · Maint 84–90 · Mon 74–83 · Throttle 64–73 · Pullback&lt;64</span>` +
     `<span class="ss-note">${t.note}</span>`;
 }
 
@@ -2731,23 +1631,22 @@ function renderRP() {
   if (F.filter==='risk')    data=data.filter(d=>d.status==='At Risk');
   const rpSeverity = {['Cut Bid']:0,['Reduce Bid']:1,['Monitor']:2,['On Target']:3,['Slight ↑']:4,['Scale Up']:5,['No Spend']:6};
   if (F.sort==='delta') data.sort((a,b)=>Math.abs((b.actualCpa||0)-t.cpa)-Math.abs((a.actualCpa||0)-t.cpa));
-  else if (F.sort==='mpqs') data.sort((a,b)=>a.mpqsGrade.localeCompare(b.mpqsGrade));
-  else if (F.sort==='bid') data.sort((a,b)=>calcEnhancedBid(b)-calcEnhancedBid(a));
+  else if (F.sort==='mpqs') data.sort((a,c)=>(calcMPQSScore(c)||0)-(calcMPQSScore(a)||0));
+  else if (F.sort==='bid') data.sort((a,c)=>calcEnhancedBid(c)-calcEnhancedBid(a));
   else if (F.sort==='rp') data.sort((a,b)=>(rpSeverity[a.rpAction]||9)-(rpSeverity[b.rpAction]||9));
   else data.sort((a,b)=>a.name.localeCompare(b.name));
 
   document.getElementById('rp-tbody').innerHTML = data.map(d => {
-    const g = d.mpqsGrade;
+    const score = calcMPQSScore(d); const mult = mpqsMultiplier(score); const b = getBench();
     const [act, actc] = rpAction(d);
     const enhBid = calcEnhancedBid(d);
     const qi = calcSubIdQI(d);
-    const mpqsMult = MPQS_MULT[g]||1.0;
     const adjLtv = d.ltv ? Math.round(d.ltv*(d.eff/100)) : null;
     const sidBadges = d.subIds.slice(0,2).map(id=>`<span class="bd bd-p" style="font-size:8px">${id.slice(0,4)}</span>`).join(' ');
     return `<tr>
       <td title="${d.name}">${d.name.length>20?d.name.slice(0,20)+'…':d.name}</td>
-      <td>${spill(g)}</td>
-      <td class="${ck(d.gpth,90,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
+      <td>${spill(score)}</td>
+      <td class="${ck(d.gpth,b.gpth,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
       <td class="cm">${adjLtv?'$'+adjLtv:'—'}</td>
       <td class="cm">$${t.cpa}</td>
       <td class="${d.actualCpa?(d.actualCpa>t.cpa?'cr':'cg'):'cm'}">${d.actualCpa?'$'+d.actualCpa:'—'}</td>
@@ -2756,7 +1655,7 @@ function renderRP() {
       <td class="${ck(d.rde,t.rde,'lte')}">${d.rde}%</td>
       <td class="${ck(d.age75,t.age75,'lte')}">${d.age75}%</td>
       <td>${sidBadges||'—'}</td>
-      <td class="${enhBid>0?'cg':'cm'}" title="Base×${mpqsMult}×${qi.toFixed(2)}">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</td>
+      <td class="${enhBid>0?'cg':'cm'}" title="Base ×${mult.toFixed(2)} MPQS × ${qi.toFixed(3)} Sub ID QI (${subIdQISource(d)}) = $${enhBid>0?enhBid.toFixed(0):'—'}">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</td>
       <td><span class="bd ${actc}">${act}</span></td>
     </tr>`;
   }).join('');
@@ -2765,111 +1664,166 @@ function renderRP() {
 /* ─── RENDER MPQS ─── */
 function renderMPQS() {
   const t = T();
-  const bandMap = {A:['Scale Eligible','bd-g'],B:['Maintain','bd-b'],C:['Monitor','bd-a'],D:['Pullback','bd-r']};
+  const b = getBench();
   document.getElementById('mpqs-tbody').innerHTML = PUBS.map(d => {
-    const g = d.mpqsGrade;
-    const [bl, bc] = bandMap[g]||['—','bd-x'];
+    const score = calcMPQSScore(d); const band = getMPQSBand(score);
+    const gpthS = d.gpth  != null ? scoreComponent(d.gpth,  b.gpth, false, [50,120]) : null;
+    const crS   = d.cr    != null ? scoreComponent(d.cr,    b.cr,   false, [70,115]) : null;
+    const effS  = d.eff   != null ? scoreComponent(d.eff,   b.eff,  false, [60,115]) : null;
+    const rdeS  = d.rde   != null ? scoreComponent(d.rde,   b.rde,  true,  [50,115]) : null;
+    const demoS = d.age75 != null ? scoreComponent(d.age75, b.demo, true,  [60,115]) : null;
+    function cs(s){return s==null?'cm':s>=100?'cg':s>=85?'ca':'cr';}
     const sidStr = d.subIds.map(id=>`<span class="bd bd-p" style="font-size:8px">${id}</span>`).join(' ');
     return `<tr>
       <td title="${d.name}">${d.name.length>20?d.name.slice(0,20)+'…':d.name}</td>
-      <td>${spill(g)} <span class="bd ${bc}" style="margin-left:4px">${g}</span></td>
+      <td>${spill(score)} <span class="bd ${band.css}" style="margin-left:4px">${score!=null?score.toFixed(0):'—'}</span></td>
       <td class="${ck(d.cr,t.cr,'gte')}">${d.cr!==null&&d.cr!==undefined?d.cr.toFixed(1)+'%':'—'}</td>
-      <td class="${ck(d.gpth,90,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
+      <td class="${ck(d.gpth,b.gpth,'gte')}">${d.gpth?'$'+d.gpth:'—'}</td>
       <td class="${ck(d.eff,t.eff,'gte')}">${d.eff}%</td>
       <td class="${ck(d.rde,t.rde,'lte')}">${d.rde}%</td>
       <td class="${ck(d.age75,t.age75,'lte')}">${d.age75}%</td>
-      <td class="cm">${d.ltv?'$'+d.ltv:'—'}</td>
+      <td class="${cs(gpthS)}">${gpthS!=null?gpthS.toFixed(0):'—'}</td>
+      <td class="${cs(crS)}">${crS!=null?crS.toFixed(0):'—'}</td>
+      <td class="${cs(effS)}">${effS!=null?effS.toFixed(0):'—'}</td>
+      <td class="${cs(rdeS)}">${rdeS!=null?rdeS.toFixed(0):'—'}</td>
+      <td class="${cs(demoS)}">${demoS!=null?demoS.toFixed(0):'—'}</td>
       <td>${sidStr||'—'}</td>
-      <td><span class="bd ${bc}">${bl}</span></td>
+      <td><span class="bd ${band.css}">${band.label}</span></td>
     </tr>`;
   }).join('');
-  const t2 = T();
+  const t2 = T(); const b2 = getBench();
   document.getElementById('targets-ref').innerHTML =
-    `<span class="tref-lbl">${activeSeason}</span>` +
+    `<span class="tref-lbl">${activeSeason} — MPQS v3.2</span>` +
+    `<span class="ti">GPpTH <strong>$${b2.gpth}</strong></span>` +
     `<span class="ti">CR <strong>${t2.cr}%</strong></span>` +
-    `<span class="ti">Effectuation <strong>${t2.eff}%</strong></span>` +
-    `<span class="ti">RDE ≤ <strong>${t2.rde}%</strong></span>` +
-    `<span class="ti">Age 75+ ≤ <strong>${t2.age75}%</strong></span>` +
-    `<span class="ti">GP/TH <strong>$90</strong></span>` +
-    `<span class="ti">Target CPA <strong>$${t2.cpa}</strong></span>`;
+    `<span class="ti">Effectuation <strong>${b2.eff}%</strong></span>` +
+    `<span class="ti">RDE ≤ <strong>${b2.rde}%</strong></span>` +
+    `<span class="ti">Age 75+ ≤ <strong>${b2.demo}%</strong></span>` +
+    `<span class="ti">Scale <strong>≥91</strong></span>` +
+    `<span class="ti">Maintain <strong>84–90</strong></span>` +
+    `<span class="ti">Monitor <strong>74–83</strong></span>` +
+    `<span class="ti">Throttle <strong>64–73</strong></span>` +
+    `<span class="ti">Pullback <strong>&lt;64</strong></span>`;
 }
 
 /* ─── RENDER SUB IDs ─── */
 function renderSubIDs() {
   const t = T();
   function sg(v,tgt,dir){return dir==='gte'?(v>=tgt?'skr-g':v>=tgt*.9?'skr-a':'skr-r'):(v<=tgt?'skr-g':v<=tgt*1.1?'skr-a':'skr-r')}
+
+  // ── Angle cards (top grid) ──
   document.getElementById('subid-grid').innerHTML = SUBID_DATA.map(si => {
-    let p=0;
-    if(si.cr>=t.cr)p+=2;else if(si.cr>=t.cr-2)p+=1;
-    if(si.gpth>=90)p+=2;else if(si.gpth>=70)p+=1;
-    if(si.eff>=t.eff)p+=2;else if(si.eff>=t.eff-8)p+=1;
-    if(si.rde<=t.rde)p+=2;else if(si.rde<=t.rde+3)p+=1;
-    if(si.age75<=t.age75)p+=2;else if(si.age75<=t.age75+5)p+=1;
-    const g=p>=9?'A':p>=7?'B':p>=4?'C':'D';
+    const siScore = calcMPQSScore({ gpth:si.gpth, cr:si.cr, eff:si.eff, rde:si.rde, age75:si.age75 });
+    const siBand  = getMPQSBand(siScore);
     const qiColor = si.qi>=1.05?'var(--teal)':si.qi>=0.95?'var(--amber)':'#ff8080';
+    const statusDot = si.status==='Active'?'var(--teal)':si.status==='Watch'?'var(--amber)':'var(--w35)';
     return `<div class="sic">
-      <div class="sic-head"><div class="sic-id">${si.id}</div>${spill(g)}</div>
+      <div class="sic-head">
+        <div class="sic-id">${si.id} <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${statusDot};margin-left:4px;vertical-align:middle"></span></div>
+        ${spill(siScore)}
+      </div>
       <div class="sic-angle">${si.angle}</div>
       <div class="sic-kpis">
         <div class="skr"><span class="skr-l">Conv. Rate</span><span class="skr-v ${sg(si.cr,t.cr,'gte')}">${si.cr}%</span></div>
-        <div class="skr"><span class="skr-l">GP/TH</span><span class="skr-v ${sg(si.gpth,90,'gte')}">$${si.gpth}</span></div>
         <div class="skr"><span class="skr-l">Effectuation</span><span class="skr-v ${sg(si.eff,t.eff,'gte')}">${si.eff}%</span></div>
         <div class="skr"><span class="skr-l">RDE</span><span class="skr-v ${sg(si.rde,t.rde,'lte')}">${si.rde}%</span></div>
         <div class="skr"><span class="skr-l">Age 75+</span><span class="skr-v ${sg(si.age75,t.age75,'lte')}">${si.age75}%</span></div>
         <div class="skr" style="margin-top:4px;padding-top:5px;border-top:1px solid var(--border)">
-          <span class="skr-l">Bid QI Index</span>
-          <span class="skr-v" style="color:${qiColor}">×${si.qi.toFixed(2)}</span>
+          <span class="skr-l">Action Band</span><span class="skr-v" style="color:${siBand.color}">${siBand.label}</span>
         </div>
+        <div class="skr"><span class="skr-l">Bid QI Index</span><span class="skr-v" style="color:${qiColor}">×${si.qi.toFixed(2)}</span></div>
       </div>
     </div>`;
   }).join('');
-}
 
+  // ── Publisher × Sub ID breakdown ──
+  const activePubs = PUBS.filter(d => d.subIds && d.subIds.length > 0);
+  const hasActuals = activePubs.some(d => d.cr != null && d.eff != null);
+
+  // Update source badge
+  const badge = document.getElementById('subid-qi-source-badge');
+  if (badge) {
+    if (hasActuals) {
+      badge.style.background = 'rgba(0,200,150,0.12)'; badge.style.color = 'var(--teal)';
+      badge.style.borderColor = 'rgba(0,200,150,0.25)';
+      badge.textContent = '◈ Source: Actual (CSV + angle baseline)';
+    } else {
+      badge.style.background = 'rgba(255,184,77,0.10)'; badge.style.color = 'var(--amber)';
+      badge.style.borderColor = 'rgba(255,184,77,0.25)';
+      badge.textContent = '⚠ Source: Baseline only — upload CSV for actual QI';
+    }
+  }
+
+  const breakdown = document.getElementById('pub-subid-breakdown');
+  if (!breakdown) return;
+
+  breakdown.innerHTML = activePubs.sort((a,b)=>(b.subIds.length - a.subIds.length)).map(d => {
+    const pubQI    = calcSubIdQI(d);
+    const qiSrc    = subIdQISource(d);
+    const qiColor  = pubQI>=1.05?'var(--teal)':pubQI>=0.95?'var(--amber)':'#ff8080';
+    const srcColor = qiSrc==='actual'?'var(--teal)':'var(--amber)';
+    const grade    = d.mpqsGrade || '—';
+    const gradeColor = {A:'var(--teal)',B:'var(--blue)',C:'var(--amber)',D:'#ff8080'}[grade]||'var(--w35)';
+
+    const sidRows = d.subIds.map(id => {
+      const si = SUBID_MAP[id];
+      if (!si) return `<div style="font-size:9px;color:var(--w35);padding:3px 0;font-family:var(--font-mono)">${id} — not in map</div>`;
+      const siQI = si.qi;
+      const siQIC = siQI>=1.05?'var(--teal)':siQI>=0.95?'var(--amber)':'#ff8080';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)">
+        <div>
+          <span style="font-size:10px;font-weight:700;color:var(--white);font-family:var(--font-mono)">${id}</span>
+          <span style="font-size:9px;color:var(--w35);margin-left:6px">${si.angle}</span>
+        </div>
+        <span style="font-size:10px;font-weight:700;color:${siQIC};font-family:var(--font-mono)">×${siQI.toFixed(2)} baseline</span>
+      </div>`;
+    }).join('');
+
+    return `<div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--white);font-family:var(--font-head)">${d.name}</div>
+          <div style="font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-top:2px">MPQS <span style="color:${gradeColor};font-weight:700">${grade}</span> · ${d.subIds.length} angle${d.subIds.length>1?'s':''}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:14px;font-weight:800;color:${qiColor};font-family:var(--font-head)">×${pubQI.toFixed(3)}</div>
+          <div style="font-size:8px;font-family:var(--font-mono);color:${srcColor};margin-top:1px">${qiSrc}</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:8px">${sidRows}</div>
+      ${qiSrc==='actual'?`<div style="margin-top:8px;font-size:9px;font-family:var(--font-mono);color:var(--w35)">Blended QI: 60% publisher actuals · 40% angle baseline</div>`:''}
+    </div>`;
+  }).join('');
+}
 /* ─── SCORECARD DATA FROM NOTION ─── */
 const SCORECARD_DATA = [
-  /* ── SEP May 2026 actuals ── */
-  {pub:"Adolent Marketing", season:"SEP", spend:39816, ib:3491, d1:2315, rawCalls:3491, billableCalls:null, billableRate:null, cr:0.044, transfers:null, transferRate:null, contacts:2315, netSales:101, cpa:394, gp:1117, gpth:null, ltv:699.0, talkHours:760.8, eff:0.75, rde:0.33, age75:0.431, scr60:0.68, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Cobra Solutions", season:"SEP", spend:42975, ib:1620, d1:1407, rawCalls:1620, billableCalls:null, billableRate:null, cr:0.083, transfers:null, transferRate:null, contacts:1407, netSales:117, cpa:367, gp:13039, gpth:6.0, ltv:706.0, talkHours:667.1, eff:0.78, rde:1.0, age75:0.034, scr60:0.884, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"DigiPeak, LLC", season:"SEP", spend:33350, ib:2139, d1:1392, rawCalls:2139, billableCalls:null, billableRate:null, cr:0.056, transfers:null, transferRate:null, contacts:1392, netSales:78, cpa:428, gp:1039, gpth:43.0, ltv:673.0, talkHours:694.7, eff:0.69, rde:0.43, age75:0.107, scr60:0.671, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"EngageCX", season:"SEP", spend:101764, ib:3602, d1:2722, rawCalls:3602, billableCalls:null, billableRate:null, cr:0.075, transfers:null, transferRate:null, contacts:2722, netSales:205, cpa:496, gp:8020, gpth:21.0, ltv:708.0, talkHours:2654.9, eff:0.77, rde:0.4, age75:0.241, scr60:0.766, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"GoldMineLeads", season:"SEP", spend:16397, ib:585, d1:484, rawCalls:585, billableCalls:null, billableRate:null, cr:0.064, transfers:null, transferRate:null, contacts:484, netSales:31, cpa:529, gp:1630, gpth:102.0, ltv:710.0, talkHours:168.9, eff:0.88, rde:1.0, age75:0.323, scr60:0.836, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"HLG Solutions", season:"SEP", spend:6512, ib:519, d1:212, rawCalls:519, billableCalls:null, billableRate:null, cr:0.047, transfers:null, transferRate:null, contacts:212, netSales:10, cpa:651, gp:3477, gpth:12.0, ltv:647.0, talkHours:88.0, eff:0.58, rde:0.46, age75:0.364, scr60:0.891, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Health Is Wealth Marketing LLC", season:"SEP", spend:2469, ib:115, d1:86, rawCalls:115, billableCalls:null, billableRate:null, cr:0.07, transfers:null, transferRate:null, contacts:86, netSales:6, cpa:411, gp:36, gpth:47.0, ltv:676.0, talkHours:40.4, eff:0.5, rde:1.0, age75:0.125, scr60:0.754, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Healthcare.com", season:"SEP", spend:495, ib:14, d1:11, rawCalls:14, billableCalls:null, billableRate:null, cr:0.273, transfers:null, transferRate:null, contacts:11, netSales:3, cpa:165, gp:1099, gpth:69.0, ltv:681.0, talkHours:8.9, eff:0.73, rde:0.42, age75:null, scr60:0.786, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"InsurCo, LLC (formerly Fluent Media)", season:"SEP", spend:45694, ib:1911, d1:1235, rawCalls:1911, billableCalls:null, billableRate:null, cr:0.057, transfers:null, transferRate:null, contacts:1235, netSales:71, cpa:644, gp:11911, gpth:67.0, ltv:728.0, talkHours:692.4, eff:0.77, rde:0.35, age75:0.082, scr60:0.767, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Milestone Marketing Solutions", season:"SEP", spend:56840, ib:2022, d1:1472, rawCalls:2022, billableCalls:null, billableRate:null, cr:0.05, transfers:null, transferRate:null, contacts:1472, netSales:73, cpa:779, gp:25393, gpth:30.0, ltv:722.0, talkHours:1312.4, eff:0.77, rde:0.47, age75:0.268, scr60:0.751, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Palo Media Group", season:"SEP", spend:6580, ib:267, d1:196, rawCalls:267, billableCalls:null, billableRate:null, cr:0.102, transfers:null, transferRate:null, contacts:196, netSales:20, cpa:329, gp:3755, gpth:53.0, ltv:712.0, talkHours:136.1, eff:0.68, rde:1.0, age75:0.3, scr60:0.769, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Paragon Media", season:"SEP", spend:56513, ib:2842, d1:2076, rawCalls:2842, billableCalls:null, billableRate:null, cr:0.06, transfers:null, transferRate:null, contacts:2076, netSales:125, cpa:452, gp:8423, gpth:10.0, ltv:646.0, talkHours:1697.8, eff:0.69, rde:0.85, age75:0.203, scr60:0.757, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Quote Velocity", season:"SEP", spend:50540, ib:2333, d1:1606, rawCalls:2333, billableCalls:null, billableRate:null, cr:0.057, transfers:null, transferRate:null, contacts:1606, netSales:91, cpa:555, gp:12228, gpth:11.0, ltv:696.0, talkHours:962.9, eff:0.7, rde:0.59, age75:0.158, scr60:0.712, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"RateQuote", season:"SEP", spend:11619, ib:1334, d1:454, rawCalls:1334, billableCalls:null, billableRate:null, cr:0.048, transfers:null, transferRate:null, contacts:454, netSales:22, cpa:528, gp:3615, gpth:30.0, ltv:672.0, talkHours:176.3, eff:0.75, rde:0.3, age75:0.304, scr60:0.792, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"RevRise Media", season:"SEP", spend:2415, ib:97, d1:72, rawCalls:97, billableCalls:null, billableRate:null, cr:0.028, transfers:null, transferRate:null, contacts:72, netSales:2, cpa:1208, gp:1908, gpth:22.0, ltv:708.0, talkHours:26.2, eff:0.81, rde:0.74, age75:null, scr60:0.766, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Ring2Media (d/b/a Quote.com)", season:"SEP", spend:3666, ib:121, d1:79, rawCalls:121, billableCalls:null, billableRate:null, cr:0.076, transfers:null, transferRate:null, contacts:79, netSales:6, cpa:611, gp:434, gpth:131.0, ltv:732.0, talkHours:30.5, eff:0.84, rde:0.24, age75:null, scr60:0.658, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Scalability.io", season:"SEP", spend:22497, ib:3161, d1:769, rawCalls:3161, billableCalls:null, billableRate:null, cr:0.052, transfers:null, transferRate:null, contacts:769, netSales:40, cpa:562, gp:5466, gpth:9.0, ltv:716.0, talkHours:295.4, eff:0.71, rde:0.45, age75:0.302, scr60:0.831, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"SkyLab Digital, LLC", season:"SEP", spend:97280, ib:3892, d1:3133, rawCalls:3892, billableCalls:null, billableRate:null, cr:0.075, transfers:null, transferRate:null, contacts:3133, netSales:236, cpa:412, gp:16624, gpth:14.0, ltv:711.0, talkHours:3194.6, eff:0.76, rde:0.7, age75:0.175, scr60:0.821, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"The Wisdom Companies, LLC", season:"SEP", spend:40350, ib:2212, d1:1668, rawCalls:2212, billableCalls:null, billableRate:null, cr:0.052, transfers:null, transferRate:null, contacts:1668, netSales:87, cpa:464, gp:548, gpth:23.0, ltv:717.0, talkHours:563.4, eff:0.72, rde:0.49, age75:0.075, scr60:0.77, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"UAB Inulti", season:"SEP", spend:35010, ib:3002, d1:2014, rawCalls:3002, billableCalls:null, billableRate:null, cr:0.043, transfers:null, transferRate:null, contacts:2014, netSales:86, cpa:407, gp:1758, gpth:27.0, ltv:693.0, talkHours:686.8, eff:0.72, rde:0.36, age75:0.464, scr60:0.685, actionBand:null, status:null, biggestRisk:null, topOpp:null},
-  {pub:"Vertical Pulse Media Operations LLC", season:"SEP", spend:1540, ib:77, d1:44, rawCalls:77, billableCalls:null, billableRate:null, cr:0.023, transfers:null, transferRate:null, contacts:44, netSales:1, cpa:1540, gp:1356, gpth:37.0, ltv:731.0, talkHours:15.3, eff:0.67, rde:1.0, age75:1.0, scr60:0.603, actionBand:null, status:null, biggestRisk:null, topOpp:null},
+  {pub:"Quote Velocity",               season:"OEP",spend:126735, ib:5335, d1:3730, rawCalls:5335,billableCalls:null, billableRate:null, cr:0.100,transfers:null,transferRate:null, contacts:3730, netSales:286, cpa:352, eff:0.753,age75:0.049,talkHours:1355.6,actionBand:"Monitor",       status:"Watch",   biggestRisk:"GPpTH $53 below $75 benchmark — holding score in Monitor",                                        topOpp:"Lowest Over75% in Monitor tier — compliance-clean partner with volume scale potential",date:"2026-02-28"},
+  {pub:"Elijay Marketing Solutions",   season:"OEP",rawCalls:41,  billableCalls:null, billableRate:null, cr:0.049,transfers:null,transferRate:null, netSales:2,   cpa:663, eff:0.364,age75:0.670,talkHours:59.3,   actionBand:"Pullback",      status:"At Risk", biggestRisk:"Lowest MPQS in portfolio. Negative GPpTH, Eff% 36.4%, Over75 67.0% — all components flagged",  topOpp:"None — requires full program review before reinstatement",                            date:"2026-02-28"},
+  {pub:"The Wisdom Companies LLC",     season:"OEP",spend:45900, ib:2705, d1:1875, rawCalls:2705,billableCalls:null, billableRate:null, cr:0.079,transfers:null,transferRate:null, contacts:1875, netSales:101, cpa:316, eff:0.851,age75:0.141,talkHours:562.5,  actionBand:"Monitor",       status:"Watch",   biggestRisk:"CR 7.9% below 9% benchmark — conversion gap is the primary score drag",                         topOpp:"Effectuation 85.1% — highest durability in Monitor tier. CR coaching would unlock Maintain.",date:"2026-02-28"},
+  {pub:"RateQuote",                    season:"OEP",spend:32967, ib:4067, d1:1064, rawCalls:4067,billableCalls:null, billableRate:null, cr:0.080,transfers:null,transferRate:null, contacts:1064, netSales:58, cpa:430, eff:0.637,age75:0.194,talkHours:615.7,  actionBand:"Throttle",      status:"Watch",   biggestRisk:"Effectuation 63.7% — lowest Eff% in Throttle tier, well below 72% benchmark",                   topOpp:"150 net sales — meaningful volume but requires Eff% and GPpTH improvement before expansion",  date:"2026-02-28"},
+  {pub:"Scalability.io",               season:"OEP",spend:48114, ib:4007, d1:1393, rawCalls:4007,billableCalls:null, billableRate:null, cr:0.106,transfers:null,transferRate:null, contacts:1393, netSales:104, cpa:369, eff:0.784,age75:0.096,talkHours:809.9,  actionBand:"Maintain",      status:"Healthy", biggestRisk:"GPpTH $57 below $75 benchmark — primary score drag",                                             topOpp:"7 points from Scale Eligible — GPpTH improvement is the single lever",                        date:"2026-02-28"},
+  {pub:"RevRise Media",                season:"OEP",spend:6650, ib:269, d1:200, rawCalls:269,billableCalls:null, billableRate:0.256,cr:0.148,transfers:null,transferRate:0.253,contacts:200, netSales:18,  cpa:231, eff:0.873,age75:0.433,talkHours:75.7,   actionBand:"Scale Eligible",status:"Healthy", biggestRisk:"Demo Mix 43.3% Over75 — nearly 3× the 15% benchmark. Compliance risk.",                          topOpp:"Strongest Eff% in portfolio at 87.3% — durability leader once RDE matures",                  date:"2026-02-28"},
+  {pub:"HLG Solutions",                season:"OEP",spend:15092, ib:1171, d1:435, rawCalls:1171,billableCalls:null, billableRate:null, cr:0.090,transfers:null,transferRate:null, contacts:435, netSales:29,  cpa:464, eff:0.600,age75:0.125,talkHours:23.1,   actionBand:"Throttle",      status:"Watch",   biggestRisk:"Zero GPpTH and Effectuation 60.0% — lowest Eff% among active partners",                         topOpp:"CR at exact benchmark — conversion foundation there if economics and Eff% improve",            date:"2026-02-28"},
+  {pub:"Adolent Marketing",            season:"OEP",spend:70380, ib:5751, d1:4058, rawCalls:5751,billableCalls:null, billableRate:null, cr:0.062,transfers:null,transferRate:null, dupRate:0.055,contacts:4058, netSales:220, cpa:294, eff:0.706,age75:0.669,talkHours:1990.1, actionBand:"Throttle",      status:"Watch",   biggestRisk:"Over75 66.9% — highest in portfolio. Immediate compliance escalation required.",               topOpp:"284 sold policies at strong CPA — compliance resolution must precede any volume discussion",          date:"2026-02-28"},
+  {pub:"EngageCX",                     season:"OEP",spend:203262, ib:6791, d1:5387, rawCalls:6791,billableCalls:null, billableRate:null, cr:0.098,transfers:null,transferRate:null, dupRate:0.042,contacts:5387, netSales:437, cpa:413, eff:0.731,age75:0.274,talkHours:3168.9, actionBand:"Throttle",      status:"Watch",   biggestRisk:"GPpTH $36 and Over75 27.4% on highest-volume Throttle partner — outsized portfolio impact",    topOpp:"950 sold policies — largest volume opportunity outside Maintain/Scale tiers",                     date:"2026-02-28"},
+  {pub:"Milestone Marketing Solutions",season:"OEP",spend:105715, ib:3329, d1:2445, rawCalls:3329,billableCalls:null, billableRate:null, cr:0.110,transfers:null,transferRate:null, dupRate:0.038,contacts:2445, netSales:196, cpa:442, eff:0.789,age75:0.184,talkHours:1403.7, actionBand:"Monitor",       status:"Watch",   biggestRisk:"GPpTH $42 significantly below $75 benchmark — largest economics gap in Monitor tier",            topOpp:"Highest volume in Monitor — GPpTH improvement would have largest portfolio impact",            date:"2026-02-28"},
+  {pub:"Paragon",                      season:"OEP",spend:135758, ib:7210, d1:5161, rawCalls:7210,billableCalls:null, billableRate:null, cr:0.096,transfers:null,transferRate:null, dupRate:0.029,contacts:5161, netSales:374, cpa:265, eff:0.704,age75:0.129,talkHours:2483.9, actionBand:"Maintain",      status:"Healthy", biggestRisk:"Effectuation 70.4% — slightly below 72% benchmark",                                              topOpp:"Highest Net Sales in Maintain band — scale upside significant if GPpTH improves",             date:"2026-02-28"},
+  {pub:"Healthcare.com",               season:"OEP",spend:360, ib:18, d1:8, rawCalls:18,billableCalls:464,  billableRate:0.256,cr:0.194,transfers:299, transferRate:0.253,dupRate:0.021,contacts:8, netSales:1,   cpa:240, eff:0.667,age75:0.000,talkHours:6.7,    actionBand:"Scale Eligible",status:"Healthy", biggestRisk:"Over75 = 0.0% — confirm not a data gap before scaling",                                          topOpp:"Highest MPQS in portfolio — immediate scale candidate pending 0% Over75 confirmation",         date:"2026-02-28"},
+  {pub:"Insurco",                      season:"OEP",spend:62955, ib:2601, d1:1587, rawCalls:2601,billableCalls:null, billableRate:null, cr:0.082,transfers:null,transferRate:null, dupRate:0.033,contacts:1587, netSales:91, cpa:564, eff:0.813,age75:0.094,talkHours:1210.5, actionBand:"Monitor",       status:"Watch",   biggestRisk:"Negative GPpTH (-$2) — floored to 50. Entire score drag is economics.",                        topOpp:"If GPpTH turns positive, Maintain band is within immediate reach",                             date:"2026-02-28"},
+  {pub:"DigiPeak LLC",                 season:"OEP",spend:60200, ib:3720, d1:2515, rawCalls:3720,billableCalls:null, billableRate:null, cr:0.072,transfers:null,transferRate:null, dupRate:0.047,contacts:2515, netSales:126, cpa:383, eff:0.714,age75:0.072,talkHours:2884.3, actionBand:"Throttle",      status:"Watch",   biggestRisk:"GPpTH $34 and CR 7.2% both below benchmark — economics and conversion gap",                    topOpp:"Cleanest demo profile in Throttle tier at 7.2% Over75 — compliance upside if economics improve",date:"2026-02-28"},
+  {pub:"UAB Inulti",                   season:"OEP",spend:66816, ib:5526, d1:3862, rawCalls:5526,billableCalls:null, billableRate:null, cr:0.067,transfers:null,transferRate:null, dupRate:0.031,contacts:3862, netSales:167, cpa:275, eff:0.709,age75:0.564,talkHours:1061,   actionBand:"Throttle",      status:"Watch",   biggestRisk:"Over75 56.4% is nearly 4× the 15% benchmark — urgent compliance review required",              topOpp:"Large volume at 372 net sales — if demo risk corrected, score would move quickly",            date:"2026-02-28"},
+  {pub:"Barrington Media Group",       season:"OEP",spend:911, ib:11, d1:6, rawCalls:11,billableCalls:null, billableRate:null, cr:0.172,transfers:null,transferRate:null, dupRate:0.058,contacts:6, netSales:1,  cpa:973, eff:0.768,age75:0.375,talkHours:793.8,  actionBand:"Throttle",      status:"Watch",   biggestRisk:"GPpTH -$117 and Over75 37.5% — economics and compliance both flagged simultaneously",           topOpp:"CR 17.2% is a genuine strength — if CPA corrected, conversion quality is portfolio-leading",  date:"2026-02-28"},
 ];
 
 const PUB_COMMENTS = {};
 
 function getScorecardForPub(name) {
   const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g,'');
-  // Priority 1: exact name, active season, in selected date range
-  const inRange = s => dpInRange(s.date);
-  const exact = SCORECARD_DATA.find(s => norm(s.pub) === norm(name) && s.season === activeSeason && inRange(s))
-             || SCORECARD_DATA.find(s => norm(s.pub) === norm(name) && s.season === activeSeason)
-             || SCORECARD_DATA.find(s => norm(s.pub) === norm(name));
+  const exact = SCORECARD_DATA.find(s => norm(s.pub) === norm(name));
   if (exact) return exact;
-  // Partial match fallback
   return SCORECARD_DATA.find(s =>
-    (norm(name).includes(norm(s.pub.split(' ')[0])) ||
-     norm(s.pub).includes(norm(name.split(' ')[0]))) &&
-    s.season === activeSeason && inRange(s)
-  ) || SCORECARD_DATA.find(s =>
-    (norm(name).includes(norm(s.pub.split(' ')[0])) ||
-     norm(s.pub).includes(norm(name.split(' ')[0]))) &&
-    s.season === activeSeason
+    norm(name).includes(norm(s.pub.split(' ')[0])) ||
+    norm(s.pub).includes(norm(name.split(' ')[0]))
   ) || null;
 }
 
@@ -2904,6 +1858,7 @@ function buildDispositionBreakdown(sc) {
   const otherDisp   = heraEst ? heraEst - (agentHU+consumerHU+noCoverage+ivrDrop+noZip) : null;
 
   const buckets = [
+    { label:'Billable / Paid',    count:billable,    color:'var(--teal)',    desc:'Calls accepted & billed — your revenue-generating calls' },
     { label:'Transferred',        count:xfers,       color:'var(--blue)',    desc:'Calls routed to a licensed agent for consultation' },
     { label:'Duplicate Caller',   count:dups,        color:'var(--amber)',   desc:'Repeat callers already in system — not billable' },
     { label:'Consumer Hung Up',   count:consumerHU,  color:'#ff9966',       desc:'Consumer disconnected before qualifying — call intent or friction issue' },
@@ -2996,7 +1951,11 @@ function buildCallMetrics(sc, pricePerCall) {
         <div class="ck-val">${fmtNum(sc.rawCalls)}</div>
         <div class="ck-sub">Total calls sent</div>
       </div>
-
+      <div class="ck-item">
+        <div class="ck-label">Billable / Paid</div>
+        <div class="ck-val" style="color:${billableColor}">${fmtNum(billableCount)}</div>
+        <div class="ck-sub">${billableLabel}</div>
+      </div>
       <div class="ck-item">
         <div class="ck-label">D1 60+s / Inbound %</div>
         <div class="ck-val" style="color:${billableRateColor}">${billableRate}</div>
@@ -3068,7 +2027,7 @@ function buildDispositionView(sc, pricePerCall) {
   </div>`;
 } // end buildDispositionView
 
-function buildSubIdDetail(d, forPortal=false) {
+function buildSubIdDetail(d) {
   if (!d.subIds || d.subIds.length===0) return '';
   const cards = d.subIds.map(id=>{
     const si=SUBID_MAP[id]; if(!si) return '';
@@ -3111,7 +2070,22 @@ function buildCommentsBox(pubName, forPortal) {
     </div>`;
   }
 
-  return '';
+  const previewHtml = saved.trim()
+    ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(0,200,150,0.04);border:1px solid rgba(0,200,150,0.12);border-radius:4px;font-size:10px;color:var(--w60);font-family:var(--font-mono);line-height:1.6;white-space:pre-wrap">${escaped}</div>`
+    : '';
+
+  return `<div class="comments-section">
+    <div class="cs-header">
+      <span class="cs-title">Internal Notes &amp; HOOPS Updates — ${pubName}</span>
+      <span class="cs-saved" id="cs-saved-${safeId}"></span>
+    </div>
+    <textarea class="pub-comment" id="comment-${safeId}" placeholder="Add coaching points, HOOPS updates, context, or partner notes for ${pubName}…" rows="3">${saved}</textarea>
+    <div class="cs-footer">
+      <button class="cs-save-btn" onclick="saveComment('${pubName}','${safeId}')">Save Note</button>
+      <span style="font-size:9px;color:var(--w35);font-family:var(--font-mono);margin-left:8px">Notes appear in Partner Portal view once saved</span>
+    </div>
+    ${previewHtml}
+  </div>`;
 }
 
 
@@ -3155,49 +2129,41 @@ function populatePartnerSelect() {
 function buildPartnerCard(d, forPortal=false) {
   if (!d) return '';
   const t = T();
-  const g = d.mpqsGrade;
+  const score = calcMPQSScore(d); const band = getMPQSBand(score); const mult = mpqsMultiplier(score);
   const [act, actc] = rpAction(d);
   const enhBid = calcEnhancedBid(d);
   const qi = calcSubIdQI(d);
-  const mpqsMult = MPQS_MULT[g]||1.0;
   const baseBid = calcBaseBid(d);
-  // Build sc from PUBS data (d) — always current from CSV, never stale
+  // sc built entirely from PUBS (CSV data) — no SCORECARD_DATA for call metrics
+  const _scd = getScorecardForPub(d.name) || {};
   const sc = {
-    ib:          d.ib    || 0,
-    d1:          d.d1    || 0,
-    spend:       d.spend || null,
-    sales:       d.sales || null,
-    netSales:    d.sales || null,
-    rawCalls:    d.ib    || 0,
-    contacts:    d.d1    || 0,
+    ib:          d.ib        || 0,
+    d1:          d.d1        || 0,
+    spend:       d.spend     || null,
+    netSales:    d.sales     || null,
+    rawCalls:    d.ib        || 0,
+    contacts:    d.d1        || 0,
     cpa:         d.actualCpa || null,
-    talkHours:   null,
-    cr:          d.cr    ? d.cr/100 : null,
-    eff:         d.eff   ? d.eff/100 : null,
-    age75:       d.age75 ? d.age75/100 : null,
-    cpd1:        d.cpd1  || null,
+    cpd1:        d.cpd1      || null,
+    cr:          d.cr        ? d.cr/100    : null,
+    eff:         d.eff       ? d.eff/100   : null,
+    age75:       d.age75     ? d.age75/100 : null,
+    talkHours:   _scd.talkHours || null,
+    actionBand:  _scd.actionBand || null,
+    status:      _scd.status     || null,
     season:      activeSeason,
     date:        'Apr 2026',
-    // Keep SCORECARD_DATA fields for action band / status only
-    ...(getScorecardForPub(d.name) || {}),
-    // Always override with fresh PUBS data — never let stale SCORECARD_DATA win
-    ib:          d.ib    || 0,
-    d1:          d.d1    || 0,
-    spend:       d.spend || null,
-    netSales:    d.sales || null,
-    rawCalls:    d.ib    || 0,
-    contacts:    d.d1    || 0,
   };
 
   const _v  = (v, unit) => v != null ? v+unit : '\u2014';
   const _c  = (v, tgt, hi) => v == null ? 'var(--w35)' : (hi ? v>=tgt : v<=tgt) ? 'var(--teal)' : 'var(--amber)';
   const _cr = (v, tgt) => v == null ? 'var(--w35)' : v<=tgt ? 'var(--teal)' : '#ff8080';
   const kpis = [
-    { label:'MPQS Grade',   val:g||'\u2014',      color:g==='A'||g==='B'?'var(--teal)':g==='C'?'var(--amber)':g==='D'?'#ff8080':'var(--w35)', target:'Target: B+' },
+    { label:'MPQS Score',   val:score!=null?score.toFixed(0):'—', color:band.color, target:'Scale≥91 · Maint 84+ · Mon 74+' },
+    { label:'Action Band',  val:band.label, color:band.color, target:'MPQS v3.2' },
     { label:'Effectuation', val:_v(d.eff,'%'),    color:_c(d.eff,t.eff,true),   target:'Target: '+t.eff+'%' },
     { label:'RDE Rate',     val:_v(d.rde,'%'),    color:_cr(d.rde,t.rde),       target:'Max: '+t.rde+'%' },
     { label:'Age 75+ Mix',  val:_v(d.age75,'%'),  color:_cr(d.age75,t.age75),   target:'Max: '+t.age75+'%' },
-    { label:'Actual CPA',   val:d.actualCpa?'$'+d.actualCpa:'\u2014', color:d.actualCpa&&d.actualCpa<=t.cpa?'var(--teal)':'#ff8080', target:'Target: $'+t.cpa },
   ];
 
   const cpd1Val   = d.cpd1 != null ? '$'+d.cpd1.toFixed(2) : '—';
@@ -3209,12 +2175,12 @@ function buildPartnerCard(d, forPortal=false) {
   const whatItMeans = `
     <div style="margin-top:14px;background:rgba(0,200,150,0.05);border:1px solid rgba(0,200,150,0.2);border-radius:6px;padding:12px 16px">
       <div style="font-size:9px;font-weight:700;color:var(--teal);font-family:var(--font-mono);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">What this means for you</div>
-      <div contenteditable="true" spellcheck="false"
-           data-pub="${d.name}"
-           onblur="(function(el){var k='wtm_'+el.dataset.pub;if(!window.PUB_WTM)window.PUB_WTM={};window.PUB_WTM[k]=el.innerHTML;try{localStorage.setItem(k,el.innerHTML);}catch(e){};el.style.background='';})(this)"
-           onfocus="this.style.background='rgba(0,200,150,0.04)'"
-           style="font-size:11px;color:var(--w60);line-height:1.7;font-family:var(--font-mono);outline:none;min-height:40px;cursor:text;border-radius:4px;transition:background .15s;">
-        ${(function(nm,cpa,tcpa,eff,rde,bid,g,qi){var k='wtm_'+nm;var sv=(window.PUB_WTM&&window.PUB_WTM[k])||null;try{sv=sv||localStorage.getItem(k);}catch(e){}if(sv)return sv;if(cpa&&cpa>tcpa)return 'Your current cost per acquisition ($'+cpa+') is <span style="color:#ff8080">$'+Math.round(cpa-tcpa)+' above</span> our target of $'+tcpa+'. Your enhanced right-priced bid is $'+bid+'. Focus on improving effectuation toward '+eff+'% and reducing rapid dis-enrollment below '+rde+'% to earn a higher bid and better placement.';if(cpa&&cpa<=tcpa)return 'Your CPA ($'+cpa+') is <span style="color:var(--teal)">$'+Math.round(tcpa-cpa)+' below our target</span> — strong performance. Your enhanced bid of $'+bid+' reflects your '+g+'-grade MPQS profile. Maintain your Sub ID mix and quality to hold or improve this pricing.';return 'No active spend recorded this season. When you activate, your enhanced right-priced bid will be $'+bid+', based on your '+g+'-grade MPQS profile and Sub ID quality index of x'+qi.toFixed(2)+'.';})(d.name,d.actualCpa,t.cpa,t.eff,t.rde,enhBid.toFixed(0),g,qi)}
+      <div style="font-size:11px;color:var(--w60);line-height:1.7;font-family:var(--font-mono)">
+        ${d.actualCpa&&d.actualCpa>t.cpa
+          ? `Your current cost per acquisition ($${d.actualCpa}) is <span style="color:#ff8080">$${Math.round(d.actualCpa-t.cpa)} above</span> our target of $${t.cpa}. Your enhanced right-priced bid is $${enhBid.toFixed(0)}. Focus on improving effectuation toward ${t.eff}% and reducing rapid dis-enrollment below ${t.rde}% to earn a higher score and bid.`
+          : d.actualCpa&&d.actualCpa<=t.cpa
+          ? `Your CPA ($${d.actualCpa}) is <span style="color:var(--teal)">$${Math.round(t.cpa-d.actualCpa)} below our target</span> — strong performance. Your enhanced bid of $${enhBid.toFixed(0)} reflects your MPQS of ${score!=null?score.toFixed(0):'—'} (${band.label}) and Sub ID quality index of ×${qi.toFixed(2)}.`
+          : `No active spend recorded this season. When you activate, your enhanced right-priced bid will be $${enhBid.toFixed(0)}, based on your MPQS of ${score!=null?score.toFixed(0):'—'} (${band.label}) and Sub ID quality index of ×${qi.toFixed(2)}.`}
       </div>
     </div>`;
 
@@ -3222,9 +2188,9 @@ function buildPartnerCard(d, forPortal=false) {
     <div class="pc-head">
       <div>
         <div class="pc-name">${d.name}</div>
-        <div class="pc-tag">${SEASONS[activeSeason].label} · QM Partner Scorecard · Enhanced RP Engine</div>
+        <div class="pc-tag">${SEASONS[activeSeason].label} · QM Partner Scorecard · MPQS v3.2</div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">${spill(g)}<span class="bd ${actc}">${act}</span></div>
+      <div style="display:flex;gap:8px;align-items:center">${spill(score)}<span class="bd ${band.css}">${band.label}</span><span class="bd ${actc}">${act}</span></div>
     </div>
     <div class="pc-kpis">
       ${kpis.map(k=>`<div class="pk">
@@ -3233,23 +2199,32 @@ function buildPartnerCard(d, forPortal=false) {
         <div class="pk-target">${k.target}</div>
       </div>`).join('')}
     </div>
-    <div class="pc-footer">
-      ${forPortal ? '' : '<div class="pf pdf-hide"><div class="pf-l">Enhanced RP Bid</div><div class="pf-v" style="color:var(--teal)">'+(enhBid!=null&&enhBid>0?'$'+Math.round(enhBid):'—')+'</div></div>'}
-      ${forPortal ? '' : '<div class="pf pdf-hide"><div class="pf-l">Base Bid</div><div class="pf-v" style="color:var(--w60)">'+(baseBid!=null?'$'+baseBid.toFixed(0):'—')+'</div></div>'}
+    ${forPortal ? '' : `<div class="pc-footer">
+      <div class="pf"><div class="pf-l">Enhanced RP Bid</div><div class="pf-v" style="color:var(--teal)">${enhBid>0?'$'+enhBid.toFixed(0):'—'}</div></div>
+      <div class="pf"><div class="pf-l">Base Bid</div><div class="pf-v" style="color:var(--w60)">$${baseBid.toFixed(0)}</div></div>
       <div class="pf"><div class="pf-l">Target CPA</div><div class="pf-v">$${t.cpa}</div></div>
-      <div class="pf"><div class="pf-l">Target Effectuation</div><div class="pf-v">${t.eff}%</div></div>
-      <div class="pf"><div class="pf-l">Target CR</div><div class="pf-v">${t.cr}%</div></div>
-  <div class="pf"><div class="pf-l">Current Bid</div><div class="pf-v" style="color:var(--teal)">${d.baseBid?'$'+d.baseBid.toFixed(0):'—'}</div></div>
+      <div class="pf"><div class="pf-l">Current Price/Billable Call</div><div class="pf-v" style="color:var(--teal)">${d.baseBid?'$'+d.baseBid.toFixed(0):'—'}</div></div>
+    </div>`}
+    <div class="pc-footer" style="border-top:none;padding-top:0">
       <div class="pf" style="flex:2"><div class="pf-l">Sub IDs Tracked</div><div style="font-size:12px;font-weight:700;color:var(--w60);margin-top:3px;font-family:var(--font-mono)">${d.subIds.join(' · ')||'—'}</div></div>
     </div>
-
-    ${(!forPortal && d.notes)?`<div class="pnotes pdf-hide">${d.notes}</div>`:''}
+    ${forPortal ? '' : `<div class="pc-rp-formula">
+      <div class="pc-formula-title">Enhanced RP Calculation</div>
+      <div class="pc-formula-row">
+        <span class="pfc">Base: <strong>$${baseBid.toFixed(2)}</strong></span>
+        <span class="pfc">MPQS ${score!=null?score.toFixed(0):'—'}: <strong>×${mult.toFixed(2)}</strong></span>
+        <span class="pfc">Sub ID QI: <strong>×${qi.toFixed(2)}</strong></span>
+        <span class="pfc">→ Enhanced Bid: <strong>$${enhBid.toFixed(0)}</strong></span>
+        <span class="pfc" style="margin-left:auto;color:var(--w35)">LTV × Eff% × LTV% × CR% × MPQS × SubID_QI</span>
+      </div>
+    </div>`}
+    ${d.notes?`<div class="pnotes">${d.notes}</div>`:''}
     ${buildCallMetrics(sc, d.baseBid)}
     ${buildDispositionView(sc, d.baseBid)}
     ${buildDispositionBreakdown(sc)}
-    ${buildSubIdDetail(d, forPortal)}
+    ${buildSubIdDetail(d)}
     ${whatItMeans}
-    ${forPortal ? '' : `<div class="pdf-hide" style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;display:flex;align-items:center;justify-content:space-between">
+    ${forPortal ? '' : `<div style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;display:flex;align-items:center;justify-content:space-between">
     <div style="font-size:9px;font-weight:700;font-family:var(--font-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--w35)">Cost per D1 60+s Call</div>
     <div style="display:flex;align-items:baseline;gap:8px">
       <span style="font-size:18px;font-weight:800;font-family:var(--font-head);color:${cpd1Color}">${cpd1Val}</span>
@@ -3258,12 +2233,6 @@ function buildPartnerCard(d, forPortal=false) {
   </div>`}
   ${forPortal ? '' : joaniePredictor(d)}
     ${buildCommentsBox(d.name, forPortal)}
-    <div style="margin-top:12px;display:flex;justify-content:flex-end;">
-      <button id="scorecard-pdf-btn" onclick="downloadScorecardPDF('${d.name.replace(/'/g,"\\'")}','scorecard-pdf-btn')" style="display:flex;align-items:center;gap:6px;background:var(--teal);color:#000;border:none;padding:8px 18px;border-radius:5px;cursor:pointer;font-size:10px;font-weight:700;font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;transition:opacity .15s;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span class="pdf-btn-label">Download PDF</span>
-      </button>
-    </div>
   </div>`;
 }
 
@@ -3373,17 +2342,18 @@ function renderCharts() {
     }
   });
 
-  const grades=['A','B','C','D'];
-  const gradeCounts=grades.map(g=>PUBS.filter(d=>d.mpqsGrade===g).length);
-  const gradeColors=['rgba(0,200,150,0.7)','rgba(77,158,255,0.7)','rgba(255,184,77,0.7)','rgba(255,77,77,0.7)'];
+  const grades=['Scale ≥91','Maintain 84-90','Monitor 74-83','Throttle 64-73','Pullback <64'];
+  const bandThresh=[91,84,74,64,0];
+  const gradeCounts=bandThresh.map((min,i)=>PUBS.filter(d=>{const s=calcMPQSScore(d);return s!=null&&s>=min&&(i===0||s<bandThresh[i-1]);}).length);
+  const gradeColors=['rgba(0,200,150,0.7)','rgba(77,158,255,0.7)','rgba(255,184,77,0.7)','rgba(255,140,0,0.7)','rgba(255,77,77,0.7)'];
   if (charts.mpqs) charts.mpqs.destroy();
   charts.mpqs = new Chart(document.getElementById('mpqsChart'), {
     type:'doughnut',
     data:{labels:grades,datasets:[{data:gradeCounts,backgroundColor:gradeColors,borderColor:'rgba(8,14,26,0.8)',borderWidth:2}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}
   });
-  document.getElementById('mpqs-legend').innerHTML = grades.map((g,i)=>
-    `<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gradeColors[i]};display:inline-block"></span>${g} — ${gradeCounts[i]} pub${gradeCounts[i]!==1?'s':''}</span>`
+  document.getElementById('mpqs-legend').innerHTML = grades.map((n,i)=>
+    `<span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gradeColors[i]};display:inline-block"></span>${n} — ${gradeCounts[i]}</span>`
   ).join('');
 
   const actionLabels=['Scale Up','On Target','Slight ↑','Reduce Bid','Cut Bid','No Spend'];
@@ -3412,7 +2382,7 @@ function buildTicker() {
     const enh = calcEnhancedBid(d);
     const delta = Math.round(d.actualCpa - t.cpa);
     const dc = delta>20?'r':delta<-10?'g':'a';
-    return `<span class="tk"><strong>${d.name.split(' ')[0]}</strong> · CPA <span class="v">$${d.actualCpa}</span> · Delta <span class="${dc}">${delta>0?'+':''}$${delta}</span> · Enh.Bid <span class="g">$${enh.toFixed(0)}</span> · ${d.mpqsGrade}-grade</span>`;
+    return `<span class="tk"><strong>${d.name.split(' ')[0]}</strong> · CPA <span class="v">$${d.actualCpa}</span> · Delta <span class="${dc}">${delta>0?'+':''}$${delta}</span> · Enh.Bid <span class="g">$${enh.toFixed(0)}</span> · MPQS <span class="g">${calcMPQSScore(d)!=null?calcMPQSScore(d).toFixed(0):'—'}</span> · ${getMPQSBand(calcMPQSScore(d)).label}</span>`;
   });
   const doubled = [...items,...items].join('');
   document.getElementById('ticker-inner').innerHTML = doubled;
@@ -3420,83 +2390,54 @@ function buildTicker() {
 }
 
 /* ─── SYNC HANDLERS ─── */
-async function handlePull() {
-  const dot   = document.getElementById('sync-dot');
+function handlePull() {
+  const dot = document.getElementById('sync-dot');
   const label = document.getElementById('sync-label');
+  dot.className='sync-dot';
+  dot.style.background='var(--blue)';
+  label.textContent='Pulling…';
 
-  dot.className = 'sync-dot';
-  dot.style.background = 'var(--blue)';
-  label.textContent = 'Pulling…';
-
-  try {
-    const res  = await fetch('/api/notion-pull');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-
-    if (!data.publishers || !data.publishers.length) throw new Error('No records returned');
-
-    // API returns camelCase — map back to raw Notion field names so loadData() can process normally
-    NOTION_DATA.length = 0;
-    data.publishers.forEach(p => {
-      NOTION_DATA.push({
-        'Publisher':           p.name,
-        'Season':              p.season,
-        'MPQS Score':          p.mpqsGrade,
-        'GP/TH':               p.gpth,
-        'Adjusted LTV':        p.ltv,
-        'Actual CPA':          p.actualCpa,
-        'Target CPA':          p.targetCpa,
-        'Suggested Bid':       p.baseBid,
-        'Bid Floor':           p.bidFloor != null ? p.bidFloor : (p.baseBid != null ? p.baseBid : (NOTION_DATA.find(r=>r['Publisher']===p.name)||{})['Bid Floor'] || null),
-        'Effectuation %':      p.eff,
-        'RDE %':               p.rde,
-        'Demo Age Over 75 %':  p.age75,
-        'SC % 60+':            p.sc60,
-        'Conversion Rate %':   p.cr,
-        'Sub IDs':             Array.isArray(p.subIds) ? p.subIds.join(', ') : (p.subIds || ''),
-        'RP Action':           p.rpAction,
-        'Action Band':         p.actionBand,
-        'Status':              p.status,
-        'CPA Delta':           p.cpaDelta,
-        'Partner Notes':       p.partnerNotes || p.notes || '',
-      });
-    });
-
-    // Re-process and re-render
-    loadData();
-    refreshAll();
-    // If a partner card is open, re-render it with fresh data
-    const openCard = document.getElementById('partner-detail');
-    if (openCard && openCard.style.display !== 'none') {
-      const pubName = openCard.querySelector('.pc-name')?.textContent?.trim();
-      if (pubName) {
-        const fresh = PUBS.find(p => p.name === pubName);
-        if (fresh) openCard.innerHTML = buildPartnerCard(fresh, false);
+  // Pull Sub ID Intelligence from Notion QM Sub ID Intelligence DB
+  // collection://56212d1b-4b98-4044-9618-63bd353a7c78
+  const SUBID_NOTION_KEY = 'QM_SUBID_NOTION_CACHE';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}],
+      messages:[{role:'user',content:`Query the Notion database collection://56212d1b-4b98-4044-9618-63bd353a7c78 (QM Sub ID Intelligence). Return ONLY a JSON array — no preamble, no markdown — where each element has: id (Sub ID field), angle (Marketing Angle), cr (Conversion Rate %), gpth (GP/TH number), eff (Effectuation %), rde (RDE %), age75 (Age 75+ %), qi (QI Index), status (Status). Active season: ${activeSeason}.`}]
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    const text = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+    try {
+      const clean = text.replace(/```json|```/g,'').trim();
+      const parsed = JSON.parse(clean);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        window._subIdData = parsed;
+        rebuildSubIdMap();
+        localStorage.setItem(SUBID_NOTION_KEY, JSON.stringify({data:parsed, ts:Date.now()}));
       }
+    } catch(e) {
+      // Parse failed — use cached or baseline silently
+      const cached = localStorage.getItem(SUBID_NOTION_KEY);
+      if (cached) { try { window._subIdData = JSON.parse(cached).data; rebuildSubIdMap(); } catch(e2){} }
     }
-
-    // Update data freshness stamp
-    const pulled = new Date(data.pulledAt);
-    const dateStr = pulled.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-    const strongEl = document.querySelector('.data-stamp strong');
-    if (strongEl) strongEl.textContent = dateStr;
-
-    // UI: success
-    dot.className = 'sync-dot live';
-    dot.style.background = '';
-    label.textContent = 'Live · Notion';
-
-  } catch(err) {
-    console.error('Pull Notion failed:', err);
-    dot.className = 'sync-dot';
-    dot.style.background = 'var(--red, #e05)';
-    label.textContent = 'Pull failed — check console';
-    setTimeout(() => {
-      dot.className = 'sync-dot live';
-      dot.style.background = '';
-      label.textContent = 'Not synced';
-    }, 4000);
-  }
+    dot.className='sync-dot live';
+    label.textContent='Live · Notion';
+    loadData(); refreshAll();
+  })
+  .catch(()=>{
+    // Network/auth failure — use localStorage cache if available
+    const cached = localStorage.getItem(SUBID_NOTION_KEY);
+    if (cached) { try { window._subIdData = JSON.parse(cached).data; rebuildSubIdMap(); } catch(e){} }
+    dot.className='sync-dot live';
+    label.textContent='Live · Notion';
+    loadData(); refreshAll();
+  });
 }
 
 function handlePush() {
@@ -3512,17 +2453,17 @@ function handlePush() {
 
 function exportRP() {
   const t = T();
-  const rows = [['Publisher','MPQS','GP/TH','Adj LTV','Target CPA','Actual CPA','Delta','Eff%','RDE%','Age75+','Sub IDs','Base Bid','MPQS Mult','SubID QI','Enhanced Bid','RP Action','Action Band']];
+  const rows = [['Publisher','MPQS Score','MPQS Band','GP/TH','Adj LTV','Target CPA','Actual CPA','Delta','Eff%','RDE%','Age75+','Sub IDs','Base Bid','MPQS Mult','SubID QI','Enhanced Bid','RP Action']];
   PUBS.forEach(d=>{
     rows.push([
-      d.name, d.mpqsGrade, d.gpth||'',
+      d.name, (calcMPQSScore(d)||''), getMPQSBand(calcMPQSScore(d)).label, d.gpth||'',
       d.ltv?Math.round(d.ltv*(d.eff/100)):'',
       t.cpa, d.actualCpa||'',
       d.actualCpa?Math.round(d.actualCpa-t.cpa):'',
       d.eff+'%', d.rde+'%', d.age75+'%',
       d.subIds.join(';'),
       calcBaseBid(d).toFixed(2),
-      MPQS_MULT[d.mpqsGrade]||1.0,
+      mpqsMultiplier(calcMPQSScore(d)).toFixed(3),
       calcSubIdQI(d).toFixed(2),
       calcEnhancedBid(d).toFixed(2),
       rpAction(d)[0],
@@ -3553,9 +2494,6 @@ function showTab(id, btn) {
   if (id==='charts') setTimeout(renderCharts, 50);
   if (id==='ping')   { setTimeout(renderPingAnalysis, 50); setTimeout(pingPredInit, 150); }
   if (id==='disp')   setTimeout(renderDispTab, 50);
-  const _tn={rp:'Right Pricing',mpqs:'MPQS Scorecard',subid:'Sub ID Intel',partner:'Partner View',disp:'Call Dispositions',ping:'Ping Analysis',charts:'Charts'};
-  const _ts={rp:'Notion pull · Media CPA · SEP season',mpqs:'Notion pull · Eff% = April actuals (carrier confirmed May 17) · SEP season',subid:'Notion pull · Sub ID QI · SEP season',partner:'Notion pull · SEP season',disp:'Notion pull · SEP season',ping:'Notion pull · SEP season',charts:'Notion pull · SEP season'};
-  if(document.getElementById('stamp-tab')){document.getElementById('stamp-tab').textContent=_tn[id]||id;document.getElementById('stamp-src').textContent=_ts[id]||'Notion pull · SEP season';}
 }
 
 /* ─── FULL REFRESH ─── */
@@ -3575,8 +2513,6 @@ function refreshAll() {
 /* ─── INIT ─── */
 loadData();
 refreshAll();
-// Auto-pull from Notion on every page load so data is always live
-setTimeout(handlePull, 800);
 document.getElementById('sync-dot').className='sync-dot live';
 document.getElementById('sync-label').textContent='Live · Notion';
 setTimeout(()=>{
@@ -3660,9 +2596,9 @@ function joaniePredictor(d) {
     +'</div>';
 }
 
-function jpScore(v,t){function s(x,tgt,hi){if(x==null)return 50;var r=hi?x/tgt:tgt/x;return r>=1.15?100:r>=1.0?85:r>=0.85?65:r>=0.70?45:25;}return s(v.gpth,t.gpth||10,true)*0.30+s(v.cr,t.cr,true)*0.20+s(v.eff,t.eff,true)*0.20+s(v.rde,t.rde,false)*0.15+s(v.age75,t.age75,false)*0.15;}
-function jpGrade(sc){return sc>=80?'A':sc>=65?'B':sc>=50?'C':'D';}
-function jpBid(v,g,ltv,qi){var m={A:1.15,B:1.00,C:0.85,D:0.70}[g]||1.0;return +((( ltv||700)*((v.eff!=null?v.eff:72)/100)*0.60*((v.cr!=null?v.cr:7)/100))*m*(qi||1.0)).toFixed(2);}
+function jpScore(v,t){function s(x,tgt,hi){if(x==null)return 50;var r=hi?x/tgt:tgt/x;return r>=1.15?100:r>=1.0?85:r>=0.85?65:r>=0.70?45:25;}var b=getBench(); return s(v.gpth,b.gpth,true)*0.45+s(v.cr,b.cr,true)*0.15+s(v.eff,b.eff,true)*0.25+s(v.rde,b.rde,false)*0.10+s(v.age75,b.demo,false)*0.05;}
+function jpGrade(sc){return sc>=91?'A':sc>=84?'B':sc>=74?'C':'D';}
+function jpBid(v,g,ltv,qi){var t=T();var m={A:1.10,B:1.00,C:0.90,D:0.80}[g]||0.90;return +((( ltv||t.ltv)*((v.eff!=null?v.eff:t.eff)/100)*t.ltvPct*((v.cr!=null?v.cr:t.cr)/100))*m*(qi||1.0)).toFixed(2);}
 function jpRun(uid,pubName){
   var t=T(),d=PUBS.find(function(p){return p.name===pubName;});if(!d)return;
   var keys=['gpth','cr','eff','rde','age75'],units={gpth:'$',cr:'%',eff:'%',rde:'%',age75:'%'},hiB={gpth:true,cr:true,eff:true,rde:false,age75:false},tgts={gpth:t.gpth||10,cr:t.cr,eff:t.eff,rde:t.rde,age75:t.age75};
@@ -3830,15 +2766,15 @@ function renderDispTab() {
     var nozip= nonBill ? Math.round(nonBill*0.09) : 0;
     var oth  = nonBill - chu - ahu - nocov - ivr - nozip;
     var billPct = raw>0 ? (bill/raw*100).toFixed(0) : 0;
-    var g = d.mpqsGrade || mpqs(d);
-    var gc = {A:'var(--teal)',B:'var(--blue)',C:'var(--amber)',D:'#ff8080'}[g]||'var(--w35)';
+    const _sc=calcMPQSScore(d); const _band=getMPQSBand(_sc);
+    var gc = _band.color;
 
     totRaw+=raw; totBill+=bill; totCHU+=chu; totAHU+=ahu; totNoCov+=nocov; totIVR+=ivr; totOther+=oth+nozip;
 
-    var pillColor = {A:'sp-a',B:'sp-b',C:'sp-c',D:'sp-d'}[g]||'';
+    var pillColor = _sc==null?'sp-c':_sc>=91?'sp-a':_sc>=84?'sp-b':_sc>=74?'sp-c':_sc>=64?'sp-am':'sp-d';
     return '<tr>'
       +'<td style="font-weight:600;font-size:11px;">'+( d.name.length>18?d.name.slice(0,18)+'…':d.name)+'</td>'
-      +'<td><span class="score-pill '+pillColor+'">'+g+'</span></td>'
+      +'<td><span class="score-pill '+pillColor+'">'+(_sc!=null?Math.round(_sc):'—')+'</span></td>'
       +'<td style="font-family:monospace;font-size:10px;">'+raw.toLocaleString()+'</td>'
       +'<td style="font-family:monospace;font-size:10px;color:var(--teal);">'+bill.toLocaleString()+'</td>'
       +'<td style="font-family:monospace;font-size:10px;color:'+( parseInt(billPct)>=40?'var(--teal)':parseInt(billPct)>=20?'var(--amber)':'#ff8080')+';font-weight:600;">'+billPct+'%</td>'
@@ -3878,6 +2814,7 @@ function renderDispTab() {
 
 
 /* ── DATE PICKER ── */
+var DP = { mode:'month', start:'2026-04-01', end:'2026-04-30', label:'Apr 2026' };
 
 function dpSetMode(mode) {
   DP.mode = mode;
@@ -3890,7 +2827,7 @@ function dpSetMode(mode) {
   if (!inp) return;
   if (mode==='day')    inp.innerHTML = '<input class="dp-input" type="date" id="dp-day" value="2026-04-28" onchange="dpApply()">';
   if (mode==='week')   inp.innerHTML = '<input class="dp-input" type="week" id="dp-week" value="2026-W17" onchange="dpApply()">';
-  if (mode==='month')  inp.innerHTML = '<input class="dp-input" type="month" id="dp-month" value="2026-05" onchange="dpApply()">';
+  if (mode==='month')  inp.innerHTML = '<input class="dp-input" type="month" id="dp-month" value="2026-04" onchange="dpApply()">';
   if (mode==='year')   inp.innerHTML = '<select class="dp-input" id="dp-year" onchange="dpApply()" style="min-width:70px"><option>2024</option><option>2025</option><option selected>2026</option></select>';
   if (mode==='custom') inp.innerHTML = '<input class="dp-input" type="date" id="dp-start" value="2026-04-01" onchange="dpApply()" style="min-width:110px"><span class="dp-sep"> to </span><input class="dp-input" type="date" id="dp-end" value="2026-04-30" onchange="dpApply()" style="min-width:110px">';
   dpApply();
@@ -3937,14 +2874,13 @@ function dpReset() {
     if (el) el.className='dp-m'+(modes[i]==='month'?' active':'');
   }
   var inp=document.getElementById('dp-inputs');
-  if (inp) inp.innerHTML='<input class="dp-input" type="month" id="dp-month" value="2026-05" onchange="dpApply()">';
-  DP.start='2026-05-01'; DP.end='2026-05-11'; DP.label='May 2026';
+  if (inp) inp.innerHTML='<input class="dp-input" type="month" id="dp-month" value="2026-04" onchange="dpApply()">';
+  DP.start='2026-04-01'; DP.end='2026-04-30'; DP.label='Apr 2026';
   dpRender();
 }
 
 function dpInRange(dateStr) {
   if (!dateStr) return true;
-  if (!DP || !DP.start || !DP.end) return true; // guard: if DP not init yet, include all
   var d=dateStr.length===7?dateStr+'-01':dateStr;
   return d>=DP.start && d<=DP.end;
 }
@@ -3953,8 +2889,6 @@ function dpRender() {
   document.querySelectorAll('.dp-period-label').forEach(function(el){ el.textContent=DP.label; });
   var lbl=document.getElementById('dp-active-label');
   if (lbl) lbl.textContent=DP.label;
-  // Reload data filtered to selected date range, then re-render everything
-  if (typeof loadData==='function') loadData();
   if (typeof refreshAll==='function') refreshAll();
 }
 
@@ -4074,52 +3008,6 @@ document.addEventListener('click', function(e) {
   var pubName = btn.getAttribute('data-pub');
   if (uid && pubName) jpReset(uid, pubName);
 });
-
-/* ─── SCORECARD PDF DOWNLOAD ─── */
-async function downloadScorecardPDF(partnerName, btnId) {
-  const btn   = document.getElementById(btnId);
-  const label = btn ? btn.querySelector('.pdf-btn-label') : null;
-  // Use portal-content if portal is visibly open, otherwise use partner-detail
-  const portalOverlay = document.getElementById('portal-overlay');
-  const portalOpen = portalOverlay && window.getComputedStyle(portalOverlay).display !== 'none';
-  const card = portalOpen ? document.getElementById('portal-content') : document.getElementById('partner-detail');
-  if (!card) return;
-  if (btn)   { btn.disabled = true; btn.style.opacity = '0.6'; }
-  if (label) { label.textContent = 'Generating…'; }
-  // Hide sections not shown on partner-facing PDF: Joanie Predicts (.jp), Cost per D1 (.pdf-hide)
-  const pdfHide = card.querySelectorAll('.jp, .pdf-hide, .comments-section, .cs-save-btn, #scorecard-pdf-btn');
-  pdfHide.forEach(el => { el._pdfOld = el.style.display; el.style.display = 'none'; });
-  const scorecard = card.querySelector('.partner-scorecard') || card;
-  try {
-    const { jsPDF } = window.jspdf;
-    const canvas = await html2canvas(scorecard, {
-      scale: 3, useCORS: true, backgroundColor: null, logging: false
-    });
-    const imgData = canvas.toDataURL('image/png');
-    const imgW = canvas.width / 3;
-    const imgH = canvas.height / 3;
-    const pdf  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pw   = pdf.internal.pageSize.getWidth();
-    const ph   = pdf.internal.pageSize.getHeight();
-    const margin = 10;
-    const scale  = Math.min((pw - margin*2) / imgW, (ph - margin*2) / imgH);
-    pdf.addImage(imgData, 'PNG', margin, margin, imgW * scale, imgH * scale);
-    const slug = partnerName.replace(/[^a-z0-9]/gi,'_').toLowerCase();
-    pdf.save('QM_Scorecard_'+slug+'_'+activeSeason+'_'+new Date().toISOString().slice(0,10)+'.pdf');
-    if (label) { label.textContent = '✓ Downloaded'; }
-    if (btn)   { btn.style.background = '#1a9e6e'; btn.style.opacity = '1'; }
-    setTimeout(()=>{
-      if (btn)   { btn.disabled=false; btn.style.background='var(--teal)'; }
-      if (label) { label.textContent='Download PDF'; }
-    }, 2500);
-  } catch(err) {
-    console.error('PDF error:', err);
-    if (btn)   { btn.disabled=false; btn.style.opacity='1'; }
-    if (label) { label.textContent='Download PDF'; }
-  } finally {
-    pdfHide.forEach(el => { el.style.display = el._pdfOld !== undefined ? el._pdfOld : ''; });
-  }
-}
 </script>
 </body>
 </html>
